@@ -171,7 +171,7 @@ async function sendInputAndGetNewTrace() {
         const input = userInputs.slice(0, usedInputLines).join('\n') + '\n' + needInput;
         // console.log(input);
 
-        const response = await fetch('http://127.0.0.1:5000/request-debug-log', {
+        const response = await fetch('http://127.0.0.1:5000/new-debug-page', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -180,14 +180,24 @@ async function sendInputAndGetNewTrace() {
         });
 
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            const errorData = await response.json();
+            throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
         }
 
-        const debuggingResult = await response.json();
-        // console.log(debuggingResult['log']);
+        const debugging_result = await response.json();
+        // Redirect to the new page with the ID from the response
+        console.log(debugging_result)
+
+        if (debugging_result.execution_time > 5) {
+            CustomAlert(`Time limit exceeded. Execution time: ${debugging_result.execution_time} seconds.`);
+        } else if (debugging_result.memory_used > 256) {
+            CustomAlert(`Memory usage exceeded. Used: ${debugging_result.memory_used} MB.`);
+        } else {
+            window.location.href = debugging_result.url;
+        }
 
         // Update debugLog and other variables
-        debugLog = debuggingResult['log'];
+        debugLog = debugging_result['log'];
         stepForward();
     } catch (error) {
         console.error('Fetch error:', error);

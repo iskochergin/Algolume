@@ -5,6 +5,7 @@ import uuid
 import json
 import os
 from get_py_debug_log import get_debug_log
+from debug_limits import get_debug_log_limited, TimeoutException, MemoryLimitException
 import shutil
 
 
@@ -21,7 +22,7 @@ def get_current_datetime():
 
 
 def create_new_debugging_session(debug_id, debug_log, code, input_data):
-    base_path = "C:/Users/iskoc/YandexDisk/Data/1Projects/AlgorithmVisualizer/python_debug_sessions"
+    base_path = "C:/Users/iskoc/YandexDisk/Data/1Projects/VisuAlgo/python_debug_sessions"
     folder_name = debug_id
     full_path = os.path.join(base_path, folder_name)
 
@@ -58,32 +59,46 @@ def index():
 
 @app.route('/new-debug-page', methods=['POST'])
 def new_debug_page():
-    # Get code and inputs from the request
-    code = request.json.get('code', '')
-    input_data = request.json.get('input', '')  # Assuming inputs are newline separated
+    try:
+        # Get code and inputs from the request
+        data = request.get_json()
+        code = data.get('code', '')
+        input_data = data.get('input', '')  # Assuming inputs are newline separated
 
-    debug_id = generate_uuid()
-    debug_log = get_debug_log(code, input_data)
-    # print(debug_log)
+        debug_id = generate_uuid()
+        debug_log, exec_time, memory = get_debug_log_limited(code, input_data)
 
-    file_url = create_new_debugging_session(debug_id, debug_log, code, input_data)
+        file_url = create_new_debugging_session(debug_id, debug_log, code, input_data)
 
-    return jsonify({
-        "url": file_url,
-        "id": debug_id,
-    })
+        return jsonify({
+            "url": file_url,
+            "id": debug_id,
+            "execution_time": exec_time,
+            "memory_used": memory
+        }), 200
 
+    except Exception as e:
+        # Log the exception as needed
+        return jsonify({"error": "An unexpected error occurred."}), 500
 
 @app.route('/request-debug-log', methods=['POST'])
 def request_debug_log():
-    code = request.json.get('code', '')
-    input_data = request.json.get('input', '')
+    try:
+        data = request.get_json()
+        code = data.get('code', '')
+        input_data = data.get('input', '')
 
-    debug_log = get_debug_log(code, input_data)
+        debug_log, exec_time, memory = get_debug_log_limited(code, input_data)
 
-    return jsonify({
-        "log": debug_log,
-    })
+        return jsonify({
+            "log": debug_log,
+            "execution_time": exec_time,
+            "memory_used": memory
+        }), 200
+
+    except Exception as e:
+        # Log the exception as needed
+        return jsonify({"error": "An unexpected error occurred."}), 500
 
 
 if __name__ == '__main__':

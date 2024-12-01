@@ -298,7 +298,7 @@ def get_debug_log(code: str, input_data: str) -> List[Dict[str, Any]]:
                                 "variables": {},
                                 "line_content": None})
 
-        tprint(execution_trace)
+        # tprint(execution_trace)
         sys.stdout = original_stdout
 
         supported_json_execution_trace = modify_unsupported_json_types(execution_trace)
