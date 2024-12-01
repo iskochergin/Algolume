@@ -1,0 +1,58 @@
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    margin: 20px;
+    background-color: #0d1117; /* GitHub dark mode background color */
+    color: #c9d1d9; /* GitHub text color in dark mode */
+}
+
+h1 {
+    color: #58a6ff; /* GitHub blue for headers */
+}
+
+form {
+    margin-bottom: 20px;
+}
+
+label {
+    font-weight: bold;
+    color: #c9d1d9; /* Keeps labels the same color as normal text */
+}
+
+.CodeMirror {
+    position: absolute;
+    margin-top: 10px;
+    height: 700px !important; /* Desired height */
+    width: 800px;
+    border: 2px solid #30363d; /* GitHub border color in dark mode */
+    border-radius: 6px; /* GitHub's border-radius */
+    background-color: #0d1117; /* Background same as body */
+    color: #c9d1d9; /* Text color */
+    font-size: large;
+    resize: both; /* Allow resizing */
+    padding: 5px;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #238636; /* GitHub button color in dark mode */
+    color: white;
+    border: none;
+    border-radius: 6px; /* GitHub's border-radius */
+    cursor: pointer;
+    position: relative;
+    top: -29px;
+}
+
+button:hover {
+    background-color: #2ea043; /* Lighter green on hover */
+}
+
+#result, pre {
+    white-space: pre-wrap;
+    background-color: #161b22; /* Slightly different background for contrast */
+    color: #c9d1d9; /* Text color */
+    padding: 10px;
+    border: 1px solid #30363d; /* Border color */
+    border-radius: 6px; /* Border radius */
+    margin-bottom: 0;
+}

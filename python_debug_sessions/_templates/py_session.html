@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Session</title>
+    <link rel="stylesheet" href="../_templates/style_debug_session.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/dracula.min.css">
+</head>
+<body>
+    <div id="code-and-input">
+        <div id="code-area">
+            <textarea id="code-textarea"></textarea>
+        </div>
+        <textarea id="user-input" placeholder="Enter input..." rows="5"></textarea>
+    </div>
+    <div id="control-area">
+        <button id="first-button" onclick="stepFirst()">First</button>
+        <button id="prev-button" onclick="stepBack()">Previous</button>
+        <button id="next-button" onclick="stepForward()">Next</button>
+        <button id="last-button" onclick="stepLast()">Last</button>
+    </div>        
+    <pre id="execution-output"></pre>
+    <script>
+        let debugLog = {debug_log};
+        let needInput = 'WOIEJ:BWOIE J:WOEIJWGO:WIEJWEF:SODIFJ:WOEI:woiefj123t32joih2j34g;awii;ILOVEMYMOMANDDAD;lakw213;ri2jg2;3oi2gaJW23';
+        const codeLines = {code_lines};
+    </script>
+
+    <div id="customAlertModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <p id="alertMessage">Your alert message goes here...</p>
+        </div>
+    </div>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/dracula.min.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/python/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/edit/closebrackets.min.js"></script>
+    
+    <script src="interaction.js"></script>
+</body>
+</html>
