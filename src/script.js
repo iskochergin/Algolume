@@ -55,10 +55,8 @@ document.addEventListener("DOMContentLoaded", function() {
             // Redirect to the new page with the ID from the response
             console.log(debugging_result)
 
-            if (debugging_result.execution_time > 5) {
-                CustomAlert(`Time limit exceeded. Execution time: ${debugging_result.execution_time} seconds.`);
-            } else if (debugging_result.memory_used > 256) {
-                CustomAlert(`Memory usage exceeded. Used: ${debugging_result.memory_used} MB.`);
+            if (debugging_result.execution_time > 5 || debugging_result.memory_used > 256) {
+                CustomAlert(`Memory/Time limit exceeded. Time: ${debugging_result.execution_time} seconds. Memory: ${debugging_result.memory_used} MB.`);
             } else {
                 window.location.href = debugging_result.url;
             }

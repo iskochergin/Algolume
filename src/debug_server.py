@@ -22,7 +22,7 @@ def get_current_datetime():
 
 
 def create_new_debugging_session(debug_id, debug_log, code, input_data):
-    base_path = "C:/Users/iskoc/YandexDisk/Data/1Projects/VisuAlgo/python_debug_sessions"
+    base_path = "C:/Users/iskoc/YandexDisk/Data/1Projects/Algolume/python_debug_sessions"
     folder_name = debug_id
     full_path = os.path.join(base_path, folder_name)
 

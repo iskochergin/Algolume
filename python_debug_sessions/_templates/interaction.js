@@ -9,6 +9,7 @@ let inputNeeded = false; // Flag to indicate if input is needed at the current s
 let nextButton = null; // Reference to the Next button
 let prevButton = null; // Reference to the Previous button
 let maxCurrentStep = 0; // Track the maximum step reached in the current session
+let frozen = false // Indicates if the page is frozen
 
 document.addEventListener("DOMContentLoaded", function() {
     initializeCodeMirror();
@@ -89,7 +90,6 @@ function displayStep(step) {
     if (currentLog && (currentLog.stdin === '' || currentLog.stdin === needInput)) {
         inputNeeded = true;
         // nextButton.disabled = true;
-        // userInputMirror.focus();
     } else {
         inputNeeded = false;
         // nextButton.disabled = false;
@@ -121,6 +121,7 @@ function handleUserInputPaste(cm, e) {
 
     // Log the updated array or handle it as needed
     console.log("Updated userInputs after paste:", userInputs);
+    console.log("Current userInputMirror value", userInputMirror.getValue());
     console.log("Current input line index", inputLineIndex);
 }
 
@@ -141,6 +142,7 @@ function handleUserInputKeydown(cm, e) {
                 userInputs.push(prevLineContent);
                 inputLineIndex += 1;
                 console.log('Updated userInputs:', userInputs);
+                console.log("Current userInputMirror value", userInputMirror.getValue());
                 console.log("Current input line index", inputLineIndex);
             } else {
                 console.error('No content to process.');
@@ -171,7 +173,7 @@ async function sendInputAndGetNewTrace() {
         const input = userInputs.slice(0, usedInputLines).join('\n') + '\n' + needInput;
         // console.log(input);
 
-        const response = await fetch('http://127.0.0.1:5000/new-debug-page', {
+        const response = await fetch('http://127.0.0.1:5000/request-debug-log', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -186,23 +188,65 @@ async function sendInputAndGetNewTrace() {
 
         const debugging_result = await response.json();
         // Redirect to the new page with the ID from the response
-        console.log(debugging_result)
+        console.log(debugging_result);
 
-        if (debugging_result.execution_time > 5) {
-            CustomAlert(`Time limit exceeded. Execution time: ${debugging_result.execution_time} seconds.`);
-        } else if (debugging_result.memory_used > 256) {
-            CustomAlert(`Memory usage exceeded. Used: ${debugging_result.memory_used} MB.`);
+        if (debugging_result.execution_time > 5 || debugging_result.memory_used > 256) {
+            document.querySelectorAll("input, button").forEach(elem => elem.disabled = true);
+            frozen = true;
+            CustomAlert(`Memory/Time limit exceeded. Time: ${debugging_result.execution_time} seconds. Memory: ${debugging_result.memory_used} MB. All actions on the page are frozen, reload it to run the code again!`);
         } else {
-            window.location.href = debugging_result.url;
+            debugLog = debugging_result['log'];
+            stepForward();
         }
-
-        // Update debugLog and other variables
-        debugLog = debugging_result['log'];
-        stepForward();
     } catch (error) {
         console.error('Fetch error:', error);
         CustomAlert('Error sending input to server.');
     }
+}
+
+// function renderVariables(variables) {
+//     let html = '<div class="variables-container">';
+//     for (const scopeName in variables) {
+//         const scopeVars = variables[scopeName];
+
+//         html += `<div class="variable-scope">`;
+//         html += `<h3>${scopeName}</h3>`;
+//         html += `<table class="variables-table">`;
+//         html += `<thead><tr><th>Name</th><th>Value</th></tr></thead>`;
+//         html += `<tbody>`;
+//         for (const varName in scopeVars) {
+//             const varValue = scopeVars[varName];
+//             html += `<tr><td class="variable-name">${varName}</td><td class="variable-value">${formatVariableValue(varValue)}</td></tr>`;
+//         }
+//         html += `</tbody>`;
+//         html += `</table>`;
+//         html += `</div>`;
+//     }
+//     html += '</div>';
+//     return html;
+// }
+
+// function formatVariableValue(value) {
+//     if (Array.isArray(value)) {
+//         return '[' + value.map(formatVariableValue).join(', ') + ']';
+//     } else if (typeof value === 'object' && value !== null) {
+//         let entries = [];
+//         for (const key in value) {
+//             entries.push(`${key}: ${formatVariableValue(value[key])}`);
+//         }
+//         return '{' + entries.join(', ') + '}';
+//     } else if (typeof value === 'string') {
+//         return `"${value}"`;
+//     } else {
+//         return String(value);
+//     }
+// }
+
+function appendToUserInput(contentToAdd) {
+    const lastLine = userInputMirror.lastLine();
+    userInputMirror.replaceRange(contentToAdd + '\n', { line: lastLine + 1, ch: 0 });
+    userInputMirror.scrollTo(null, userInputMirror.getScrollInfo().height);
+    userInputs.length += 1 + contentToAdd.indexOf('\n');
 }
 
 function renderExecutionTrace() {
@@ -210,6 +254,12 @@ function renderExecutionTrace() {
     const currentLog = debugLog[currentStep];
 
     executionOutput.textContent = JSON.stringify(currentLog, null, 2);
+    // executionOutput.innerHTML = renderVariables(currentLog);
+
+    // Append stdout to the user input area
+    if (currentLog.stdout) {
+        appendToUserInput(currentLog.stdout);
+    }
 }
 
 function highlightLine(lineNumber) {
@@ -229,10 +279,12 @@ function CustomAlert(message) {
 }
 
 closeBtn.onclick = function() {
-    modal.style.display = "none";
+    if (!frozen) {
+        modal.style.display = "none";
+    }
 }
 window.onclick = function(event) {
-    if (event.target == modal) {
+    if (event.target == modal && !frozen) {
         modal.style.display = "none";
     }
 }

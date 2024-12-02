@@ -145,3 +145,56 @@ button {
     from {opacity: 0}
     to {opacity: 1}
 }
+
+/* CSS for output display */
+#step-output {
+    white-space: pre-wrap;
+    background-color: #161b22;
+    color: #c9d1d9;
+    padding: 10px;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    margin-top: 10px;
+    font-family: monospace;
+    overflow-x: auto;
+}
+
+/* CSS for variable visualization */
+.variables-container {
+    margin-top: 10px;
+}
+
+.variable-scope {
+    margin-bottom: 20px;
+}
+
+.variable-scope h3 {
+    margin-bottom: 5px;
+    color: #58a6ff;
+}
+
+.variables-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.variables-table th,
+.variables-table td {
+    border: 1px solid #30363d;
+    padding: 8px;
+    text-align: left;
+}
+
+.variables-table th {
+    background-color: #161b22;
+    color: #c9d1d9;
+}
+
+.variable-name {
+    color: #58a6ff;
+}
+
+.variable-value {
+    color: #c9d1d9;
+    word-break: break-word;
+}
