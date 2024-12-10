@@ -10,6 +10,7 @@ let nextButton = null; // Reference to the Next button
 let prevButton = null; // Reference to the Previous button
 let maxCurrentStep = 0; // Track the maximum step reached in the current session
 let frozen = false // Indicates if the page is frozen
+let step_console = new Map(); // Store the console output of each step
 
 document.addEventListener("DOMContentLoaded", function() {
     initializeCodeMirror();
@@ -34,6 +35,10 @@ function initializeCodeMirror() {
         readOnly: true
     });
 
+    initializeUserInput();
+}
+
+function initializeUserInput() {
     // Initialize user input area
     var userInput = document.getElementById('user-input');
     userInputMirror = CodeMirror.fromTextArea(userInput, {
@@ -48,7 +53,7 @@ function initializeCodeMirror() {
 
     // Add a specific class to this CodeMirror instance
     userInputMirror.getWrapperElement().classList.add('input-codemirror');
-    userInputMirror.setValue(userInputs.join('\n'));
+    // userInputMirror.setValue(userInputs.join('\n'));
 
     // Handle read-only lines
     userInputMirror.on('beforeChange', function(cm, change) {
@@ -200,7 +205,9 @@ async function sendInputAndGetNewTrace() {
         }
     } catch (error) {
         console.error('Fetch error:', error);
-        CustomAlert('Error sending input to server.');
+        document.querySelectorAll("input, button").forEach(elem => elem.disabled = true);
+        frozen = true;
+        CustomAlert('Error sending input to server. Reload the page to start again!');
     }
 }
 
@@ -242,11 +249,17 @@ async function sendInputAndGetNewTrace() {
 //     }
 // }
 
+// ПЕРЕДЕЛАТЬ ЧЕРЕЗ step_console
 function appendToUserInput(contentToAdd) {
-    const lastLine = userInputMirror.lastLine();
-    userInputMirror.replaceRange(contentToAdd + '\n', { line: lastLine + 1, ch: 0 });
-    userInputMirror.scrollTo(null, userInputMirror.getScrollInfo().height);
-    userInputs.length += 1 + contentToAdd.indexOf('\n');
+    // let contentLines = contentToAdd.split('\n');
+    // console.log(contentToAdd);
+    // console.log('Content to add:', contentLines);
+    // for (let i = 0; i < contentLines.length; i++) {
+    //     const lastLine = userInputMirror.lastLine();
+    //     userInputMirror.replaceRange(contentLines[i] + '\n', { line: lastLine + 1, ch: 0 });
+    //     userInputMirror.scrollTo(null, userInputMirror.getScrollInfo().height);
+        
+    // }
 }
 
 function renderExecutionTrace() {
@@ -290,6 +303,18 @@ window.onclick = function(event) {
 }
 
 function stepForward() {
+    console.log('forward');
+    
+    // Select the specific element with the given class
+    const codeMirrorElement = document.querySelector('.CodeMirror.cm-s-dracula.CodeMirror-wrap.input-codemirror');
+
+    // Check if the element exists and remove it
+    if (codeMirrorElement) {
+        codeMirrorElement.remove();
+    }
+
+    initializeUserInput();
+
     if (inputNeeded) {
         if (usedInputLines == inputLineIndex) {
             CustomAlert('Please provide the required input before proceeding 😸');
@@ -304,6 +329,15 @@ function stepForward() {
     } else if (currentStep < debugLog.length - 1) {
         currentStep++;
         maxCurrentStep = Math.max(maxCurrentStep, currentStep);
+        // if (step_console.size < currentStep) {
+        //     let input_lines = 0;
+        //     if (debugLog[currentStep].stdin != null) {
+        //         input_lines = 1;
+        //     } else if (debugLog[currentStep].stdout != null) {
+        //         input_lines = debugLog[currentStep].stdout.split('\n').length;
+        //     step_console.set(currentStep, input_lines);
+        //     console.log(step_console);
+        // }
         displayStep(currentStep);
     }
 }
