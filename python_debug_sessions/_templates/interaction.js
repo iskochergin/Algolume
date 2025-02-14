@@ -137,6 +137,10 @@ function displayStep(step) {
 }
 
 function handleUserInputPaste(cm, e) {
+    if (currentStep < maxCurrentStep) {
+        return;
+    }
+ 
     e.preventDefault();
     
     // Get text from clipboard
@@ -159,14 +163,18 @@ function handleUserInputPaste(cm, e) {
         }
     });
 
-    console.log("Updated userInputs after paste:", userInputs);
-    console.log("Current userInputMirror value", userInputMirror.getValue());
-    console.log("Current input line index", inputLineIndex);
+    // console.log("Updated userInputs after paste:", userInputs);
+    // console.log("Current userInputMirror value", userInputMirror.getValue());
+    // console.log("Current input line index", inputLineIndex);
     // Update stored content for this step
     stepsContent[currentStep] = userInputMirror.getValue();
 }
 
 function handleUserInputKeydown(cm, e) {
+    if (currentStep < maxCurrentStep) {
+        return;
+    }
+
     if (e.key === 'Enter') {
         // Use setTimeout to ensure we process after the new line is added
         setTimeout(function() {
@@ -182,9 +190,9 @@ function handleUserInputKeydown(cm, e) {
                 // Update userInputs with the previous line
                 userInputs.push(prevLineContent);
                 inputLineIndex += 1;
-                console.log('Updated userInputs:', userInputs);
-                console.log("Current userInputMirror value", userInputMirror.getValue());
-                console.log("Current input line index", inputLineIndex);
+                // console.log('Updated userInputs:', userInputs);
+                // console.log("Current userInputMirror value", userInputMirror.getValue());
+                // console.log("Current input line index", inputLineIndex);
                 // Update the stored snapshot for the current step
                 stepsContent[currentStep] = userInputMirror.getValue();
             } else {
@@ -229,7 +237,7 @@ async function sendInputAndGetNewTrace() {
         }
 
         const debugging_result = await response.json();
-        console.log(debugging_result);
+        // console.log(debugging_result);
 
         if (debugging_result.execution_time > 5 || debugging_result.memory_used > 256) {
             document.querySelectorAll("input, button").forEach(elem => elem.disabled = true);
@@ -251,9 +259,9 @@ function renderExecutionTrace() {
 
     executionOutput.textContent = JSON.stringify(currentLog, null, 2);
 
-    console.log("LOOOOOOOOOOOOOK", currentLog, currentStep, maxCurrentStep, usedMax);
+    // console.log("LOOOOOOOOOOOOOK", currentLog, currentStep, maxCurrentStep, usedMax);
     if (currentLog.stdout && currentStep == maxCurrentStep && !usedMax) {
-        console.log('AAAAAAAA', currentLog.stdout, currentStep);
+        // console.log('AAAAAAAA', currentLog.stdout, currentStep);
         stepsContent[currentStep] += currentLog.stdout + '\n';
         usedMax = true;
         reinitUserInputFront();
@@ -320,9 +328,9 @@ function reinitUserInputFront() {
 }
 
 function stepForward() {    
-    console.log('!!!!!!!INPUT', userInputs);
-    console.log(inputLineIndex);
-    console.log("Current userInputMirror value", userInputMirror.getValue());
+    // console.log('!!!!!!!INPUT', userInputs);
+    // console.log(inputLineIndex);
+    // console.log("Current userInputMirror value", userInputMirror.getValue());
     const currentLog = debugLog[currentStep];
 
     if (currentLog.stdin === needInput || currentLog.stdin === '') {
@@ -347,7 +355,7 @@ function stepForward() {
             maxCurrentStep = currentStep;
             usedMax = false;
             stepsContent[currentStep] = stepsContent[currentStep - 1];
-            console.log(stepsContent);
+            // console.log(stepsContent);
         }
 
         if (currentStep != maxCurrentStep) {
@@ -360,8 +368,8 @@ function stepForward() {
 }
 
 function stepBack() {
-    console.log(currentStep)
-    console.log(stepsContent);
+    // console.log(currentStep)
+    // console.log(stepsContent);
 
     if (currentStep > 0) {
         currentStep--;
