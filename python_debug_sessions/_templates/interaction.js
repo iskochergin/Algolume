@@ -1,7 +1,7 @@
 let currentStep = 0; // Track the current step in the debugging process
 let previousLineNumber = null; // Track the line number of the previous step
-let codeMirrorInstance = null; //  Reference to the CodeMirror instance for code display
-let userInputs = []; // Store the user input lines
+let codeMirrorInstance = null; // Reference to the CodeMirror instance for code display
+let userInputs = []; // Store the user input lines (used during typing)
 let inputLineIndex = 0; // Track the current line of input being used
 let usedInputLines = 0; // Track the number of input lines used so far
 let userInputMirror = null; // Reference to the CodeMirror instance for user input
@@ -9,8 +9,11 @@ let inputNeeded = false; // Flag to indicate if input is needed at the current s
 let nextButton = null; // Reference to the Next button
 let prevButton = null; // Reference to the Previous button
 let maxCurrentStep = 0; // Track the maximum step reached in the current session
-let frozen = false // Indicates if the page is frozen
-let step_console = new Map(); // Store the console output of each step
+let frozen = false; // Indicates if the page is frozen
+let usedMax = false; // Indicates if the max step has been used
+
+let stepsContent = [];
+stepsContent[0] = "";
 
 document.addEventListener("DOMContentLoaded", function() {
     initializeCodeMirror();
@@ -39,7 +42,7 @@ function initializeCodeMirror() {
 }
 
 function initializeUserInput() {
-    // Initialize user input area
+    // Initialize user input area (editable)
     var userInput = document.getElementById('user-input');
     userInputMirror = CodeMirror.fromTextArea(userInput, {
         lineNumbers: false,
@@ -53,16 +56,50 @@ function initializeUserInput() {
 
     // Add a specific class to this CodeMirror instance
     userInputMirror.getWrapperElement().classList.add('input-codemirror');
-    // userInputMirror.setValue(userInputs.join('\n'));
+    // Set its content from the stored snapshot for this step, if any
+    if (stepsContent[currentStep]) {
+        userInputMirror.setValue(stepsContent[currentStep]);
+    }
 
     // Handle read-only lines
     userInputMirror.on('beforeChange', function(cm, change) {
-        const lastEditableLine = userInputs.length; // Lines after this are editable
+        const lastEditableLine = stepsContent[currentStep].split('\n').length - 1; // Lines after this are editable
 
         if (change.from.line < lastEditableLine) {
             change.cancel();
         }
     });
+
+    userInputMirror.on("change", function(cm) {
+        const totalLines = cm.lineCount();
+        for (let i = 0; i < totalLines; i++) {
+            cm.setGutterMarker(i, "CodeMirror-linenumbers", makeMarker());
+        }
+    });
+
+    userInputMirror.on('keydown', handleUserInputKeydown);
+    userInputMirror.on("paste", handleUserInputPaste);    
+}
+
+function initializeUserInputReadonly() {
+    // Initialize user input area (read-only version)
+    var userInput = document.getElementById('user-input');
+    userInputMirror = CodeMirror.fromTextArea(userInput, {
+        lineNumbers: false,
+        mode: "text/plain",
+        theme: "dracula",
+        indentUnit: 4,
+        lineWrapping: true,
+        readOnly: true,
+        cursorHeight: 1,
+    });
+
+    // Add a specific class to this CodeMirror instance
+    userInputMirror.getWrapperElement().classList.add('input-codemirror');
+    // Set its content from the stored snapshot for this step.
+    if (stepsContent[currentStep]) {
+        userInputMirror.setValue(stepsContent[currentStep]);
+    }
 
     userInputMirror.on("change", function(cm) {
         const totalLines = cm.lineCount();
@@ -94,10 +131,8 @@ function displayStep(step) {
     // Check if the current step requires input
     if (currentLog && (currentLog.stdin === '' || currentLog.stdin === needInput)) {
         inputNeeded = true;
-        // nextButton.disabled = true;
     } else {
         inputNeeded = false;
-        // nextButton.disabled = false;
     }
 }
 
@@ -124,10 +159,11 @@ function handleUserInputPaste(cm, e) {
         }
     });
 
-    // Log the updated array or handle it as needed
     console.log("Updated userInputs after paste:", userInputs);
     console.log("Current userInputMirror value", userInputMirror.getValue());
     console.log("Current input line index", inputLineIndex);
+    // Update stored content for this step
+    stepsContent[currentStep] = userInputMirror.getValue();
 }
 
 function handleUserInputKeydown(cm, e) {
@@ -149,6 +185,8 @@ function handleUserInputKeydown(cm, e) {
                 console.log('Updated userInputs:', userInputs);
                 console.log("Current userInputMirror value", userInputMirror.getValue());
                 console.log("Current input line index", inputLineIndex);
+                // Update the stored snapshot for the current step
+                stepsContent[currentStep] = userInputMirror.getValue();
             } else {
                 console.error('No content to process.');
             }
@@ -174,9 +212,8 @@ function processNextInputLine() {
 async function sendInputAndGetNewTrace() {
     try {
         const code = codeLines.join('\n');
-        usedInputLines += 1;
-        const input = userInputs.slice(0, usedInputLines).join('\n') + '\n' + needInput;
-        // console.log(input);
+        // usedInputLines += 1;
+        const input = userInputs.join('\n') + '\n' + needInput;
 
         const response = await fetch('http://127.0.0.1:5000/request-debug-log', {
             method: 'POST',
@@ -192,7 +229,6 @@ async function sendInputAndGetNewTrace() {
         }
 
         const debugging_result = await response.json();
-        // Redirect to the new page with the ID from the response
         console.log(debugging_result);
 
         if (debugging_result.execution_time > 5 || debugging_result.memory_used > 256) {
@@ -205,61 +241,8 @@ async function sendInputAndGetNewTrace() {
         }
     } catch (error) {
         console.error('Fetch error:', error);
-        document.querySelectorAll("input, button").forEach(elem => elem.disabled = true);
-        frozen = true;
-        CustomAlert('Error sending input to server. Reload the page to start again!');
+        CustomAlert('Error sending input to server.');
     }
-}
-
-// function renderVariables(variables) {
-//     let html = '<div class="variables-container">';
-//     for (const scopeName in variables) {
-//         const scopeVars = variables[scopeName];
-
-//         html += `<div class="variable-scope">`;
-//         html += `<h3>${scopeName}</h3>`;
-//         html += `<table class="variables-table">`;
-//         html += `<thead><tr><th>Name</th><th>Value</th></tr></thead>`;
-//         html += `<tbody>`;
-//         for (const varName in scopeVars) {
-//             const varValue = scopeVars[varName];
-//             html += `<tr><td class="variable-name">${varName}</td><td class="variable-value">${formatVariableValue(varValue)}</td></tr>`;
-//         }
-//         html += `</tbody>`;
-//         html += `</table>`;
-//         html += `</div>`;
-//     }
-//     html += '</div>';
-//     return html;
-// }
-
-// function formatVariableValue(value) {
-//     if (Array.isArray(value)) {
-//         return '[' + value.map(formatVariableValue).join(', ') + ']';
-//     } else if (typeof value === 'object' && value !== null) {
-//         let entries = [];
-//         for (const key in value) {
-//             entries.push(`${key}: ${formatVariableValue(value[key])}`);
-//         }
-//         return '{' + entries.join(', ') + '}';
-//     } else if (typeof value === 'string') {
-//         return `"${value}"`;
-//     } else {
-//         return String(value);
-//     }
-// }
-
-// ПЕРЕДЕЛАТЬ ЧЕРЕЗ step_console
-function appendToUserInput(contentToAdd) {
-    // let contentLines = contentToAdd.split('\n');
-    // console.log(contentToAdd);
-    // console.log('Content to add:', contentLines);
-    // for (let i = 0; i < contentLines.length; i++) {
-    //     const lastLine = userInputMirror.lastLine();
-    //     userInputMirror.replaceRange(contentLines[i] + '\n', { line: lastLine + 1, ch: 0 });
-    //     userInputMirror.scrollTo(null, userInputMirror.getScrollInfo().height);
-        
-    // }
 }
 
 function renderExecutionTrace() {
@@ -267,11 +250,13 @@ function renderExecutionTrace() {
     const currentLog = debugLog[currentStep];
 
     executionOutput.textContent = JSON.stringify(currentLog, null, 2);
-    // executionOutput.innerHTML = renderVariables(currentLog);
 
-    // Append stdout to the user input area
-    if (currentLog.stdout) {
-        appendToUserInput(currentLog.stdout);
+    console.log("LOOOOOOOOOOOOOK", currentLog, currentStep, maxCurrentStep, usedMax);
+    if (currentLog.stdout && currentStep == maxCurrentStep && !usedMax) {
+        console.log('AAAAAAAA', currentLog.stdout, currentStep);
+        stepsContent[currentStep] += currentLog.stdout + '\n';
+        usedMax = true;
+        reinitUserInputFront();
     }
 }
 
@@ -302,18 +287,47 @@ window.onclick = function(event) {
     }
 }
 
-function stepForward() {
-    console.log('forward');
-    
-    // Select the specific element with the given class
+function reinitUserInputBack() {
     const codeMirrorElement = document.querySelector('.CodeMirror.cm-s-dracula.CodeMirror-wrap.input-codemirror');
 
-    // Check if the element exists and remove it
     if (codeMirrorElement) {
-        codeMirrorElement.remove();
+        userInputMirror.toTextArea();
+        userInputMirror.setValue("");
+        userInputMirror = null;
+    }
+    const userInput = document.getElementById('user-input');
+    if (userInput) {
+        userInput.value = "";
+    }
+
+    initializeUserInputReadonly();
+}
+
+function reinitUserInputFront() {
+    const codeMirrorElement = document.querySelector('.CodeMirror.cm-s-dracula.CodeMirror-wrap.input-codemirror');
+
+    if (codeMirrorElement) {
+        userInputMirror.toTextArea();
+        userInputMirror.setValue("");
+        userInputMirror = null;
+    }
+    const userInput = document.getElementById('user-input');
+    if (userInput) {
+        userInput.value = "";
     }
 
     initializeUserInput();
+}
+
+function stepForward() {    
+    console.log('!!!!!!!INPUT', userInputs);
+    console.log(inputLineIndex);
+    console.log("Current userInputMirror value", userInputMirror.getValue());
+    const currentLog = debugLog[currentStep];
+
+    if (currentLog.stdin === needInput || currentLog.stdin === '') {
+        inputNeeded = true;
+    }
 
     if (inputNeeded) {
         if (usedInputLines == inputLineIndex) {
@@ -327,34 +341,43 @@ function stepForward() {
     if (currentStep == debugLog.length - 1 || debugLog[currentStep + 1].line_content == null) {
         CustomAlert('End of the debugging session 😽');
     } else if (currentStep < debugLog.length - 1) {
+        // Before moving forward, the current step's snapshot is already updated via our event handlers.
         currentStep++;
-        maxCurrentStep = Math.max(maxCurrentStep, currentStep);
-        // if (step_console.size < currentStep) {
-        //     let input_lines = 0;
-        //     if (debugLog[currentStep].stdin != null) {
-        //         input_lines = 1;
-        //     } else if (debugLog[currentStep].stdout != null) {
-        //         input_lines = debugLog[currentStep].stdout.split('\n').length;
-        //     step_console.set(currentStep, input_lines);
-        //     console.log(step_console);
-        // }
+        if (maxCurrentStep < currentStep) {
+            maxCurrentStep = currentStep;
+            usedMax = false;
+            stepsContent[currentStep] = stepsContent[currentStep - 1];
+            console.log(stepsContent);
+        }
+
+        if (currentStep != maxCurrentStep) {
+            reinitUserInputBack();
+        } else {
+            reinitUserInputFront();
+        }
         displayStep(currentStep);
     }
 }
 
 function stepBack() {
+    console.log(currentStep)
+    console.log(stepsContent);
+
     if (currentStep > 0) {
         currentStep--;
+        reinitUserInputBack();
         displayStep(currentStep);
     }
 }
 
 function stepFirst() {
     currentStep = 0;
+    reinitUserInputBack();
     displayStep(currentStep);
 }
 
 function stepLast() {
     currentStep = maxCurrentStep;
+    reinitUserInputFront()
     displayStep(currentStep);
 }
