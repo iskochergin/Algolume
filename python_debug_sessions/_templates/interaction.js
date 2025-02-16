@@ -15,12 +15,85 @@ let usedMax = false; // Indicates if the max step has been used
 let stepsContent = [];
 stepsContent[0] = "";
 
+function updateSliderMax() {
+    const stepSlider = document.getElementById('step-slider');
+    stepSlider.max = debugLog.length - 1;
+    document.getElementById('total-steps').textContent = debugLog.length - 2;
+}
+
+function moveSliderTo(newValue) {
+    const stepSlider = document.getElementById('step-slider');
+    stepSlider.value = newValue;
+    if (currentStep < maxCurrentStep) {
+        reinitUserInputBack();
+    } else {
+        reinitUserInputFront();
+    }
+    displayStep(currentStep);
+    document.getElementById('current-step').textContent = newValue;
+}
+
 document.addEventListener("DOMContentLoaded", function() {
     initializeCodeMirror();
     displayStep(currentStep);
-
+  
     nextButton = document.getElementById('next-button');
     prevButton = document.getElementById('prev-button');
+  
+    updateSliderMax();
+    
+    let sliderLocked = false;
+    const stepSlider = document.getElementById('step-slider');
+    stepSlider.addEventListener('input', function() {
+        if (sliderLocked) return;
+
+        const currentLog = debugLog[currentStep];
+    
+        if (!(currentLog.stdin === needInput || currentLog.stdin === '')) {
+            let newCurrentStep = parseInt(this.value);
+            const currentStepCopy = currentStep;
+            
+            if (maxCurrentStep < newCurrentStep) {
+                for (let i = currentStepCopy + 1; i <= newCurrentStep; i++) {
+                    // console.log(i, usedInputLines);
+                    if (inputNeeded) {
+                        moveSliderTo(i);
+                        break;
+                    }
+                    stepForward();
+                }    
+            } else {
+                currentStep = newCurrentStep;
+                reinitUserInputBack();
+                displayStep(currentStep);        
+            }
+
+            if (newCurrentStep == debugLog.length) {
+                currentStep = debugLog.length - 1;
+            }
+            maxCurrentStep = Math.max(currentStep, maxCurrentStep);
+
+            if (currentStep < maxCurrentStep) {
+                reinitUserInputBack();
+            } else {
+                reinitUserInputFront();
+            }
+            displayStep(currentStep);
+
+            
+            document.getElementById('current-step').textContent = currentStep;
+        } else {
+            moveSliderTo(currentStep);
+
+            sliderLocked = true;
+            stepSlider.disabled = true;
+  
+            stepForward();
+
+            sliderLocked = false;
+            stepSlider.disabled = false;
+        }
+    });
 });
 
 function initializeCodeMirror() {
@@ -60,6 +133,8 @@ function initializeUserInput() {
     if (stepsContent[currentStep]) {
         userInputMirror.setValue(stepsContent[currentStep]);
     }
+
+    userInputMirror.execCommand("goDocEnd");
 
     // Handle read-only lines
     userInputMirror.on('beforeChange', function(cm, change) {
@@ -101,6 +176,8 @@ function initializeUserInputReadonly() {
         userInputMirror.setValue(stepsContent[currentStep]);
     }
 
+    userInputMirror.execCommand("goDocEnd");
+
     userInputMirror.on("change", function(cm) {
         const totalLines = cm.lineCount();
         for (let i = 0; i < totalLines; i++) {
@@ -112,7 +189,124 @@ function initializeUserInputReadonly() {
     userInputMirror.on("paste", handleUserInputPaste);    
 }
 
+// Helper function to escape HTML entities
+function escapeHtml(text) {
+    return text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+}
+
+function renderDebugVisualization(debugData) {
+    let html = '';
+
+    // Display error only if it exists and doesn't contain needInput.
+    if (debugData.error && !debugData.error.includes(needInput) && !debugData.error.includes("")) {
+        html += `<div class="debug-error">${escapeHtml(debugData.error)}</div>`;
+    }
+
+    html += `<div class="variable-scope">
+                <h4>Line ${debugData.line_number || '-'}</h4>`;
+
+    if (debugData.line_content) {
+        html += `<pre style="background-color:#0d1117; padding:8px; border-radius:4px;">
+                    ${escapeHtml(debugData.line_content)}
+                 </pre>`;
+    }
+
+    // Render Globals table.
+    if (debugData.variables && debugData.variables.globals) {
+        html += renderVariablesTable("Globals", debugData.variables.globals);
+    }
+
+    // For each function in globals, if detailed info is available, render it in its own block.
+    if (debugData.variables && debugData.variables.globals) {
+        for (let key in debugData.variables.globals) {
+            let val = debugData.variables.globals[key];
+            if (typeof val === "string" && val.startsWith("<function")) {
+                if (debugData.variables[key] && typeof debugData.variables[key] === "object") {
+                    html += renderVariablesTable(`Local (${key})`, debugData.variables[key]);
+                }
+            }
+        }
+    }
+
+    // Render other local sections.
+    if (debugData.variables) {
+        for (let key in debugData.variables) {
+            if (key === "globals") continue;
+            if (
+                debugData.variables.globals &&
+                debugData.variables.globals[key] &&
+                typeof debugData.variables.globals[key] === "string" &&
+                debugData.variables.globals[key].startsWith("<function")
+            ) {
+                continue;
+            }
+            html += renderVariablesTable(`Local (${key})`, debugData.variables[key]);
+        }
+    }
+
+    // Optionally show call stack depth.
+    if (typeof debugData.call_stack_depth !== 'undefined') {
+        html += `<div style="margin-top:10px;"><strong>Call Stack Depth:</strong> ${debugData.call_stack_depth}</div>`;
+    }
+
+    html += `</div>`;
+
+    document.getElementById('variable-visualization').innerHTML = html;
+    document.getElementById('current-step').textContent = currentStep;
+    document.getElementById('total-steps').textContent = debugLog.length - 2;
+}
+
+/**
+ * Renders a variables table for a given section.
+ * If a value is a function string (starting with "<function"),
+ * it is rendered by outputting its value directly (HTML-escaped),
+ * preserving the complete name.
+ *
+ * @param {string} title - The title of the section.
+ * @param {object} obj - The object holding the variables.
+ * @returns {string} - The HTML for that section.
+ */
+function renderVariablesTable(title, obj) {
+    let html = `<h4>${title}</h4>
+                <table class="variables-table">
+                    <thead>
+                        <tr><th>Variable</th><th>Value</th></tr>
+                    </thead>
+                    <tbody>`;
+
+    for (let key in obj) {
+        let val = obj[key];
+        if (typeof val === "string" && val.startsWith("<function")) {
+            html += `<tr>
+                        <td class="variable-name">${escapeHtml(key)}</td>
+                        <td class="variable-value">${escapeHtml(val)}</td>
+                     </tr>`;
+        } else {
+            html += `<tr>
+                        <td class="variable-name">${escapeHtml(key)}</td>
+                        <td class="variable-value">${JSON.stringify(val, null, 2)}</td>
+                     </tr>`;
+        }
+    }
+
+    html += `</tbody></table>`;
+    return html;
+}
+  
+  
+
 function displayStep(step) {
+    const stepSlider = document.getElementById('step-slider');
+    if (stepSlider) {
+        stepSlider.value = step;
+    }
+    document.getElementById('current-step').textContent = step;
+    
+    renderDebugVisualization(debugLog[currentStep]);
+    
     // Unhighlight the previous line
     if (previousLineNumber !== null) {
         unhighlightLine(previousLineNumber);
@@ -138,6 +332,7 @@ function displayStep(step) {
 
 function handleUserInputPaste(cm, e) {
     if (currentStep < maxCurrentStep) {
+        CustomAlert('You can enter input only in the last step!')
         return;
     }
  
@@ -168,10 +363,13 @@ function handleUserInputPaste(cm, e) {
     // console.log("Current input line index", inputLineIndex);
     // Update stored content for this step
     stepsContent[currentStep] = userInputMirror.getValue();
+
+    // console.log(stepsContent);
 }
 
 function handleUserInputKeydown(cm, e) {
     if (currentStep < maxCurrentStep) {
+        CustomAlert('You can enter input only in the last step!')
         return;
     }
 
@@ -185,19 +383,21 @@ function handleUserInputKeydown(cm, e) {
             // Get the previous line (before the cursor moved down)
             const prevLineNumber = cursor.line - 1;
             const prevLineContent = lines[prevLineNumber];
+            
+            // IF DON'T NEED TO PROCESS EMPTY LINES
+            // if (prevLineContent !== '') {
+            //     // Update userInputs with the previous line
+            //     userInputs.push(prevLineContent);
+            //     inputLineIndex += 1;
+            //     stepsContent[currentStep] = userInputMirror.getValue();
+            // } else {
+            //     console.error('No content to process.');
+            // }
+            userInputs.push(prevLineContent);
+            inputLineIndex += 1;
+            stepsContent[currentStep] = userInputMirror.getValue();
 
-            if (prevLineContent !== '') {
-                // Update userInputs with the previous line
-                userInputs.push(prevLineContent);
-                inputLineIndex += 1;
-                // console.log('Updated userInputs:', userInputs);
-                // console.log("Current userInputMirror value", userInputMirror.getValue());
-                // console.log("Current input line index", inputLineIndex);
-                // Update the stored snapshot for the current step
-                stepsContent[currentStep] = userInputMirror.getValue();
-            } else {
-                console.error('No content to process.');
-            }
+            // console.log(stepsContent);
         }, 0); // Delay execution until after the default action
     }
 }
@@ -220,8 +420,9 @@ function processNextInputLine() {
 async function sendInputAndGetNewTrace() {
     try {
         const code = codeLines.join('\n');
-        // usedInputLines += 1;
-        const input = userInputs.join('\n') + '\n' + needInput;
+        usedInputLines += 1;
+        console.log('usedInputLines', usedInputLines);
+        const input = userInputs.slice(0, usedInputLines).join('\n') + '\n' + needInput;
 
         const response = await fetch('http://127.0.0.1:5000/request-debug-log', {
             method: 'POST',
@@ -245,6 +446,7 @@ async function sendInputAndGetNewTrace() {
             CustomAlert(`Memory/Time limit exceeded. Time: ${debugging_result.execution_time} seconds. Memory: ${debugging_result.memory_used} MB. All actions on the page are frozen, reload it to run the code again!`);
         } else {
             debugLog = debugging_result['log'];
+            updateSliderMax();
             stepForward();
         }
     } catch (error) {
@@ -332,14 +534,19 @@ function stepForward() {
     // console.log(inputLineIndex);
     // console.log("Current userInputMirror value", userInputMirror.getValue());
     const currentLog = debugLog[currentStep];
+    // console.log('stdin', currentLog.stdin);
 
     if (currentLog.stdin === needInput || currentLog.stdin === '') {
         inputNeeded = true;
     }
 
+    // console.log(inputNeeded)
+    // console.log('!!!!', usedInputLines, inputLineIndex);
+
     if (inputNeeded) {
         if (usedInputLines == inputLineIndex) {
             CustomAlert('Please provide the required input before proceeding 😸');
+            return;
         } else {
             processNextInputLine();
         }

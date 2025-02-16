@@ -1,47 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Debug Session</title>
-    <link rel="stylesheet" href="../_templates/style_debug_session.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/dracula.min.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Algolume</title>
+  <link rel="stylesheet" href="../_templates/style_debug_session.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/dracula.min.css" />
 </head>
 <body>
-    <div id="code-and-input">
-        <div id="code-area">
-            <textarea id="code-textarea"></textarea>
-        </div>
-        <textarea id="user-input" placeholder="Enter input..." rows="5"></textarea>
+  <!-- Title -->
+  <h1>Algolume Debugger</h1>
+
+  <!-- Captions for Code Area and Input -->
+  <div id="code-input-captions">
+    <div class="caption code-caption">Code</div>
+    <div class="caption input-caption">Input</div>
+  </div>
+
+  <!-- Code and Input areas -->
+  <div id="code-and-input">
+    <div id="code-area">
+      <textarea id="code-textarea"></textarea>
     </div>
-    <div id="control-area">
-        <button id="first-button" onclick="stepFirst()">First</button>
-        <button id="prev-button" onclick="stepBack()">Previous</button>
-        <button id="next-button" onclick="stepForward()">Next</button>
-        <button id="last-button" onclick="stepLast()">Last</button>
-    </div>        
-    <pre id="execution-output"></pre>
-    <script>
-        let debugLog = {debug_log};
-        let needInput = 'WOIEJ:BWOIE J:WOEIJWGO:WIEJWEF:SODIFJ:WOEI:woiefj123t32joih2j34g;awii;ILOVEMYMOMANDDAD;lakw213;ri2jg2;3oi2gaJW23';
-        const codeLines = {code_lines};
-    </script>
+    <textarea id="user-input" placeholder="Enter input..." rows="5"></textarea>
+  </div>
 
-    <div id="customAlertModal" class="modal">
-        <div class="modal-content">
-            <span class="close-button">&times;</span>
-            <p id="alertMessage">Your alert message goes here...</p>
-        </div>
+  <!-- Step Slider Container (interactive) -->
+  <div id="step-slider-container">
+    <div class="slider-label">
+      Step <span id="current-step">0</span> / <span id="total-steps">?</span>
     </div>
+    <input type="range" id="step-slider" min="0" max="0" value="0" step="1" />
+  </div>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/dracula.min.css">
+  <!-- Control buttons -->
+  <div id="control-area">
+    <button id="first-button" onclick="stepFirst()">First</button>
+    <button id="prev-button" onclick="stepBack()">Previous</button>
+    <button id="next-button" onclick="stepForward()">Next</button>
+    <button id="last-button" onclick="stepLast()">Last</button>
+  </div>
+  
+  <!-- Execution Output (hidden) -->
+  <pre id="execution-output"></pre>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/python/python.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/edit/closebrackets.min.js"></script>
-    
-    <script src="interaction.js"></script>
+  <div id="variable-visualization" class="variables-container">
+    <!-- This block will be updated via JS -->
+  </div>
+
+  <div id="customAlertModal" class="modal">
+    <div class="modal-content">
+      <span class="close-button">&times;</span>
+      <p id="alertMessage">Your alert message goes here...</p>
+    </div>
+  </div>
+
+  <script>
+    let debugLog = {debug_log};
+    let needInput = 'WOIEJ:BWOIE J:WOEIJWGO:WIEJWEF:SODIFJ:WOEI:woiefj123t32joih2j34g;awii;ILOVEMYMOMANDDAD;lakw213;ri2jg2;3oi2gaJW23';
+    const codeLines = {code_lines};
+  </script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/python/python.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/edit/closebrackets.min.js"></script>
+  <script src="interaction.js"></script>
 </body>
 </html>
