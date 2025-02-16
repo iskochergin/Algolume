@@ -57,8 +57,11 @@ document.addEventListener("DOMContentLoaded", function() {
 
             if (debugging_result.execution_time > 5 || debugging_result.memory_used > 256) {
                 CustomAlert(`Memory/Time limit exceeded. Time: ${debugging_result.execution_time} seconds. Memory: ${debugging_result.memory_used} MB.`);
+            } else if (debugging_result.error) {
+                CustomAlert("‼️ Error: " + debugging_result.error)
             } else {
-                window.location.href = debugging_result.url;
+                console.log(debugging_result);
+                // window.location.href = debugging_result.url;
             }
         } catch (error) {
             console.error('Fetch error:', error);

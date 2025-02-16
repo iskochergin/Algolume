@@ -305,5 +305,5 @@ def get_debug_log(code: str, input_data: str) -> List[Dict[str, Any]]:
 
         return supported_json_execution_trace
     except Exception as e:
-        print("ERROR WHILE GETTING DEBUGING LOG", e)
+        print("ERROR WHILE GETTING DEBUGING LOG!", e)
         return "error", str(e).replace("<unknown>, ", "")

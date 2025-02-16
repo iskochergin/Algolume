@@ -67,6 +67,9 @@ def new_debug_page():
 
         debug_id = generate_uuid()
         debug_log, exec_time, memory = get_debug_log_limited(code, input_data)
+        # debug_log is execution result, and in the case of exception it contains error
+        if type(debug_log) is tuple and debug_log[0] == 'error':
+            return jsonify({"error": debug_log[1]})
 
         file_url = create_new_debugging_session(debug_id, debug_log, code, input_data)
 
@@ -74,7 +77,8 @@ def new_debug_page():
             "url": file_url,
             "id": debug_id,
             "execution_time": exec_time,
-            "memory_used": memory
+            "memory_used": memory,
+            "error": None
         }), 200
 
     except Exception as e:
@@ -89,13 +93,16 @@ def request_debug_log():
         input_data = data.get('input', '')
 
         debug_log, exec_time, memory = get_debug_log_limited(code, input_data)
+        # debug_log is execution result, and in the case of exception it contains error
+        if type(debug_log) is tuple and debug_log[0] == 'error':
+            return jsonify({"error": debug_log[1]})
 
         return jsonify({
             "log": debug_log,
             "execution_time": exec_time,
-            "memory_used": memory
+            "memory_used": memory,
+            "error": None
         }), 200
-
     except Exception as e:
         # Log the exception as needed
         return jsonify({"error": "An unexpected error occurred."}), 500
