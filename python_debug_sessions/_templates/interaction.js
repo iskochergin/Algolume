@@ -472,6 +472,9 @@ function renderExecutionTrace() {
 
 function highlightLine(lineNumber) {
     codeMirrorInstance.addLineClass(lineNumber - 1, 'background', 'highlight');
+
+        // Scroll so that the highlighted line is visible near the top
+        codeMirrorInstance.scrollIntoView({ line: lineNumber - 1, ch: 0 }, 100);
 }
 
 function unhighlightLine(lineNumber) {
