@@ -60,8 +60,8 @@ document.addEventListener("DOMContentLoaded", function() {
             } else if (debugging_result.error) {
                 CustomAlert("‼️ Error: " + debugging_result.error)
             } else {
-                console.log(debugging_result);
-                // window.location.href = debugging_result.url;
+                // console.log(debugging_result);
+                window.location.href = debugging_result.url;
             }
         } catch (error) {
             console.error('Fetch error:', error);
