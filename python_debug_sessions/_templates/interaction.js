@@ -11,6 +11,7 @@ let prevButton = null; // Reference to the Previous button
 let maxCurrentStep = 0; // Track the maximum step reached in the current session
 let frozen = false; // Indicates if the page is frozen
 let usedMax = false; // Indicates if the max step has been used
+let waitingServer = false; // Indicates if the server is waiting for input
 
 let stepsContent = [];
 stepsContent[0] = "";
@@ -419,6 +420,7 @@ function processNextInputLine() {
 
 async function sendInputAndGetNewTrace() {
     try {
+        waitingServer = true;
         const code = codeLines.join('\n');
         usedInputLines += 1;
         console.log('usedInputLines', usedInputLines);
@@ -439,7 +441,8 @@ async function sendInputAndGetNewTrace() {
 
         const debugging_result = await response.json();
         // console.log(debugging_result);
-
+        
+        waitingServer = false;
         if (debugging_result.execution_time > 5 || debugging_result.memory_used > 256) {
             document.querySelectorAll("input, button").forEach(elem => elem.disabled = true);
             frozen = true;
@@ -533,6 +536,9 @@ function reinitUserInputFront() {
 }
 
 function stepForward() {    
+    if (waitingServer) {
+        return;
+    }
     // console.log('!!!!!!!INPUT', userInputs);
     // console.log(inputLineIndex);
     // console.log("Current userInputMirror value", userInputMirror.getValue());
@@ -578,6 +584,9 @@ function stepForward() {
 }
 
 function stepBack() {
+    if (waitingServer) {
+        return;
+    }
     // console.log(currentStep)
     // console.log(stepsContent);
 
@@ -589,12 +598,18 @@ function stepBack() {
 }
 
 function stepFirst() {
+    if (waitingServer) {
+        return;
+    }
     currentStep = 0;
     reinitUserInputBack();
     displayStep(currentStep);
 }
 
 function stepLast() {
+    if (waitingServer) {
+        return;
+    }
     currentStep = maxCurrentStep;
     reinitUserInputFront()
     displayStep(currentStep);
