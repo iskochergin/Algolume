@@ -1,4 +1,6 @@
 # VisuAlgo
 A tool to visualize programming algorithms step-by-step!
 
-### !!! The project is now on the development stage and not yet prepared for using it !!! 
+## Website - https://visualgo.ru
+
+### Now you can enjoy our debugger for Python. The whole project will be soon released as well! 
