@@ -3,4 +3,4 @@
 /.venv/
 /python_debug_sessions/
 /ideas/
-/ src/__pycache__ /
+src/__pycache__/
