@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <title>Algolume</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Top Bar (fixed) -->
+  <header class="top-bar">
+    <!-- The toggle button: "☰" when closed, "×" when open (handled by JS) -->
+    <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+
+    <h1><a href="index.html">Algolume</a></h1>
+    <div class="top-right-links">
+      <a href="https://github.com/YOUR_GITHUB" target="_blank">GitHub</a>
+      <a href="#feedback">Feedback</a>
+    </div>
+  </header>
+
+  <!-- Sidebar -->
+  <div id="sidebar" class="sidebar closed">
+    <!-- (No separate "X" button here—closing is done by the same top bar button) -->
+    <nav>
+      <ul>
+        <li><a href="dp-turtle.html">DP (Задача с черепашкой)</a></li>
+        <li><a href="#">DP (Задача с кузнечиком)</a></li>
+        <li><a href="#">DFS</a></li>
+        <li><a href="#">Дейкстра</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <!-- Content Container (shifts horizontally when sidebar is open) -->
+  <div id="content-container" class="expanded">
+    <main id="main-content">
+      <section>
+        <h2>Добро пожаловать в Algolume!</h2>
+        <p>
+          Здесь вы найдёте визуализации и краткие теоретические сведения
+          по распространённым алгоритмам. Используйте меню слева или ссылки ниже,
+          чтобы перейти к подробному описанию и примеру кода.
+        </p>
+        <p>
+          <strong>Алгоритмы:</strong>
+          <ul>
+            <li><a href="dp-turtle.html" class="light">Динамическое программирование (Задача с черепашкой)</a></li>
+            <li>Динамическое программирование (Задача с кузнечиком)</li>
+            <li>Поиск в глубину (DFS)</li>
+            <li>Алгоритм Дейкстры</li>
+          </ul>
+        </p>
+      </section>
+    </main>
+
+    <!-- Footer pinned at bottom -->
+    <footer class="credits">
+      <p>© 2025 Algolume. Created by Ivan Kochergin.</p>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
