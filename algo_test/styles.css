@@ -1,19 +1,28 @@
-/* --- БАЗОВЫЕ СТИЛИ ТЁМНОЙ ТЕМЫ --- */
 * {
   box-sizing: border-box;
 }
 body {
   margin: 0;
-  font-family: 'Roboto', -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-family: 'PT Serif', serif;
   background-color: #0d1117;
   color: #c9d1d9;
   line-height: 1.5;
-  text-align: center;
+  text-align: justify;
   margin-left: 15vw;
   margin-right: 15vw;
 }
 
-/* Контейнер и основной контент */
+code {
+  background-color: #161b22;
+  padding: 0.2em 0.4em;
+  border-radius: 4px;
+  font-family: 'Fira Code', monospace;
+  font-size: 0.95em;
+  border: 1px solid #161b22;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+  /* font-style: italic; */
+}
+
 #content-container {
   display: flex;
   flex-direction: column;
@@ -84,7 +93,7 @@ body {
   top: 0; left: 0;
   width: 260px; height: 100vh;
   background-color: #161b22;
-  padding: 20px 10px; /* уменьшенные отступы */
+  padding: 15px 15px; /* уменьшенные отступы */
   transition: transform 0.3s ease;
   transform: translateX(-300px);
   overflow-y: auto;
@@ -97,7 +106,8 @@ body {
 }
 .sidebar nav ul {
   list-style: none;
-  margin: 0; padding: 0;
+  margin-top: 0px;
+  margin: 0px; padding: 0;
 }
 .sidebar nav li {
   margin-bottom: 10px;
@@ -122,8 +132,8 @@ body {
   text-align: left;
   margin-left: 10vw;
   margin-right: 10vw;
-  max-width: 1200px;     /* увеличили ширину, чтобы текст был шире */
-  margin: 0 auto;        /* по центру */
+  max-width: 1200px;
+  margin: 0 auto;
 }
 #main-content a {
   color: #58a6ff;
@@ -136,26 +146,52 @@ body {
   font-weight: bold;
   color: #58a6ff;
 }
+#main-content p,
+#main-content ul,
+#main-content ol {
+  margin: 16px 0;
+  font-size: 1rem;
+  line-height: 1.6;
+}
 
 section {
   margin-bottom: 20px;
   padding-bottom: 0;
 }
 h2 {
-  font-size: 1.8rem;
+  font-size: 2rem;
   margin-bottom: 20px;
   text-align: center;
 }
 
-/* СТАТЬЯ */
+h1 {
+  font-size: 2.6rem;
+  margin-bottom: 23px;
+  text-align: center;
+}
+
 article {
   background-color: #0d1117;
   border-radius: 8px;
-  max-width: 100%;   /* разрешаем занять всю ширину #main-content */
-  text-align: left;
+  max-width: 100%;
+  text-align: justify;
+  position: relative; /* необходимо для позиционирования псевдоэлемента */
+  padding-bottom: 40px; /* чтобы полоска не накладывалась на контент */
 }
 
-/* ПАРАГРАФЫ, СПИСКИ */
+article::after {
+  content: "";
+  position: absolute;
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  height: 1px;
+  /* background: linear-gradient(to right, transparent, #30363d, transparent); */
+  background: #30363d;
+  border-radius: 1px;
+}
+
 article p,
 article ul,
 article ol {
@@ -168,7 +204,7 @@ article ol {
 .tab-buttons {
   border: none;
   display: inline-flex;
-  margin-top: 20px;
+  margin-top: 45px;
 }
 .tab-buttons button {
   background-color: #0d1117;
@@ -179,7 +215,7 @@ article ol {
   width: 120px;
   height: 40px;
   cursor: pointer;
-  margin-right: 0.5px;
+  margin-right: -0.2px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -269,6 +305,14 @@ article ol {
 .variables-table input[disabled] {
   color: #777;
   cursor: not-allowed;
+}
+.variables-table tr:not(:last-child) th,
+.variables-table tr:not(:last-child) td {
+  border-bottom: 1px solid #30363d;
+}
+.variables-table tr th:first-child,
+.variables-table tr td:first-child {
+  border-right: 1px solid #30363d;
 }
 
 /* MODAL */

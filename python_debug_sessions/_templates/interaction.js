@@ -202,7 +202,9 @@ function renderDebugVisualization(debugData) {
     let html = '';
 
     // Display error only if it exists and doesn't contain needInput.
-    if (debugData.error && !debugData.error.includes(needInput) && !debugData.error.includes("")) {
+    // console.log(debugData.error);
+    if (debugData.error && !inputNeeded && !debugData.error.includes(needInput) && !debugData.error.includes("''") && !debugData.error.includes('WOIEJ:BWOIE')) {
+        // renderedError = debugData.error.replace('WOIEJ:BWOIE', '');
         html += `<div class="debug-error">${escapeHtml(debugData.error)}</div>`;
     }
 
@@ -386,17 +388,17 @@ function handleUserInputKeydown(cm, e) {
             const prevLineContent = lines[prevLineNumber];
             
             // IF DON'T NEED TO PROCESS EMPTY LINES
-            // if (prevLineContent !== '') {
-            //     // Update userInputs with the previous line
-            //     userInputs.push(prevLineContent);
-            //     inputLineIndex += 1;
-            //     stepsContent[currentStep] = userInputMirror.getValue();
-            // } else {
-            //     console.error('No content to process.');
-            // }
-            userInputs.push(prevLineContent);
-            inputLineIndex += 1;
-            stepsContent[currentStep] = userInputMirror.getValue();
+            if (prevLineContent !== '') {
+                // Update userInputs with the previous line
+                userInputs.push(prevLineContent);
+                inputLineIndex += 1;
+                stepsContent[currentStep] = userInputMirror.getValue();
+            } else {
+                console.error('No content to process.');
+            }
+            // userInputs.push(prevLineContent);
+            // inputLineIndex += 1;
+            // stepsContent[currentStep] = userInputMirror.getValue();
 
             // console.log(stepsContent);
         }, 0); // Delay execution until after the default action

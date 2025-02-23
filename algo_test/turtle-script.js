@@ -29,15 +29,12 @@ function showTab(tabName) {
   const exampleTabBtn = document.getElementById('exampleTabBtn');
   const userTabBtn = document.getElementById('userTabBtn');
 
-  // Сначала прячем обе вкладки
   exampleTab.classList.add('hidden');
   userTab.classList.add('hidden');
 
-  // Снимаем активность с обеих кнопок
   exampleTabBtn.classList.remove('active-tab');
   userTabBtn.classList.remove('active-tab');
 
-  // Включаем нужную вкладку
   if (tabName === 'example') {
     exampleTab.classList.remove('hidden');
     exampleTabBtn.classList.add('active-tab');
@@ -49,9 +46,7 @@ function showTab(tabName) {
   }
 }
 
-/* Инициализация CodeMirror и остальная логика */
 document.addEventListener("DOMContentLoaded", function() {
-  // CodeMirror для "Пример кода" (readOnly)
   const exampleCodeTextarea = document.getElementById('example-code');
   if (exampleCodeTextarea) {
     window.exampleCM = CodeMirror.fromTextArea(exampleCodeTextarea, {
@@ -64,7 +59,6 @@ document.addEventListener("DOMContentLoaded", function() {
     });
   }
 
-  // CodeMirror для "Ваш код" (редактируемый)
   const userCodeTextarea = document.getElementById('user-code');
   if (userCodeTextarea) {
     window.userCM = CodeMirror.fromTextArea(userCodeTextarea, {
@@ -76,7 +70,6 @@ document.addEventListener("DOMContentLoaded", function() {
     });
   }
 
-  // CodeMirror для теоретических блоков (readOnly)
   const snippet1 = document.getElementById('theory-code-snippet-1');
   if (snippet1) {
     const theoryCM1 = CodeMirror.fromTextArea(snippet1, {
@@ -85,8 +78,8 @@ document.addEventListener("DOMContentLoaded", function() {
       theme: "dracula",
       indentUnit: 4,
       readOnly: true,
-      viewportMargin: Infinity,  // Автоматическая высота по содержимому
-      lineWrapping: true         // Перенос длинных строк
+      viewportMargin: Infinity,
+      lineWrapping: true
     });
     theoryCM1.getWrapperElement().classList.add('theory-cm');
   }
@@ -119,8 +112,20 @@ document.addEventListener("DOMContentLoaded", function() {
     theoryCM3.getWrapperElement().classList.add('theory-cm');
   }
 
+  const snippet4 = document.getElementById('theory-code-snippet-4');
+  if (snippet4) {
+    const theoryCM4 = CodeMirror.fromTextArea(snippet4, {
+      lineNumbers: true,
+      mode: "python",
+      theme: "dracula",
+      indentUnit: 4,
+      readOnly: true,
+      viewportMargin: Infinity,
+      lineWrapping: true
+    });
+    theoryCM4.getWrapperElement().classList.add('theory-cm');
+  }
 
-  // Модальное окно (Custom Alert)
   const modal = document.getElementById("customAlertModal");
   const closeBtn = document.getElementsByClassName("close-button")[0];
   function CustomAlert(message) {
@@ -139,14 +144,12 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   };
 
-  // Кнопка "Запустить" для Примера
   const exampleRunBtn = document.getElementById('exampleRunBtn');
   if (exampleRunBtn && window.exampleCM) {
     exampleRunBtn.addEventListener('click', async function(e) {
       e.preventDefault();
       const code = window.exampleCM.getValue();
 
-      // Проверка на длину кода
       const maxCodeLines = 300;
       const codeLines = code.split('\n').length;
       if (codeLines > maxCodeLines) {
@@ -155,10 +158,13 @@ document.addEventListener("DOMContentLoaded", function() {
       }
 
       try {
-        const response = await fetch('http://127.0.0.1:5000/new-debug-page', {
+        dpVar = 'dp';
+        parentVar = 'parent';
+
+        const response = await fetch('http://127.0.0.1:5000/new-debug-page-turtle', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ code })
+          body: JSON.stringify({ code, dpVar, parentVar })
         });
         if (!response.ok) {
           const errorData = await response.json();
@@ -179,19 +185,16 @@ document.addEventListener("DOMContentLoaded", function() {
     });
   }
 
-  // Кнопка "Запустить" для пользовательского кода
   const userRunBtn = document.getElementById('userRunBtn');
   if (userRunBtn && window.userCM) {
     userRunBtn.addEventListener('click', async function(event) {
       event.preventDefault();
       const code = window.userCM.getValue();
 
-      // Проверяем обязательные переменные
       const dpVar = document.getElementById('var-dp')?.value.trim();
-      const pathVar = document.getElementById('var-path')?.value.trim();
-      const currentPosVar = document.getElementById('var-currentPosition')?.value.trim();
+      const parentVar = document.getElementById('var-parent')?.value.trim();
 
-      if (!dpVar || !pathVar || !currentPosVar) {
+      if (!dpVar || !parentVar) {
         CustomAlert("Пожалуйста, заполните все переменные в таблице.");
         return;
       }
@@ -199,16 +202,11 @@ document.addEventListener("DOMContentLoaded", function() {
         CustomAlert(`Переменная "${dpVar}" не найдена в вашем коде.`);
         return;
       }
-      if (!code.includes(pathVar)) {
-        CustomAlert(`Переменная "${pathVar}" не найдена в вашем коде.`);
-        return;
-      }
-      if (!code.includes(currentPosVar)) {
-        CustomAlert(`Переменная "${currentPosVar}" не найдена в вашем коде.`);
+      if (!code.includes(parentVar)) {
+        CustomAlert(`Переменная "${parentVar}" не найдена в вашем коде.`);
         return;
       }
 
-      // Проверка на длину кода
       const maxCodeLines = 300;
       const codeLines = code.split('\n').length;
       if (codeLines > maxCodeLines) {
@@ -217,10 +215,10 @@ document.addEventListener("DOMContentLoaded", function() {
       }
 
       try {
-        const response = await fetch('http://127.0.0.1:5000/new-debug-page', {
+        const response = await fetch('http://127.0.0.1:5000/new-debug-page-turtle', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ code })
+          body: JSON.stringify({ code, dpVar, parentVar })
         });
         if (!response.ok) {
           const errorData = await response.json();
@@ -241,7 +239,6 @@ document.addEventListener("DOMContentLoaded", function() {
     });
   }
 
-  // При окончании анимации сдвига контейнера — рефреш CodeMirror
   const contentContainer = document.getElementById('content-container');
   if (contentContainer) {
     contentContainer.addEventListener('transitionend', (e) => {

@@ -4,22 +4,18 @@
   <meta charset="UTF-8" />
   <title>DP (Черепашка) | Algolume</title>
   
-  <!-- Основной CSS -->
   <link rel="stylesheet" href="styles.css" />
 
-  <!-- Roboto Font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&display=swap&subset=cyrillic" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap" rel="stylesheet">
 
-  <!-- CodeMirror -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/dracula.min.css" />
 </head>
 <body>
-  <!-- Top Bar (fixed) -->
   <header class="top-bar">
-    <!-- Кнопка открытия/закрытия боковой панели -->
     <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
 
     <h1><a href="index.html">Algolume</a></h1>
@@ -29,7 +25,6 @@
     </div>
   </header>
 
-  <!-- Sidebar -->
   <div id="sidebar" class="sidebar closed">
     <nav>
       <ul>
@@ -41,43 +36,44 @@
     </nav>
   </div>
 
-  <!-- Content Container -->
   <div id="content-container" class="expanded">
     <main id="main-content">
       <section>
-        <h2>ДП: Задача с черепашкой (2D массив)</h2>
+        <h1>ДП: Задача с черепашкой (2D массив)</h1>
 
         <article>
-          <h3>Подробное объяснение алгоритма динамического программирования</h3>
           <p>
-            Пусть дана прямоугольная матрица <code>matrix</code> размером <code>n×m</code>, где каждая ячейка содержит число – стоимость прохождения через неё. 
-            Черепашка начинает движение в точке <code>(0, 0)</code> и может перемещаться только вправо или вниз. Цель – дойти до точки <code>(n-1, m-1)</code> с минимальной суммарной стоимостью.
+            <span style="font-weight: bold; font-size: 1.2rem;">Задача:</span> Пусть дана прямоугольная матрица <code>matrix</code> размером <code>n×m</code>, где каждая ячейка содержит число – стоимость прохождения через неё. 
+            Черепашка начинает движение в точке <code>(0, 0)</code> и может перемещаться только вправо или вниз. Цель — дойти до точки <code>(n-1, m-1)</code> с минимальной суммарной стоимостью и вывести путь, по которому должна идти черепашка.
           </p>
           <p>
-            Для решения задачи используется метод динамического программирования. Создаётся массив <code>dp</code>, где <code>dp[i][j]</code> — минимальная стоимость пути от <code>(0,0)</code> до <code>(i,j)</code>. Дополнительно формируется массив <code>path</code> для восстановления маршрута.
+            <span style="font-weight: bold; font-size: 1.2rem;">Формат входных данных:</span> На первой строке заданы два числа <code>n</code> и <code>m</code> (<code>1 ≤ n, m ≤ 1000</code>). Далее идут <code>n</code> строк по <code>m</code> целых чисел <code>0 ≤ matrix[i][j] ≤ 100</code>.
+          </p>
+          <p>
+            <span style="font-weight: bold; font-size: 1.2rem;">Формат выходных данных:</span> На первой строке выводится одно число — минимальная суммарная стоимость. Во второй строке подряд написаны символы <code>R</code> (вправо) и <code>D</code> (вниз), обозначающие направление движения черепашки (пример: RRDRD).
+          </p>
+          <p>
+            <span style="font-weight: bold; font-size: 1.2rem;">Решение:</span>
+            Для решения задачи используется метод динамического программирования. Создаётся массив <code>dp</code>, где <code>dp[i][j]</code> — минимальная стоимость пути от <code>(0,0)</code> до <code>(i,j)</code>. Дополнительно формируется массив <code>parent</code> для восстановления маршрута, где <code>parent[i][j]</code> — оптимальный предок для клетки (<code>'R'</code>, если пришли слева, <code>'D'</code>, если пришли сверху).
           </p>
 
-          <h4>Инициализация и переходы</h4>
-          <p>Начальное условие: <code>dp[0][0] = matrix[0][0]</code>.</p>
-          <p>
-            Для остальных ячеек выбираем оптимальный переход – из ячейки сверху или слева:
-          </p>
-          <!-- Код для теории (snippet 1) -->
+          <p>Начальное условие:</p>
+           <p><code>dp[0][0] = matrix[0][0]</code></p>
+           <p>Для остальных ячеек выбираем оптимальный переход – из ячейки сверху или слева, параллельно обновляя предка текущей ячейки:</p>
           <textarea id="theory-code-snippet-1" style="display:none;">
 for i in range(n):
     for j in range(m):
-        top = dp[i-1][j] if i > 0 else INF
-        left = dp[i][j-1] if j > 0 else INF
+        if i == 0 and j == 0: continue
+        top = dp[i - 1][j] if i > 0 else INF
+        left = dp[i][j - 1] if j > 0 else INF
         dp[i][j] = min(top, left) + matrix[i][j]
-        path[i][j] = (i-1, j) if top < left else (i, j-1)</textarea>
+        parent[i][j] = 'D' if top < left else 'R'</textarea>
 
           <p>
-            После заполнения матрицы <code>dp</code> значение <code>dp[n-1][m-1]</code> – искомая минимальная стоимость, а массив <code>path</code> позволяет восстановить маршрут.
+            После заполнения матрицы <code>dp</code> значение <code>dp[n-1][m-1]</code> – искомая минимальная стоимость, а массив <code>parent</code> позволяет восстановить маршрут.
           </p>
-
-          <h4>Пример визуализации</h4>
+          
           <p>Пусть:</p>
-          <!-- Код для теории (snippet 2) -->
           <textarea id="theory-code-snippet-2" style="display:none;">
 matrix = [
     [1, 2, 3],
@@ -86,7 +82,6 @@ matrix = [
 ]</textarea>
 
           <p>Тогда после вычислений:</p>
-          <!-- Код для теории (snippet 3) -->
           <textarea id="theory-code-snippet-3" style="display:none;">
 dp = [
     [1,   3,  6],
@@ -95,74 +90,67 @@ dp = [
 ]</textarea>
 
           <p>
-            Маршрут можно восстановить, начиная с <code>(2,2)</code> и двигаясь по массиву <code>path</code> до <code>(0,0)</code>.
+            <span style="font-weight: bold; font-size: 1.2rem;">Восстановление маршрута:</span>
+            Начиная с <code>(n-1, m-1)</code>, предвигаемся по предкам, параллельно обнавляя текущюю ячейку. В итоге, приходим в <code>(0, 0)</code> и на этом шаге заканчиваем.
           </p>
-          <p>
-            Таким образом, алгоритм позволяет найти оптимальную последовательность ходов, минимизирующую суммарную стоимость.
-          </p>
+          <textarea id="theory-code-snippet-4" style="display:none;">
+path = []
+cur = (n - 1, m - 1)
+while cur != (0, 0):
+    if cur[0] - 1 >= 0 and parent[cur[0]][cur[1]] == 'D':
+        cur = (cur[0] - 1, cur[1])
+        path.append('D')
+    else:
+        cur = (cur[0], cur[1] - 1)
+        path.append('R')
+path.reverse()</textarea>
         </article>
 
-        <!-- Tabs -->
         <div class="tab-buttons">
           <button id="exampleTabBtn" onclick="showTab('example')">Пример кода</button>
           <button id="userTabBtn" onclick="showTab('user')">Ваш код</button>
         </div>
 
-        <!-- Example Code Tab -->
         <div id="exampleTab" class="tab-content">
-          <h3>Пример (Python)</h3>
+          <p><span style="font-weight: bold; font-size: 1.2rem;">Визуализируйте алгоритм! (Python3)</span></p>
+          <p>Для стабильное работы визуализации, ограничения на входные данные следующие: <code>1 ≤ n, m ≤ 8</code>.</p>
           <textarea id="example-code">
-// Example DP (Turtle) - Python
-def turtle_task(matrix):
-    dp = []
-    path = []
-    currentPosition = (0, 0)
+# Example DP (Turtle) - Python
+n, m = map(int, input().split())
+matrix = [list(map(int, input().split())) for _ in range(n)]
+dp = [[-1] * m for _ in range(n)]
+dp[0][0] = matrix[0][0]
+parent = [['-'] * m for _ in range(n)]
+INF = 10 ** 9
 
-    rows = len(matrix)
-    cols = len(matrix[0]) if rows > 0 else 0
+for i in range(n):
+    for j in range(m):
+        if i == 0 and j == 0: continue
+        top = dp[i - 1][j] if i > 0 else INF
+        left = dp[i][j - 1] if j > 0 else INF
+        dp[i][j] = min(top, left) + matrix[i][j]
+        parent[i][j] = 'D' if top < left else 'R'
 
-    # Initialize dp & path
-    for r in range(rows):
-        dp.append([float('inf')] * cols)
-        path.append([None] * cols)
+path = []
+cur = (n - 1, m - 1)
+while cur != (0, 0):
+    if cur[0] - 1 >= 0 and parent[cur[0]][cur[1]] == 'D':
+        cur = (cur[0] - 1, cur[1])
+        path.append('D')
+    else:
+        cur = (cur[0], cur[1] - 1)
+        path.append('R')
+path.reverse()
 
-    dp[0][0] = matrix[0][0]
+print(dp[n - 1][m - 1])
+print(''.join(path))
+</textarea>
 
-    # We can move right or down
-    for r in range(rows):
-        for c in range(cols):
-            if r+1 < rows:
-                cost_down = dp[r][c] + matrix[r+1][c]
-                if cost_down < dp[r+1][c]:
-                    dp[r+1][c] = cost_down
-                    path[r+1][c] = (r, c)
-            if c+1 < cols:
-                cost_right = dp[r][c] + matrix[r][c+1]
-                if cost_right < dp[r][c+1]:
-                    dp[r][c+1] = cost_right
-                    path[r][c+1] = (r, c)
-
-    currentPosition = (rows-1, cols-1)
-    return dp, path, currentPosition
-
-if __name__ == "__main__":
-    matrix = [
-        [1, 2, 3],
-        [4, 5, 6],
-        [7, 8, 9]
-    ]
-    res_dp, res_path, res_pos = turtle_task(matrix)
-    print("dp =", res_dp)
-    print("path =", res_path)
-    print("currentPosition =", res_pos)
-          </textarea>
-
-          <!-- Read-only variable mapping table -->
           <table class="variables-table">
             <thead>
               <tr>
-                <th>Logical Name</th>
-                <th>Variable Name</th>
+                <th>Логическое название</th>
+                <th>Название переменной</th>
               </tr>
             </thead>
             <tbody>
@@ -171,33 +159,27 @@ if __name__ == "__main__":
                 <td><input type="text" value="dp" disabled /></td>
               </tr>
               <tr>
-                <td>path</td>
-                <td><input type="text" value="path" disabled /></td>
-              </tr>
-              <tr>
-                <td>currentPosition</td>
-                <td><input type="text" value="currentPosition" disabled /></td>
+                <td>parent</td>
+                <td><input type="text" value="parent" disabled /></td>
               </tr>
             </tbody>
           </table>
 
           <div class="run-button-area">
-            <!-- Запуск кода -->
             <button id="exampleRunBtn" class="run-btn">Запустить</button>
           </div>
         </div>
 
-        <!-- User Code Tab -->
         <div id="userTab" class="tab-content hidden">
-          <h3>Ваш код (Python)</h3>
+          <p><span style="font-weight: bold; font-size: 1.2rem;">Визуализируйте алгоритм! (Python3)</span></p>
+          <p>Для стабильное работы визуализации, ограничения на входные данные следующие: <code>1 ≤ n, m ≤ 8</code>.</p>
           <textarea id="user-code"></textarea>
 
-          <!-- Editable variable mapping table -->
           <table class="variables-table" id="user-variables-table">
             <thead>
               <tr>
-                <th>Logical Name</th>
-                <th>Variable Name (in your code)</th>
+                <th>Логическое название</th>
+                <th>Название переменной (в вашем коде)</th>
               </tr>
             </thead>
             <tbody>
@@ -206,12 +188,8 @@ if __name__ == "__main__":
                 <td><input type="text" id="var-dp" placeholder="e.g. dp" /></td>
               </tr>
               <tr>
-                <td>path</td>
-                <td><input type="text" id="var-path" placeholder="e.g. path" /></td>
-              </tr>
-              <tr>
-                <td>currentPosition</td>
-                <td><input type="text" id="var-currentPosition" placeholder="e.g. currentPosition" /></td>
+                <td>parent</td>
+                <td><input type="text" id="var-parent" placeholder="e.g. parent" /></td>
               </tr>
             </tbody>
           </table>
@@ -223,13 +201,11 @@ if __name__ == "__main__":
       </section>
     </main>
 
-    <!-- Footer pinned at bottom -->
     <footer class="credits">
       <p>© 2025 Algolume. Created by Ivan Kochergin.</p>
     </footer>
   </div>
 
-  <!-- Custom Alert Modal -->
   <div id="customAlertModal" class="modal">
     <div class="modal-content">
       <span class="close-button">&times;</span>
@@ -237,12 +213,10 @@ if __name__ == "__main__":
     </div>
   </div>
 
-  <!-- CodeMirror Scripts -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/python/python.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/edit/closebrackets.min.js"></script>
 
-  <!-- Your Main Script -->
-  <script src="script.js"></script>
+  <script src="turtle-script.js"></script>
 </body>
 </html>

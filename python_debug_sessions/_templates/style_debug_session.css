@@ -60,8 +60,8 @@ label {
 }
 button {
     margin-top: 0.5vh;
-    width: 120px; /* Fixed width */
-    height: 40px; /* Optional fixed height */
+    width: 120px;
+    height: 40px;
     padding: 10px 20px;
     background-color: #238636;
     color: white;
@@ -278,3 +278,5 @@ button:hover {
     font-weight: bold;
     margin-bottom: 10px;
 }
+
+
