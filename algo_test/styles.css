@@ -3,14 +3,16 @@
 }
 body {
   margin: 0;
-  font-family: 'PT Serif', serif;
+  /* font-family: 'PT Serif', serif; */
+  font-family: 'Open Sans', sans-serif;
   background-color: #0d1117;
   color: #c9d1d9;
   line-height: 1.5;
   text-align: justify;
-  margin-left: 15vw;
-  margin-right: 15vw;
+  margin-left: 17vw;
+  margin-right: 17vw;
 }
+
 
 code {
   background-color: #161b22;
@@ -62,6 +64,7 @@ code {
   color: #c9d1d9;
   text-decoration: none;
   color: #58a6ff;
+  margin-left: 9.2vw;
 }
 .menu-toggle {
   background: none;

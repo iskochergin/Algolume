@@ -44,8 +44,8 @@ def update_stdout() -> str:
     stdout: str = stdout_capture.get_stdout()
     stdout_capture.clear()  # Clear stdout after capturing
     total_stdout += stdout
-    if stdout != '':
-        total_stdout += '\n'
+    # if stdout != '':
+    #     total_stdout += '\n'
     return stdout
 
 
@@ -259,6 +259,8 @@ class StdoutCapture:
 
     def get_stdout(self) -> str:
         return self.stdout.strip()
+        # tprint(self.stdout)
+        # return self.stdout
 
     def clear(self) -> None:
         self.stdout = ""

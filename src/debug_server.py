@@ -85,6 +85,36 @@ def create_new_tutle_session(debug_id, debug_log, code, input_data, dp, parent):
     return file_url
 
 
+def create_new_grasshopper_session(debug_id, debug_log, code, input_data, dp, parent):
+    folder_name = debug_id
+    full_path = os.path.join(BASE_PATH, folder_name)
+
+    os.makedirs(full_path, exist_ok=True)
+
+    template_path = os.path.join(BASE_PATH, "_templates")
+    html_template_path = os.path.join(template_path, "pysession-grasshopper.html")
+    js_template_path = os.path.join(template_path, "interaction-grasshopper.js")
+
+    code_lines = code.split('\n')
+
+    with open(html_template_path, 'r', encoding='utf-8') as file:
+        html_content = file.read()
+        html_content = html_content.replace("{code_lines}", json.dumps(code_lines))
+        html_content = html_content.replace("{input_data}", input_data)
+        html_content = html_content.replace("{debug_log}", json.dumps(debug_log))
+        html_content = html_content.replace("{dpVar}", dp)
+        html_content = html_content.replace("{parentVar}", parent)
+
+    html_filename = "pysession-grasshopper.html"
+    with open(os.path.join(full_path, html_filename), 'w', encoding='utf-8') as file:
+        file.write(html_content)
+
+    shutil.copy(js_template_path, os.path.join(full_path, "interaction-grasshopper.js"))
+
+    file_url = f'http://127.0.0.1:5000/python_debug_sessions/{folder_name}/pysession-grasshopper.html'
+    return file_url
+
+
 @app.route('/')
 def index():
     return send_from_directory('.', 'index.html')
@@ -142,6 +172,40 @@ def new_debug_page_turtle():
 
         print('OK')
         file_url = create_new_tutle_session(debug_id, debug_log, code, input_data, dp, parent)
+
+        return jsonify({
+            "url": file_url,
+            "id": debug_id,
+            "execution_time": exec_time,
+            "memory_used": memory,
+            "error": None
+        }), 200
+
+    except Exception as e:
+        return jsonify({"error": "An unexpected error occurred."}), 500
+    
+
+@app.route('/new-debug-page-grasshopper', methods=['POST'])
+def new_debug_page_grasshopper():
+    try:
+        data = request.get_json()
+        code = data.get('code', '')
+        input_data = data.get('input', '')
+        dp = data.get('dpVar', '')
+        parent = data.get('parentVar', '')
+
+        if not dp or not parent:
+            return jsonify({"error": "dpVar or parent is missing"})
+
+        debug_id = generate_uuid()
+        debug_log, exec_time, memory = get_debug_log_limited(code, input_data)
+        if type(debug_log) is tuple and debug_log[0] == 'error':
+            return jsonify({"error": debug_log[1]})
+        if type(debug_log) is str and debug_log.startswith('Restricted!'):
+            return jsonify({"error": debug_log})
+
+        print('OK')
+        file_url = create_new_grasshopper_session(debug_id, debug_log, code, input_data, dp, parent)
 
         return jsonify({
             "url": file_url,

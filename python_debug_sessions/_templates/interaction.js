@@ -470,6 +470,7 @@ function renderExecutionTrace() {
     if (currentLog.stdout && currentStep == maxCurrentStep && !usedMax) {
         // console.log('AAAAAAAA', currentLog.stdout, currentStep);
         stepsContent[currentStep] += currentLog.stdout + '\n';
+        
         usedMax = true;
         reinitUserInputFront();
     }

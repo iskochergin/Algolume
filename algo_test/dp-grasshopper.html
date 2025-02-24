@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>DP (Кузнечик) | Algolume</title>
+  
+  <link rel="stylesheet" href="styles.css"/>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&display=swap&subset=cyrillic" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/dracula.min.css" />
+
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header class="top-bar">
+    <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+
+    <h1><a href="index.html">Algolume</a></h1>
+    <div class="top-right-links">
+      <a href="https://github.com/iskochergin/Algolume" target="_blank">GitHub</a>
+      <a href="https://example.com">Feedback</a>
+    </div>
+  </header>
+
+  <div id="sidebar" class="sidebar closed">
+    <nav>
+      <ul>
+        <li><a href="dp-turtle.html">DP (Задача с черепашкой)</a></li>
+        <li><a href="dp-grasshopper.html" class="active">DP (Задача с кузнечиком)</a></li>
+        <li><a href="#">DFS</a></li>
+        <li><a href="#">Дейкстра</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <div id="content-container" class="expanded">
+    <main id="main-content">
+      <section>
+        <h1>ДП: Задача с кузнечиком</h1>
+
+        <article>
+          <p>
+            <span style="font-weight: bold; font-size: 1.2rem;">Задача:</span> Пусть одномерный массив <code>route</code> длиной <code>n</code>, где каждая ячейка содержит число – стоимость прохождения через неё. 
+            Кузнечик начинает движение прямо перед первой клеткой и может прыгать на одну или две клетки вперед. Цель — пройти весь <code>route</code>, <b>придя в последнюю клетку</b>, с минимальной суммарной стоимостью и вывести прыжки, которые должен делать кузнечик.
+          </p>
+          <p>
+            <span style="font-weight: bold; font-size: 1.2rem;">Формат входных данных:</span> В первой строке задано число <code>n</code> (<code>2 ≤ n ≤ 1,000,000</code>). Во второй строке заданы <code>n</code> целых чисел <code>0 ≤ route[i] ≤ 100</code>.
+          </p>
+          <p>
+            <span style="font-weight: bold; font-size: 1.2rem;">Формат выходных данных:</span> В первой строке выводится одно число — минимальная суммарная стоимость. Во второй строке — номера клеток (целые числа от 1 до n), которые кузнечик посетит, если будет передвигаться оптимально (пример: 1 3 4 6).
+          </p>
+          <p>
+            <span style="font-weight: bold; font-size: 1.2rem;">Решение:</span>
+            Для решения задачи используется метод динамического программирования. Создаётся одмерный массив <code>dp</code>, где <code>dp[i]</code> — минимальная стоимость пути до <code>i</code>. Дополнительно формируется массив <code>parent</code> для восстановления маршрута, где <code>parent[i]</code> — номер оптимального предка для клетки.
+          </p>
+
+          <p>Начальное условие:</p>
+           <p><code>dp[0] = route[0]</code></p>
+           <p><code>dp[1] = route[1]</code></p>
+           <p>Для остальных ячеек выбираем оптимальный переход – из ячейки <code>i - 1</code> или <code>i - 2</code>, параллельно обновляя предка текущей ячейки:</p>
+          <textarea id="theory-code-snippet-1" style="display:none;">
+for i in range(2, n):
+    dp[i] = route[i] + min(dp[i - 1], dp[i - 2])
+    parent[i] = i - 1 if dp[i - 1] < dp[i - 2] else i - 2</textarea>
+
+          <p>
+            После заполнения массива <code>dp</code>, значение <code>dp[n-1]</code> – искомая минимальная стоимость, а массив <code>parent</code> позволяет восстановить маршрут.
+          </p>
+          
+          <p>Пусть:</p>
+          <textarea id="theory-code-snippet-2" style="display:none;">
+route = [5, 2, 8, 9, 9, 1, 4, 2, 4]</textarea>
+
+          <p>Тогда после вычислений:</p>
+          <textarea id="theory-code-snippet-3" style="display:none;">
+dp = [5, 2, 10, 11, 19, 12, 16, 14, 18]</textarea>
+
+          <p>
+            <span style="font-weight: bold; font-size: 1.2rem;">Восстановление маршрута:</span>
+            Начиная с <code>n - 1</code>, предвигаемся по предкам, параллельно обнавляя текущюю ячейку. В итоге, приходим в <code>1</code> или <cod>0</cod>, отуда могли просто начать путь, и на этом шаге заканчиваем.
+          </p>
+          <textarea id="theory-code-snippet-4" style="display:none;">
+path = []
+cur = n - 1
+while cur != -1:
+    path.append(cur + 1)
+    cur = parent[cur]
+path.reverse()</textarea>
+        </article>
+
+        <div class="tab-buttons">
+          <button id="exampleTabBtn" onclick="showTab('example')">Пример кода</button>
+          <button id="userTabBtn" onclick="showTab('user')">Ваш код</button>
+        </div>
+
+        <div id="exampleTab" class="tab-content">
+          <p><span style="font-weight: bold; font-size: 1.2rem;">Визуализируйте алгоритм! (Python3)</span></p>
+          <p>Для стабильное работы визуализации, ограничения на входные данные следующие: <code>2 ≤ n ≤ 30</code>.</p>
+          <textarea id="example-code">
+# Example DP (Grasshopper) - Python
+n = int(input())
+route = list(map(int, input().split()))
+dp = [0] * n
+dp[0] = route[0]
+dp[1] = route[1]
+parent = [-1] * n
+
+for i in range(2, n):
+    dp[i] = route[i] + min(dp[i - 1], dp[i - 2])
+    parent[i] = i - 1 if dp[i - 1] < dp[i - 2] else i - 2
+
+path = []
+cur = n - 1
+while cur != -1:
+    path.append(cur + 1)
+    cur = parent[cur]
+path.reverse()
+
+print(dp[n - 1])
+print(*path)
+</textarea>
+
+          <table class="variables-table">
+            <thead>
+              <tr>
+                <th>Логическое название</th>
+                <th>Название переменной</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>dp</td>
+                <td><input type="text" value="dp" disabled /></td>
+              </tr>
+              <tr>
+                <td>parent</td>
+                <td><input type="text" value="parent" disabled /></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="run-button-area">
+            <button id="exampleRunBtn" class="run-btn">Запустить</button>
+          </div>
+        </div>
+
+        <div id="userTab" class="tab-content hidden">
+          <p><span style="font-weight: bold; font-size: 1.2rem;">Визуализируйте алгоритм! (Python3)</span></p>
+          <p>Для стабильное работы визуализации, ограничения на входные данные следующие: <code>2 ≤ n ≤ 30</code>.</p>
+          <p>! Ваша реализация должна быть основана на <b>0-индексации</b> при работе с массивами и значениями в них, иначе визализация может работать некорректно.</p>
+          <textarea id="user-code"></textarea>
+
+          <table class="variables-table" id="user-variables-table">
+            <thead>
+              <tr>
+                <th>Логическое название</th>
+                <th>Название переменной (в вашем коде)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>dp</td>
+                <td><input type="text" id="var-dp" placeholder="e.g. dp" /></td>
+              </tr>
+              <tr>
+                <td>parent</td>
+                <td><input type="text" id="var-parent" placeholder="e.g. parent" /></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="run-button-area">
+            <button id="userRunBtn" class="run-btn">Запустить</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="credits">
+      <p>© 2025 Algolume. Created by Ivan Kochergin.</p>
+    </footer>
+  </div>
+
+  <div id="customAlertModal" class="modal">
+    <div class="modal-content">
+      <span class="close-button">&times;</span>
+      <p id="alertMessage"></p>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/python/python.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/edit/closebrackets.min.js"></script>
+
+  <script src="grasshopper-script.js"></script>
+</body>
+</html>

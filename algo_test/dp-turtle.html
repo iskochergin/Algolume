@@ -8,6 +8,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&display=swap&subset=cyrillic" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap" rel="stylesheet">
 
@@ -29,7 +30,7 @@
     <nav>
       <ul>
         <li><a href="dp-turtle.html" class="active">DP (Задача с черепашкой)</a></li>
-        <li><a href="#">DP (Задача с кузнечиком)</a></li>
+        <li><a href="dp-grasshopper.html"">DP (Задача с кузнечиком)</a></li>
         <li><a href="#">DFS</a></li>
         <li><a href="#">Дейкстра</a></li>
       </ul>
@@ -39,7 +40,7 @@
   <div id="content-container" class="expanded">
     <main id="main-content">
       <section>
-        <h1>ДП: Задача с черепашкой (2D массив)</h1>
+        <h1>ДП: Задача с черепашкой</h1>
 
         <article>
           <p>
@@ -50,11 +51,11 @@
             <span style="font-weight: bold; font-size: 1.2rem;">Формат входных данных:</span> На первой строке заданы два числа <code>n</code> и <code>m</code> (<code>1 ≤ n, m ≤ 1000</code>). Далее идут <code>n</code> строк по <code>m</code> целых чисел <code>0 ≤ matrix[i][j] ≤ 100</code>.
           </p>
           <p>
-            <span style="font-weight: bold; font-size: 1.2rem;">Формат выходных данных:</span> На первой строке выводится одно число — минимальная суммарная стоимость. Во второй строке подряд написаны символы <code>R</code> (вправо) и <code>D</code> (вниз), обозначающие направление движения черепашки (пример: RRDRD).
+            <span style="font-weight: bold; font-size: 1.2rem;">Формат выходных данных:</span> На первой строке выводится одно число — минимальная суммарная стоимость. Во второй строке символы <code>R</code> (вправо) и <code>D</code> (вниз), обозначающие направление движения черепашки на каждом ходу (пример: RRDRD).
           </p>
           <p>
             <span style="font-weight: bold; font-size: 1.2rem;">Решение:</span>
-            Для решения задачи используется метод динамического программирования. Создаётся массив <code>dp</code>, где <code>dp[i][j]</code> — минимальная стоимость пути от <code>(0,0)</code> до <code>(i,j)</code>. Дополнительно формируется массив <code>parent</code> для восстановления маршрута, где <code>parent[i][j]</code> — оптимальный предок для клетки (<code>'R'</code>, если пришли слева, <code>'D'</code>, если пришли сверху).
+            Для решения задачи используется метод динамического программирования. Создаётся массив двухмерный <code>dp</code>, где <code>dp[i][j]</code> — минимальная стоимость пути от <code>(0,0)</code> до <code>(i,j)</code>. Дополнительно формируется массив <code>parent</code> для восстановления маршрута, где <code>parent[i][j]</code> — оптимальный предок для клетки (<code>'R'</code>, если пришли слева, <code>'D'</code>, если пришли сверху).
           </p>
 
           <p>Начальное условие:</p>
@@ -70,7 +71,7 @@ for i in range(n):
         parent[i][j] = 'D' if top < left else 'R'</textarea>
 
           <p>
-            После заполнения матрицы <code>dp</code> значение <code>dp[n-1][m-1]</code> – искомая минимальная стоимость, а массив <code>parent</code> позволяет восстановить маршрут.
+            После заполнения матрицы <code>dp</code>, значение <code>dp[n-1][m-1]</code> – искомая минимальная стоимость, а массив <code>parent</code> позволяет восстановить маршрут.
           </p>
           
           <p>Пусть:</p>
