@@ -1,31 +1,64 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Step-by-step Algorithms</title>
-    <link rel="stylesheet" href="style_main_page.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/dracula.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&display=swap&subset=cyrillic" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap" rel="stylesheet">
+  
+  <meta charset="UTF-8">
+  <title>Algolume</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Algolume debugger</h1>
-    <form id="debugForm">
-        <label for="code">Write your code in Python 3.11</label><br>
-        <textarea id="code" name="code"></textarea><br><br>
-        <button type="button" id="runButton">Run code</button>
-    </form>
+  <header class="top-bar">
+    <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
 
-    <div id="customAlertModal" class="modal">
-        <div class="modal-content">
-            <span class="close-button">&times;</span>
-            <p id="alertMessage">Your alert message goes here...</p>
-        </div>
+    <h1><a href="index.html">Algolume</a></h1>
+    <div class="top-right-links">
+      <a href="https://github.com/iskochergin/Algolume" target="_blank">GitHub</a>
+      <a href="#feedback">Feedback</a>
     </div>
+  </header>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/python/python.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/edit/closebrackets.min.js"></script>
-    <script src="script.js"></script>
+  <div id="sidebar" class="sidebar closed">
+    <nav>
+      <ul>
+        <li><a href="dp-turtle.html">DP (Задача с черепашкой)</a></li>
+        <li><a href="dp-grasshopper.html">DP (Задача с кузнечиком)</a></li>
+        <li><a href="dfs.html">DFS</a></li>
+        <li><a href="dijkstra.html">Дейкстра</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <div id="content-container" class="expanded">
+    <main id="main-content">
+      <section>
+        <h1>Добро пожаловать в Algolume!</h1>
+        <p>
+          Здесь вы найдёте визуализации и краткие теоретические сведения
+          по распространённым алгоритмам. Используйте меню слева или ссылки ниже,
+          чтобы перейти к подробному описанию и примеру кода.
+        </p>
+        <p>
+          <strong>Алгоритмы:</strong>
+          <ul>
+            <li><a href="dp-turtle.html" class="light">Динамическое программирование (Задача с черепашкой)</a></li>
+            <li><a href="dp-grasshopper.html" class="light">Динамическое программирование (Задача с кузнечиком)</a></li>
+            <li><a href="dfs.html" class="light">Поиск в глубину (DFS)</a></li>
+            <li><a href="dijkstra.html" class="light">Алгоритм Дейкстры</a></li>
+          </ul>
+        </p>
+      </section>
+    </main>
+
+    <footer class="credits">
+      <p>© 2025 Algolume. Created by Ivan Kochergin.</p>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>

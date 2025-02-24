@@ -255,14 +255,11 @@ def sessions(filename):
     return send_from_directory(SESSIONS_BASE, filename)
 
 
-@app.route('/script.js')
-def get_script_src():
-    return send_from_directory(PATH_TO_SRC, "script.js")
-
-
-@app.route('/style_main_page.css')
-def get_style_main_src():
-    return send_from_directory(PATH_TO_SRC, "style_main_page.css")
+@app.route('/<path:filename>')
+def serve_src(filename):
+    if filename.endswith('.py'):
+        return
+    return send_from_directory(PATH_TO_SRC, filename)
 
 
 @app.route('/white_black_list_py.html')
