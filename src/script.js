@@ -1,7 +1,3 @@
-exampleTab.classList.remove('hidden');
-exampleTabBtn.classList.add('active-tab');
-if (window.exampleCM) window.exampleCM.refresh();
-
 /* Toggle the sidebar with ONE button that changes from ☰ to × */
 function toggleSidebar() {
   const sidebar = document.getElementById('sidebar');
