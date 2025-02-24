@@ -1,6 +1,6 @@
 /.idea/
 /.vscode/
 /.venv/
-# /python_debug_sessions/
+/python_debug_sessions/
 /ideas/
 src/__pycache__/
