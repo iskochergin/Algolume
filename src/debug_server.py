@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, send_from_directory
+from flask import Flask, redirect, request, jsonify, send_from_directory
 from flask_cors import CORS
 from datetime import datetime
 import uuid
@@ -259,7 +259,19 @@ def sessions(filename):
 def serve_src(filename):
     if filename.endswith('.py'):
         return
-    return send_from_directory(PATH_TO_SRC, filename)
+
+    if filename == "index.html":
+        return redirect("/", code=301)
+
+    file_path = os.path.join(PATH_TO_SRC, filename)
+    if os.path.exists(file_path):
+        return send_from_directory(PATH_TO_SRC, filename)
+
+    html_path = os.path.join(PATH_TO_SRC, f"{filename}.html")
+    if os.path.exists(html_path):
+        return send_from_directory(PATH_TO_SRC, f"{filename}.html")
+
+    return "File not found", 404
 
 
 @app.route('/white_black_list_py.html')

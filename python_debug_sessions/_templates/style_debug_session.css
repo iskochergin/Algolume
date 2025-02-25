@@ -12,6 +12,12 @@ h1 {
     margin-bottom: 10px;
 }
 
+h1 a {
+    color: #c9d1d9;
+    text-decoration: none;
+    color: #58a6ff;
+}
+
 /* Captions for code & input areas */
 #code-input-captions {
     display: flex;
