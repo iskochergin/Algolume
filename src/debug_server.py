@@ -115,6 +115,36 @@ def create_new_grasshopper_session(debug_id, debug_log, code, input_data, dp, pa
     return file_url
 
 
+def create_new_dfs_session(debug_id, debug_log, code, input_data, parent, graph):
+    folder_name = debug_id
+    full_path = os.path.join(BASE_PATH, folder_name)
+
+    os.makedirs(full_path, exist_ok=True)
+
+    template_path = os.path.join(BASE_PATH, "_templates")
+    html_template_path = os.path.join(template_path, "pysession-dfs.html")
+    js_template_path = os.path.join(template_path, "interaction-dfs.js")
+
+    code_lines = code.split('\n')
+
+    with open(html_template_path, 'r', encoding='utf-8') as file:
+        html_content = file.read()
+        html_content = html_content.replace("{code_lines}", json.dumps(code_lines))
+        html_content = html_content.replace("{input_data}", input_data)
+        html_content = html_content.replace("{debug_log}", json.dumps(debug_log))
+        html_content = html_content.replace("{parentVar}", parent)
+        html_content = html_content.replace("{graphVar}", graph)
+
+    html_filename = "pysession-dfs.html"
+    with open(os.path.join(full_path, html_filename), 'w', encoding='utf-8') as file:
+        file.write(html_content)
+
+    shutil.copy(js_template_path, os.path.join(full_path, "interaction-dfs.js"))
+
+    file_url = f'http://127.0.0.1:5000/python_debug_sessions/{folder_name}/pysession-dfs.html'
+    return file_url
+
+
 @app.route('/')
 def index():
     return send_from_directory('.', 'index.html')
@@ -217,6 +247,40 @@ def new_debug_page_grasshopper():
 
     except Exception as e:
         return jsonify({"error": "An unexpected error occurred."}), 500
+    
+
+@app.route('/new-debug-page-dfs', methods=['POST'])
+def new_debug_page_dfs():
+    try:
+        data = request.get_json()
+        code = data.get('code', '')
+        input_data = data.get('input', '')
+        parent = data.get('parentVar', '')
+        graph = data.get('graphVar', '')
+
+        if not parent or not graph:
+            return jsonify({"error": "dpVar or graph is missing"})
+
+        debug_id = generate_uuid()
+        debug_log, exec_time, memory = get_debug_log_limited(code, input_data)
+        if type(debug_log) is tuple and debug_log[0] == 'error':
+            return jsonify({"error": debug_log[1]})
+        if type(debug_log) is str and debug_log.startswith('Restricted!'):
+            return jsonify({"error": debug_log})
+
+        print('OK')
+        file_url = create_new_dfs_session(debug_id, debug_log, code, input_data, parent, graph)
+
+        return jsonify({
+            "url": file_url,
+            "id": debug_id,
+            "execution_time": exec_time,
+            "memory_used": memory,
+            "error": None
+        }), 200
+
+    except Exception as e:
+        return jsonify({"error": "An unexpected error occurred."}), 500
 
 
 @app.route('/request-debug-log', methods=['POST'])
@@ -255,12 +319,17 @@ def sessions(filename):
     return send_from_directory(SESSIONS_BASE, filename)
 
 
+@app.route('/a.ico')
+def serve_ico():
+    return send_from_directory("/root/Algolume/", "a.ico")
+
+
 @app.route('/<path:filename>')
 def serve_src(filename):
     if filename.endswith('.py'):
         return
 
-    if filename == "index.html":
+    if filename == "index.html" or filename == "index":
         return redirect("/", code=301)
 
     file_path = os.path.join(PATH_TO_SRC, filename)

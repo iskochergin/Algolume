@@ -1,9 +1,12 @@
 body {
-    /* font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; */
     font-family: 'Open Sans', sans-serif;
     margin: 20px;
     background-color: #0d1117;
     color: #c9d1d9;
+}
+
+#execution-output {
+    display: none;
 }
 
 h1 {
@@ -13,12 +16,10 @@ h1 {
 }
 
 h1 a {
-    color: #c9d1d9;
-    text-decoration: none;
     color: #58a6ff;
+    text-decoration: none;
 }
 
-/* Captions for code & input areas */
 #code-input-captions {
     display: flex;
     gap: 10px;
@@ -46,7 +47,6 @@ label {
     color: #c9d1d9;
 }
 
-/* CodeMirror container */
 .CodeMirror {
     height: 700px;
     width: 60vw;
@@ -65,6 +65,7 @@ label {
     padding-top: 0px;
     text-align: left;
 }
+
 button {
     margin-top: 0.5vh;
     width: 120px;
@@ -76,6 +77,7 @@ button {
     border-radius: 6px;
     cursor: pointer;
 }
+
 button:hover {
     background-color: #2ea043;
 }
@@ -177,27 +179,11 @@ button:hover {
     to {opacity: 1}
 }
 
-/* CSS for output display */
-#step-output {
-    white-space: pre-wrap;
-    background-color: #161b22;
-    color: #c9d1d9;
-    padding: 10px;
-    border: 1px solid #30363d;
-    border-radius: 6px;
-    margin-top: 10px;
-    font-family: monospace;
-    overflow-x: auto;
-}
-#execution-output {
-    display: none;
-}
-
-/* Slider styling */
 #step-slider-container {
     margin: 5px auto;
     text-align: left;
 }
+
 #step-slider {
   -webkit-appearance: none;
   height: 6px;
@@ -206,6 +192,7 @@ button:hover {
   outline: none;
   width: 60vw;
 }
+
 #step-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
@@ -216,6 +203,7 @@ button:hover {
   cursor: pointer;
   border: 2px solid #0d1117;
 }
+
 #step-slider::-moz-range-thumb {
   width: 16px;
   height: 16px;
@@ -224,6 +212,7 @@ button:hover {
   cursor: pointer;
   border: 2px solid #0d1117;
 }
+
 .slider-label {
   margin-top: 5px;
   font-size: 0.9em;
@@ -231,7 +220,6 @@ button:hover {
   text-align: left;
 }
 
-/* Variables container styling (narrower width) */
 .variables-container {
     background-color: #161b22;
     padding: 10px;
@@ -244,19 +232,23 @@ button:hover {
     width: 58.8vw;
     margin-top: 20px;
 }
+
 .variable-scope {
     margin-bottom: 20px;
 }
+
 .variable-scope h3,
 .variable-scope h4 {
     margin-bottom: 5px;
     color: #58a6ff;
     font-size: 0.95em;
 }
+
 .variables-table {
     width: 100%;
     border-collapse: collapse;
 }
+
 .variables-table th,
 .variables-table td {
     border: 1px solid #30363d;
@@ -264,17 +256,21 @@ button:hover {
     text-align: left;
     font-size: 0.85em;
 }
+
 .variables-table th {
     background-color: #0d1117;
     color: #c9d1d9;
 }
+
 .variable-name {
     color: #58a6ff;
 }
+
 .variable-value {
     color: #c9d1d9;
     word-break: break-word;
 }
+
 .debug-error {
     margin-top: 10px;
     background-color: rgba(179, 29, 40, 0.8);
@@ -286,13 +282,29 @@ button:hover {
     margin-bottom: 10px;
 }
 
+/* Graph visualization container styling */
+#graph-visualization-container {
+    background-color: #161b22;
+    padding: 12px;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    margin-top: 20px;
+    height: 500px;  /* Fixed height to prevent continuous expansion */
+    /* width: 58.8vw; */
+    /* overflow-x: hidden; */
+}
 
-.dp-heading-container {
+.graph-heading-container {
     position: relative;
     display: inline-block;
-  }
-  
-.dp-heading-container .tooltip-text {
+}
+
+.graph-heading-container h2 {
+    margin-top: 0;
+    color: #58a6ff;
+}
+
+.graph-heading-container .tooltip-text {
     visibility: hidden;
     width: 280px;
     background-color: #282a36;
@@ -302,15 +314,15 @@ button:hover {
     border-radius: 6px;
     position: absolute;
     bottom: 100%;
-    left: 50%;
-    transform: translateX(-50%);
+    left: 165px;
+    transform: translateX(-30%);
     opacity: 0;
     transition: opacity 0.3s ease;
     z-index: 10;
     font-size: 0.9em;
 }
 
-.dp-heading-container .tooltip-text::after {
+.graph-heading-container .tooltip-text::after {
     content: "";
     position: absolute;
     top: 100%;
@@ -321,58 +333,13 @@ button:hover {
     border-color: #282a36 transparent transparent transparent;
 }
 
-.dp-heading-container:hover .tooltip-text {
+.graph-heading-container:hover .tooltip-text {
     visibility: visible;
     opacity: 1;
-}  
+}
 
-#var-and-dp-wrapper {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-}
-  
-#dp-visualization-container {
-  background-color: #161b22;
-  padding: 12px;
-  border: 1px solid #30363d;
-  border-radius: 6px;
-  width: 34.5vw;
-  margin-top: 20px;
-  /* max-height: 39.2vh; */
-  padding-bottom: 20px;
-}
-  
-#dp-visualization-container h2 {
-    margin-top: 0;
-    color: #58a6ff;
-}
-  
-#dp-visualization {
-    margin-top: 10px;
-}
-  
-#dp-table {
-    border-collapse: collapse;
-    width: 100%;
-    table-layout: fixed;
-    margin-bottom: 10px; 
-}
-  
-#dp-table th,
-#dp-table td {
+#graph-visualization {
+    width: 99.5%;
+    height: 81%;
     border: 1px solid #30363d;
-    padding: 8px;
-    text-align: center;
-    transition: background-color 0.2s ease;
-}
-  
-#dp-table td:hover {
-    background-color: #2ea043;
-    cursor: pointer;
-}
-  
-.dp-highlight {
-    background-color: #2ea043 !important;
-}
-  
+} 

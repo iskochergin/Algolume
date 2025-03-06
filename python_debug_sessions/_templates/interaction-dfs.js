@@ -630,107 +630,158 @@ function searchVariableRecursively(obj, varName) {
     return undefined;
 }
 
-function check2DArrayStructure(arr, n, m) {
-    if (!Array.isArray(arr) || arr.length !== n) return false;
-    for (let i = 0; i < n; i++) {
-        if (!Array.isArray(arr[i]) || arr[i].length !== m) return false;
-    }
-    return true;
-}
-
-function computeDPPath(i, j, parentData) {
-    let pathCells = [];
-    let curRow = i, curCol = j;
+function highlightPathToRoot(network, nodeId, parentData) {
+    if (!parentData) return;
+    let pathNodes = [];
+    let pathEdges = [];
+    let current = nodeId;
     while (true) {
-        if (curRow < 0 || curCol < 0) break;
-        pathCells.push({ row: curRow, col: curCol });
-        if ((curRow === 0 && curCol === 0) || (parentData[curRow][curCol] !== "D" && parentData[curRow][curCol] !== "R")) {
-            break;
-        }
-        let direction = parentData[curRow][curCol];
-        if (direction === 'D') {
-            curRow--;
-        } else if (direction === 'R') {
-            curCol--;
-        } else {
-            break;
-        }
+        pathNodes.push(current);
+        let p = parentData[current];
+        if (typeof p !== 'number' || p < 0 || p >= parentData.length) break;
+        pathEdges.push("edge_" + Math.min(current, p) + "_" + Math.max(current, p));
+        current = p;
     }
-    return pathCells;
+    network.selectNodes(pathNodes, false);
+    network.selectEdges(pathEdges);
 }
 
-function highlightDPPathCell(i, j, dpData, parentData) {
-    if (dpData[i][j] === undefined || dpData[i][j] === null) return;
-    const pathCells = computeDPPath(i, j, parentData);
-    pathCells.forEach(cell => {
-        const td = document.querySelector(
-            `#dp-table tr:nth-child(${cell.row + 1}) td:nth-child(${cell.col + 1})`
-        );
-        if (td) {
-            td.classList.add('dp-highlight');
-        }
-    });
-}
-
-function clearDPHighlight() {
-    const highlighted = document.querySelectorAll('#dp-table td.dp-highlight');
-    highlighted.forEach(cell => cell.classList.remove('dp-highlight'));
-}
-
-function renderDPVisualization() {
+function renderGraphVisualization() {
     const currentVars = debugLog[currentStep] && debugLog[currentStep].variables;
-    const container = document.getElementById('dp-visualization');
+    const container = document.getElementById('graph-visualization');
     if (!currentVars || !container) {
         if (container) container.innerHTML = '';
         return;
     }
-    const dpData = searchVariableRecursively(currentVars, dpVar);
-    const parentData = searchVariableRecursively(currentVars, parentVar);
-    if (dpData === undefined || parentData === undefined) {
-        container.innerHTML = 'Таблица DP не определена (dp или parent отсутствуют).';
+
+    const adjacency = searchVariableRecursively(currentVars, graphVar);
+    let parentData = searchVariableRecursively(currentVars, parentVar);
+    if (!adjacency || adjacency.length > 16) {
+        container.innerHTML = '\u00A0 Данные графа не определены или граф слишком большой.';
         return;
     }
-    if (!Array.isArray(dpData) || dpData.length === 0 || !Array.isArray(dpData[0])) {
-        container.innerHTML = 'Таблица DP не определена (dp не является корректным массивом).';
-        return;
-    }
-    const n = dpData.length;
-    const m = dpData[0].length;
-    if (n > 8 || m > 8) {
-        container.innerHTML = 'Размер таблицы превышает 8 (текущие размеры: ' + n + 'x' + m + ').';
-        return;
-    }
-    if (!check2DArrayStructure(dpData, n, m) || !check2DArrayStructure(parentData, n, m)) {
-        container.innerHTML = 'Таблица DP не определена (dp и parent не совпадают по размерам).';
-        return;
-    }
-    container.innerHTML = '';
-    const table = document.createElement('table');
-    table.id = 'dp-table';
-    for (let i = 0; i < n; i++) {
-        const tr = document.createElement('tr');
-        for (let j = 0; j < m; j++) {
-            const td = document.createElement('td');
-            td.dataset.row = i;
-            td.dataset.col = j;
-            td.textContent = (dpData[i][j] !== undefined && dpData[i][j] !== null) ? dpData[i][j] : '';
-            td.addEventListener('mouseenter', function() {
-                highlightDPPathCell(i, j, dpData, parentData);
-            });
-            td.addEventListener('mouseleave', function() {
-                clearDPHighlight();
-            });
-            tr.appendChild(td);
+
+    // If parentData is missing or too short, fill with -1
+    if (!Array.isArray(parentData)) parentData = [];
+    if (parentData.length < adjacency.length) {
+        for (let i = parentData.length; i < adjacency.length; i++) {
+            parentData.push(-1);
         }
-        table.appendChild(tr);
     }
-    container.appendChild(table);
+
+    // For an undirected graph, only create an edge for i < nb
+    let usedNodes = new Set();
+    let edges = [];
+    for (let i = 0; i < adjacency.length; i++) {
+        const neighbors = adjacency[i];
+        if (!Array.isArray(neighbors)) continue;
+        for (let nb of neighbors) {
+            if (i < nb) {
+                usedNodes.add(i);
+                usedNodes.add(nb);
+                edges.push({
+                    id: "edge_" + i + "_" + nb,
+                    from: i,
+                    to: nb
+                    // No arrow => simple line
+                });
+            }
+        }
+    }
+
+    // Create node objects only for used IDs
+    let nodes = [];
+    for (let i = 0; i < adjacency.length; i++) {
+        if (!usedNodes.has(i)) continue; // skip isolated nodes
+        nodes.push({
+            id: i,
+            label: "" + String(i),
+            // title: `Node ${i}`
+        });
+    }
+
+    container.innerHTML = '';
+    let data = {
+        nodes: new vis.DataSet(nodes),
+        edges: new vis.DataSet(edges)
+    };
+
+    // Force-based layout with bigger circle size & centered text
+    let options = {
+        layout: {
+            hierarchical: { enabled: false }
+        },
+        physics: {
+            enabled: true,
+            solver: 'barnesHut',
+            barnesHut: {
+                gravitationalConstant: -2000,
+                centralGravity: 0.3,
+                springLength: 100,
+                springConstant: 0.04,
+                damping: 0.09,
+                avoidOverlap: 0.5
+            }
+        },
+        interaction: {
+            hover: true,
+            tooltipDelay: 200,
+            dragNodes: true,
+            selectConnectedEdges: false,
+            hoverConnectedEdges: false,
+        },
+        nodes: {
+            shape: 'circle',
+            // Increase the node size so two-digit labels fit comfortably
+            size: 20,
+            font: {
+                // Slightly larger font
+                size: 18,
+                face: 'Arial',
+                // Align center ensures text is horizontally centered
+                align: 'center',
+                // If you want to tweak vertical alignment, you can adjust vadjust
+                vadjust: 0
+            },
+            borderWidth: 2,
+            shadow: true
+        },
+        edges: {
+            width: 2,
+            shadow: true,
+            color: {
+                color: '#58a6ff',
+                highlight: '#2ea043',
+                hover: '#2ea043'
+            }
+        }
+    };
+
+    let network;
+    try {
+        network = new vis.Network(container, data, options);
+    } catch (err) {
+        console.error("vis-network error:", err);
+        if (String(err).includes("Arrays are not supported by deepExtend")) {
+            console.log("Encountered 'Arrays are not supported by deepExtend'. Skipping graph rendering.");
+            return;
+        }
+        return;
+    }
+
+    // If you have a parent array and want to highlight the path to root:
+    network.on("hoverNode", params => {
+        highlightPathToRoot(network, params.node, parentData);
+    });
+    network.on("blurNode", params => {
+        network.unselectAll();
+    });
 }
 
 (function() {
     const originalDisplayStep = displayStep;
     displayStep = function(step) {
         originalDisplayStep(step);
-        renderDPVisualization();
+        renderGraphVisualization();
     };
 })();

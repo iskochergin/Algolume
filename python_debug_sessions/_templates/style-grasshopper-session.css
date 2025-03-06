@@ -115,7 +115,7 @@ button:hover {
 }
 
 .input-codemirror .CodeMirror-line::before {
-    content: ">>> ";
+    content: "";
     color: #37bb4f;
     font-weight: bold;
     pointer-events: none;

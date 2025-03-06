@@ -335,7 +335,7 @@ function displayStep(step) {
 
 function handleUserInputPaste(cm, e) {
     if (currentStep < maxCurrentStep) {
-        CustomAlert('You can enter input only in the last step!')
+        CustomAlert('You can enter input only in the last viewed step!')
         return;
     }
  
@@ -408,7 +408,7 @@ function handleUserInputKeydown(cm, e) {
 function makeMarker() {
     var marker = document.createElement("div");
     marker.style.color = "#37bb4f";
-    marker.innerHTML = ">>> ";
+    marker.innerHTML = "";
     return marker;
 }
 
@@ -566,7 +566,7 @@ function stepForward() {
     }
 
     if (currentStep == debugLog.length - 1 || debugLog[currentStep + 1].line_content == null) {
-        CustomAlert('End of the debugging session 😽');
+        // CustomAlert('End of the debugging session 😽');
     } else if (currentStep < debugLog.length - 1) {
         // Before moving forward, the current step's snapshot is already updated via our event handlers.
         currentStep++;

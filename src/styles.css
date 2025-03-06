@@ -35,8 +35,8 @@ code {
   width: 100%;
 }
 #content-container.shifted {
-  transform: translateX(260px);
-  width: calc(100% - 260px);
+  transform: translateX(135px);
+  /* width: calc(100% - 260px); */
 }
 
 /* TOP BAR */

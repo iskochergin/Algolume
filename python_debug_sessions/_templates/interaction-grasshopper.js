@@ -335,7 +335,7 @@ function displayStep(step) {
 
 function handleUserInputPaste(cm, e) {
     if (currentStep < maxCurrentStep) {
-        CustomAlert('You can enter input only in the last step!')
+        CustomAlert('You can enter input only in the last viewed step!')
         return;
     }
  
@@ -408,7 +408,7 @@ function handleUserInputKeydown(cm, e) {
 function makeMarker() {
     var marker = document.createElement("div");
     marker.style.color = "#37bb4f";
-    marker.innerHTML = ">>> ";
+    marker.innerHTML = "";
     return marker;
 }
 

@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+  <link rel="icon" href="https://algolume.ru/a.ico" type="image/x-icon">
   <meta charset="UTF-8" />
   <title>DP (Черепашка) | Algolume</title>
   
-  <link rel="stylesheet" href="styles.css"/>
+  <link rel="stylesheet" href="https://algolume.ru/styles.css" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -31,7 +32,7 @@
       <ul>
         <li><a href="dp-turtle" class="active">DP (Задача с черепашкой)</a></li>
         <li><a href="dp-grasshopper">DP (Задача с кузнечиком)</a></li>
-        <li><a href="dfs">DFS (Поиск в глубину)</a></li>
+        <li><a href="dfs">DFS</a></li>
         <li><a href="dijkstra">Дейкстра</a></li>
       </ul>
     </nav>
@@ -44,22 +45,23 @@
 
         <article>
           <p>
-            <span style="font-weight: bold; font-size: 1.2rem;">Условие задачи:</span> Вам дана прямоугольная матрица <code>matrix</code> размера <code>n×m</code>, где каждая ячейка содержит число – стоимость прохождения через неё. Черепашка стартует в клетке <code>(0, 0)</code> и может перемещаться только вправо или вниз. Необходимо найти путь от клетки <code>(0, 0)</code> до <code>(n-1, m-1)</code> с минимальной суммарной стоимостью и вывести последовательность шагов.
+            <span style="font-weight: bold; font-size: 1.2rem;">Задача:</span> Пусть дана прямоугольная матрица <code>matrix</code> размером <code>n×m</code>, где каждая ячейка содержит число – стоимость прохождения через неё. 
+            Черепашка начинает движение в точке <code>(0, 0)</code> и может перемещаться только вправо или вниз. Цель — дойти до точки <code>(n-1, m-1)</code> с минимальной суммарной стоимостью и вывести путь, по которому должна идти черепашка.
           </p>
           <p>
-            <span style="font-weight: bold; font-size: 1.2rem;">Формат входных данных:</span> В первой строке заданы два числа <code>n</code> и <code>m</code> (<code>1 ≤ n, m ≤ 1000</code>). Далее следуют <code>n</code> строк, каждая из которых содержит <code>m</code> целых чисел церез пробел, где <code>0 ≤ matrix[i][j] ≤ 100</code>.
+            <span style="font-weight: bold; font-size: 1.2rem;">Формат входных данных:</span> На первой строке заданы два числа <code>n</code> и <code>m</code> (<code>1 ≤ n, m ≤ 1000</code>). Далее идут <code>n</code> строк по <code>m</code> целых чисел <code>0 ≤ matrix[i][j] ≤ 100</code>.
           </p>
           <p>
-            <span style="font-weight: bold; font-size: 1.2rem;">Формат выходных данных:</span> В первой строке выведите минимальную суммарную стоимость, а во второй — последовательность символов <code>R</code> (вправо) и <code>D</code> (вниз), обозначающих шаги черепашки (например: <code>RRDRD</code>).
+            <span style="font-weight: bold; font-size: 1.2rem;">Формат выходных данных:</span> На первой строке выводится одно число — минимальная суммарная стоимость. Во второй строке символы <code>R</code> (вправо) и <code>D</code> (вниз), обозначающие направление движения черепашки на каждом ходу (пример: RRDRD).
           </p>
           <p>
             <span style="font-weight: bold; font-size: 1.2rem;">Решение:</span>
-            Для решения задачи применяется метод динамического программирования. Создаётся двумерный массив <code>dp</code>, где <code>dp[i][j]</code> означает минимальную стоимость пути от клетки <code>(0,0)</code> до клетки <code>(i,j)</code>. Дополнительно формируется массив <code>parent</code> для восстановления маршрута, где <code>parent[i][j]</code> хранит информацию о направлении предыдущего шага (<code>'R'</code> — если переход был выполнен из левой ячейки, и <code>'D'</code> — если из верхней).
+            Для решения задачи используется метод динамического программирования. Создаётся массив двухмерный <code>dp</code>, где <code>dp[i][j]</code> — минимальная стоимость пути от <code>(0,0)</code> до <code>(i,j)</code>. Дополнительно формируется массив <code>parent</code> для восстановления маршрута, где <code>parent[i][j]</code> — оптимальный предок для клетки (<code>'R'</code>, если пришли слева, <code>'D'</code>, если пришли сверху).
           </p>
 
-          <p><span style="font-weight: bold; font-size: 1.2rem;">Начальное условие:</span></p>
-          <p><code>dp[0][0] = matrix[0][0]</code></p>
-          <p>Для остальных ячеек выбираем оптимальный переход — из ячейки сверху или слева, одновременно обновляя предка текущей ячейки:</p>
+          <p>Начальное условие:</p>
+           <p><code>dp[0][0] = matrix[0][0]</code></p>
+           <p>Для остальных ячеек выбираем оптимальный переход – из ячейки сверху или слева, параллельно обновляя предка текущей ячейки:</p>
           <textarea id="theory-code-snippet-1" style="display:none;">
 for i in range(n):
     for j in range(m):
@@ -70,10 +72,10 @@ for i in range(n):
         parent[i][j] = 'D' if top < left else 'R'</textarea>
 
           <p>
-            После заполнения массива <code>dp</code> значение <code>dp[n-1][m-1]</code> является искомой минимальной стоимостью, а массив <code>parent</code> позволяет восстановить оптимальный путь.
+            После заполнения матрицы <code>dp</code>, значение <code>dp[n-1][m-1]</code> – искомая минимальная стоимость, а массив <code>parent</code> позволяет восстановить маршрут.
           </p>
           
-          <p>Например, если дана матрица:</p>
+          <p>Пусть:</p>
           <textarea id="theory-code-snippet-2" style="display:none;">
 matrix = [
     [1, 2, 3],
@@ -81,7 +83,7 @@ matrix = [
     [7, 8, 9]
 ]</textarea>
 
-          <p>то после вычислений получим:</p>
+          <p>Тогда после вычислений:</p>
           <textarea id="theory-code-snippet-3" style="display:none;">
 dp = [
     [1,   3,  6],
@@ -90,8 +92,8 @@ dp = [
 ]</textarea>
 
           <p>
-            <span style="font-weight: bold; font-size: 1.2rem;">Восстановление пути:</span>
-            Начните с клетки <code>(n-1, m-1)</code> и, следуя указателям массива <code>parent</code>, вернитесь к клетке <code>(0, 0)</code>. Полученная последовательность шагов затем разворачивается для вывода оптимального маршрута.
+            <span style="font-weight: bold; font-size: 1.2rem;">Восстановление маршрута:</span>
+            Начиная с <code>(n-1, m-1)</code>, предвигаемся по предкам, параллельно обнавляя текущюю ячейку. В итоге, приходим в <code>(0, 0)</code> и на этом шаге заканчиваем.
           </p>
           <textarea id="theory-code-snippet-4" style="display:none;">
 path = []
@@ -112,10 +114,10 @@ path.reverse()</textarea>
         </div>
 
         <div id="exampleTab" class="tab-content">
-          <p><span style="font-weight: bold; font-size: 1.2rem;">Визуализация алгоритма (Python3)</span></p>
-          <p>Для корректной работы визуализации ограничения на входные данные следующие: <code>1 ≤ n, m ≤ 8</code>.</p>
+          <p><span style="font-weight: bold; font-size: 1.2rem;">Визуализируйте алгоритм! (Python3)</span></p>
+          <p>Для стабильное работы визуализации, ограничения на входные данные следующие: <code>1 ≤ n, m ≤ 8</code>.</p>
           <textarea id="example-code">
-# Пример решения задачи с использованием ДП (Python)
+# Example DP (Turtle) - Python
 n, m = map(int, input().split())
 matrix = [list(map(int, input().split())) for _ in range(n)]
 dp = [[-1] * m for _ in range(n)]
@@ -171,8 +173,8 @@ print(''.join(path))
         </div>
 
         <div id="userTab" class="tab-content hidden">
-          <p><span style="font-weight: bold; font-size: 1.2rem;">Визуализация алгоритма (Python3)</span></p>
-          <p>Для корректной работы визуализации ограничения на входные данные следующие: <code>1 ≤ n, m ≤ 8</code>.</p>
+          <p><span style="font-weight: bold; font-size: 1.2rem;">Визуализируйте алгоритм! (Python3)</span></p>
+          <p>Для стабильное работы визуализации, ограничения на входные данные следующие: <code>1 ≤ n, m ≤ 8</code>.</p>
           <textarea id="user-code"></textarea>
 
           <table class="variables-table" id="user-variables-table">
@@ -185,11 +187,11 @@ print(''.join(path))
             <tbody>
               <tr>
                 <td>dp</td>
-                <td><input type="text" id="var-dp" placeholder="например, dp" /></td>
+                <td><input type="text" id="var-dp" placeholder="e.g. dp" /></td>
               </tr>
               <tr>
                 <td>parent</td>
-                <td><input type="text" id="var-parent" placeholder="например, parent" /></td>
+                <td><input type="text" id="var-parent" placeholder="e.g. parent" /></td>
               </tr>
             </tbody>
           </table>
@@ -217,6 +219,6 @@ print(''.join(path))
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/python/python.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/edit/closebrackets.min.js"></script>
 
-  <script src="turtle-script.js"></script>
+  <script src="https://algolume.ru/turtle-script.js"></script>
 </body>
 </html>
