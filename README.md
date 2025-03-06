@@ -15,11 +15,9 @@ Then the engine of python returns the execution trace of the code and js script 
 
 ---
 
-By this moment there are two algorithms available:
+By this moment there are 4 algorithms available:
 - DP (Turtle task)
 - DP (Grasshopper task)
-
-And also two algorithms are on the development stage:
 - DFS
 - Dijkstra's
 
