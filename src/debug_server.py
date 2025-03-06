@@ -145,6 +145,35 @@ def create_new_dfs_session(debug_id, debug_log, code, input_data, parent, graph)
     return file_url
 
 
+def create_new_dijkstra_session(debug_id, debug_log, code, input_data, parent, graph, dist):
+    folder_name = debug_id
+    full_path = os.path.join(BASE_PATH, folder_name)
+    os.makedirs(full_path, exist_ok=True)
+
+    template_path = os.path.join(BASE_PATH, "_templates")
+    html_template_path = os.path.join(template_path, "pysession-dijkstra.html")
+    js_template_path = os.path.join(template_path, "interaction-dijkstra.js")  # if you have a separate JS file; otherwise, you can reuse the DFS one
+
+    code_lines = code.split('\n')
+
+    with open(html_template_path, 'r', encoding='utf-8') as file:
+        html_content = file.read()
+        html_content = html_content.replace("{code_lines}", json.dumps(code_lines))
+        html_content = html_content.replace("{input_data}", input_data)
+        html_content = html_content.replace("{debug_log}", json.dumps(debug_log))
+        html_content = html_content.replace("{parentVar}", parent)
+        html_content = html_content.replace("{graphVar}", graph)
+        html_content = html_content.replace("{distVar}", dist)
+
+    html_filename = "pysession-dijkstra.html"
+    with open(os.path.join(full_path, html_filename), 'w', encoding='utf-8') as file:
+        file.write(html_content)
+
+    shutil.copy(js_template_path, os.path.join(full_path, "interaction-dijkstra.js"))
+    file_url = f'http://127.0.0.1:5000/python_debug_sessions/{folder_name}/pysession-dijkstra.html'
+    return file_url
+
+
 @app.route('/')
 def index():
     return send_from_directory('.', 'index.html')
@@ -270,6 +299,40 @@ def new_debug_page_dfs():
 
         print('OK')
         file_url = create_new_dfs_session(debug_id, debug_log, code, input_data, parent, graph)
+
+        return jsonify({
+            "url": file_url,
+            "id": debug_id,
+            "execution_time": exec_time,
+            "memory_used": memory,
+            "error": None
+        }), 200
+
+    except Exception as e:
+        return jsonify({"error": "An unexpected error occurred."}), 500
+    
+
+@app.route('/new-debug-page-dijkstra', methods=['POST'])
+def new_debug_page_dijkstra():
+    try:
+        data = request.get_json()
+        code = data.get('code', '')
+        input_data = data.get('input', '')
+        parent = data.get('parentVar', '')
+        graph = data.get('graphVar', '')
+        dist = data.get('distVar', '')
+
+        if not parent or not graph or not dist:
+            return jsonify({"error": "One or more required variables are missing (parent, graph, or dist)."}), 400
+
+        debug_id = generate_uuid()
+        debug_log, exec_time, memory = get_debug_log_limited(code, input_data)
+        if type(debug_log) is tuple and debug_log[0] == 'error':
+            return jsonify({"error": debug_log[1]})
+        if type(debug_log) is str and debug_log.startswith('Restricted!'):
+            return jsonify({"error": debug_log})
+
+        file_url = create_new_dijkstra_session(debug_id, debug_log, code, input_data, parent, graph, dist)
 
         return jsonify({
             "url": file_url,
