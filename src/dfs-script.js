@@ -191,7 +191,7 @@ document.addEventListener("DOMContentLoaded", function() {
       event.preventDefault();
       const code = window.userCM.getValue();
 
-      const parentVar = document.getElementById('var-dp')?.value.trim();
+      const parentVar = document.getElementById('var-parent')?.value.trim();
       const graphVar = document.getElementById('var-graph')?.value.trim();
 
       if (!parentVar || !graphVar) {
