@@ -11,6 +11,13 @@
   
   <meta charset="UTF-8">
   <title>Algolume</title>
+
+  <!-- CodeMirror 5 + Dracula -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/dracula.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/python/python.min.js"></script>
+
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -34,6 +41,28 @@
       </ul>
     </nav>
   </div>
+
+    <!-- ───────────── Algolume Neuro ───────────── -->
+  <section id="neuro">
+    <h2 class="neuro-title">
+      Algolume <span class="neuro-accent">Neuro</span>
+    </h2>
+
+    <textarea id="code-input" name="code"></textarea>
+
+    <div class="run-button-area">
+      <button id="predict-btn" class="run-btn">🚀 Предсказать</button>
+    </div>
+
+    <div id="prediction-area" class="hidden">
+      <h3>Предполагаемый алгоритм</h3>
+      <div id="prediction-list"></div>
+
+      <p>Не угадали? Выберите правильный вариант:</p>
+      <select id="correction-select"></select>
+      <button id="correction-btn" class="run-btn">Отправить</button>
+    </div>
+  </section>
 
   <div id="content-container" class="expanded">
     <main id="main-content">

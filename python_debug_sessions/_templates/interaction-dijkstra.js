@@ -673,7 +673,7 @@ function renderGraphVisualization() {
         }
     }
     
-    // For an undirected weighted graph, only add an edge once (if i < neighbor).
+    // For an undirected weighted graph, add each edge only once (if i < neighbor).
     let usedNodes = new Set();
     let edges = [];
     for (let i = 0; i < adjacency.length; i++) {
@@ -696,15 +696,40 @@ function renderGraphVisualization() {
         }
     }
     
+    // --- Seeded Layout: Compute fixed node positions deterministically ---
+    // Here we use a circular layout so that the nodes always appear in the same configuration.
+    if (!window.staticGraphPositions) {
+        window.staticGraphPositions = {};
+        let nodeIds = Array.from(usedNodes).sort((a, b) => a - b);
+        const n = nodeIds.length;
+        const radius = 200;  // Adjust radius as needed
+        const centerX = 0;
+        const centerY = 0;
+        for (let i = 0; i < n; i++) {
+            let angle = (2 * Math.PI * i) / n;
+            window.staticGraphPositions[nodeIds[i]] = {
+                x: centerX + radius * Math.cos(angle),
+                y: centerY + radius * Math.sin(angle)
+            };
+        }
+    }
+    
     // Create nodes only for those IDs that appear in an edge.
     let nodes = [];
     for (let i = 0; i < adjacency.length; i++) {
         if (!usedNodes.has(i)) continue;
-        nodes.push({
+        let node = {
             id: i,
             label: String(i),
             title: (dist && dist[i] !== undefined) ? "Weight: " + dist[i] : ""
-        });
+        };
+        // Apply the seeded position and fix the node.
+        if (window.staticGraphPositions && window.staticGraphPositions[i]) {
+            node.x = window.staticGraphPositions[i].x;
+            node.y = window.staticGraphPositions[i].y;
+            node.fixed = { x: true, y: true };
+        }
+        nodes.push(node);
     }
     
     container.innerHTML = '';
@@ -713,26 +738,16 @@ function renderGraphVisualization() {
         edges: new vis.DataSet(edges)
     };
     
+    // Since we have precomputed positions, disable physics so nodes don't move.
     let options = {
         layout: {
             hierarchical: { enabled: false }
         },
-        physics: {
-            enabled: true,
-            solver: 'barnesHut',
-            barnesHut: {
-                gravitationalConstant: -2000,
-                centralGravity: 0.3,
-                springLength: 100,
-                springConstant: 0.04,
-                damping: 0.09,
-                avoidOverlap: 0.5
-            }
-        },
+        physics: false,
         interaction: {
             hover: true,
             tooltipDelay: 200,
-            dragNodes: true,
+            dragNodes: false,
             selectConnectedEdges: false,
             hoverConnectedEdges: false
         },
@@ -771,7 +786,7 @@ function renderGraphVisualization() {
         return;
     }
     
-    // When hovering over a node, highlight only the edge from that node to its parent.
+    // When hovering over a node, highlight the edge from that node to its parent.
     network.on("hoverNode", params => {
         highlightPathToRoot(network, params.node, parentData);
     });

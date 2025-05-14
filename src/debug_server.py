@@ -7,14 +7,64 @@ import os
 from get_py_debug_log import get_debug_log
 from debug_limits import get_debug_log_limited, TimeoutException, MemoryLimitException
 import shutil
+from pathlib import Path
+import time, json, torch
+from transformers import AutoTokenizer, AutoModel
+
+# ─────────────── 2. МОДЕЛЬ (вставить сразу после констант) ───────
+CKPT = Path("model_ckpt")  # папка с labels.txt, tokenizer_config.json, pytorch_model.bin …
+classes = CKPT.joinpath("labels.txt").read_text().splitlines()
+
+tokenizer = AutoTokenizer.from_pretrained(str(CKPT), use_fast=False)  # <- критично!
+encoder = AutoModel.from_pretrained(str(CKPT))
+hidden_sz = encoder.config.hidden_size
+
+mlp = torch.nn.Sequential(
+    torch.nn.Linear(hidden_sz, hidden_sz // 2),
+    torch.nn.ReLU(),
+    torch.nn.Dropout(0.1),
+    torch.nn.Linear(hidden_sz // 2, len(classes)),
+)
+mlp.load_state_dict(torch.load(CKPT / "mlp_head.pt", map_location="cpu"))
+
+encoder.eval();
+mlp.eval()
+
+LOG_PATH = Path("static") / "logs.jsonl"
+LOG_PATH.parent.mkdir(exist_ok=True)
+
+
+def _safe_preprocess(src: str) -> str:
+    try:
+        from model import preprocess
+        return preprocess.preprocess_and_canonicalize(src)
+    except Exception:
+        return src + "\n"
+
+
+def _predict(code: str, top_k: int = 5):
+    clean = _safe_preprocess(code)
+    tok = tokenizer(clean, truncation=True, padding="max_length",
+                    max_length=256, return_tensors="pt")
+    with torch.no_grad():
+        logits = mlp(encoder(**tok).last_hidden_state[:, 0])
+        probs = torch.softmax(logits, dim=-1).squeeze().tolist()
+    ranked = sorted(zip(classes, probs), key=lambda x: x[1], reverse=True)
+    return ranked[:top_k]
+
+
+def _append_log(rec: dict):
+    with LOG_PATH.open("a", encoding="utf-8") as f:
+        json.dump(rec, f, ensure_ascii=False);
+        f.write("\n")
 
 
 app = Flask(__name__)
 CORS(app)
 
-SESSIONS_BASE = "C:\\Users\\iskoc\\YandexDisk\\Data\\1Projects\\Algolume\\python_debug_sessions"
-PATH_TO_SRC = "C:\\Users\\iskoc\\YandexDisk\\Data\\1Projects\\Algolume\\src"
-BASE_PATH = "C:/Users/iskoc/YandexDisk/Data/1Projects/Algolume/python_debug_sessions"
+SESSIONS_BASE = "/Users/ivankochergin/Yandex.Disk.localized/Data/1Projects/Algolume/python_debug_sessions"
+PATH_TO_SRC = "/Users/ivankochergin/Yandex.Disk.localized/Data/1Projects/Algolume/src"
+BASE_PATH = "/Users/ivankochergin/Yandex.Disk.localized/Data/1Projects/Algolume/python_debug_sessions"
 
 
 def generate_uuid():
@@ -152,7 +202,8 @@ def create_new_dijkstra_session(debug_id, debug_log, code, input_data, parent, g
 
     template_path = os.path.join(BASE_PATH, "_templates")
     html_template_path = os.path.join(template_path, "pysession-dijkstra.html")
-    js_template_path = os.path.join(template_path, "interaction-dijkstra.js")  # if you have a separate JS file; otherwise, you can reuse the DFS one
+    js_template_path = os.path.join(template_path,
+                                    "interaction-dijkstra.js")  # if you have a separate JS file; otherwise, you can reuse the DFS one
 
     code_lines = code.split('\n')
 
@@ -208,7 +259,7 @@ def new_debug_page():
     except Exception as e:
         # Log the exception as needed
         return jsonify({"error": "An unexpected error occurred."}), 500
-    
+
 
 @app.route('/new-debug-page-turtle', methods=['POST'])
 def new_debug_page_turtle():
@@ -242,7 +293,7 @@ def new_debug_page_turtle():
 
     except Exception as e:
         return jsonify({"error": "An unexpected error occurred."}), 500
-    
+
 
 @app.route('/new-debug-page-grasshopper', methods=['POST'])
 def new_debug_page_grasshopper():
@@ -276,7 +327,7 @@ def new_debug_page_grasshopper():
 
     except Exception as e:
         return jsonify({"error": "An unexpected error occurred."}), 500
-    
+
 
 @app.route('/new-debug-page-dfs', methods=['POST'])
 def new_debug_page_dfs():
@@ -310,7 +361,7 @@ def new_debug_page_dfs():
 
     except Exception as e:
         return jsonify({"error": "An unexpected error occurred."}), 500
-    
+
 
 @app.route('/new-debug-page-dijkstra', methods=['POST'])
 def new_debug_page_dijkstra():
@@ -384,7 +435,7 @@ def sessions(filename):
 
 @app.route('/a.ico')
 def serve_ico():
-    return send_from_directory("/root/Algolume/", "a.ico")
+    return send_from_directory("/Users/ivankochergin/Yandex.Disk.localized/Data/1Projects/Algolume/", "a.ico")
 
 
 @app.route('/<path:filename>')
@@ -409,6 +460,30 @@ def serve_src(filename):
 @app.route('/white_black_list_py.html')
 def white_black_list():
     return send_from_directory(PATH_TO_SRC, "white_black_list_py.html")
+
+
+# ─────────────── 3. API-РОУТЫ  (добавить перед if __name__ …) ─────
+@app.post("/api/predict")
+def api_predict():
+    data = request.get_json(force=True)
+    code = data.get("code", "")
+    preds = _predict(code)
+    # jsonify превращает list[tuple] → list[list]  (нормально для JS)
+    return jsonify(predictions=preds), 200
+
+
+@app.post("/api/log")
+def api_log():
+    data = request.get_json(force=True)
+    _append_log({
+        "ts": time.time(),
+        "code": data.get("code", ""),
+        "correct": data.get("correct", "")
+    })
+    return jsonify(status="ok"), 200
+
+
+# ───────────────────────────────────────────────────────────────────
 
 
 if __name__ == '__main__':

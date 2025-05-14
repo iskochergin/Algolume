@@ -4,3 +4,8 @@
 /python_debug_sessions/
 /ideas/
 src/__pycache__/
+src/responses.html/
+/src/reviews.html/
+/src/model_ckpt/
+/model/model_100snippets/
+/model/model_150snippets/

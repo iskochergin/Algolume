@@ -383,3 +383,29 @@ article ol {
 .credits a:hover {
   text-decoration: underline;
 }
+
+
+/* ───────────── Algolume Neuro additions ───────────── */
+.neuro-title{
+  font-size:2.2rem;
+  text-align:center;
+  margin:100px 0 20px;
+  font-weight:700;
+  background:linear-gradient(90deg,#58a6ff 0%,#d4bfff 50%,#58a6ff 100%);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-size:200% auto;
+  animation:shine 5s linear infinite;
+}
+@keyframes shine{
+  0%{background-position:0% 50%;}
+  100%{background-position:100% 50%;}
+}
+.neuro-accent{
+  filter:drop-shadow(0 0 6px #58a6ff);
+}
+#prediction-area.hidden{display:none;}
+#prediction-list p{margin:4px 0;}
+/* CodeMirror tweaks */
+.CodeMirror{font-size:0.9rem;}
+/* ───────────────────────────────────────────── */
