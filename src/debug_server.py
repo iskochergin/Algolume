@@ -27,7 +27,7 @@ mlp = torch.nn.Sequential(
 )
 mlp.load_state_dict(torch.load(CKPT / "mlp_head.pt", map_location="cpu"))
 
-encoder.eval();
+encoder.eval()
 mlp.eval()
 
 LOG_PATH = Path("static") / "logs.jsonl"

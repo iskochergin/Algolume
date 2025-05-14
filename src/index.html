@@ -1,95 +1,95 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <link rel="icon" href="https://algolume.ru/a.ico" type="image/x-icon">
-  
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&display=swap&subset=cyrillic" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap" rel="stylesheet">
-  
-  <meta charset="UTF-8">
-  <title>Algolume</title>
+    <link rel="icon" href="https://algolume.ru/a.ico" type="image/x-icon">
 
-  <!-- CodeMirror 5 + Dracula -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/dracula.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/python/python.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&display=swap&subset=cyrillic"
+          rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <title>Algolume</title>
+
+    <!-- CodeMirror 5 + Dracula -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/dracula.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/python/python.min.js"></script>
+
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header class="top-bar">
+<header class="top-bar">
     <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
 
     <h1><a href="index">Algolume</a></h1>
     <div class="top-right-links">
-      <a href="https://github.com/iskochergin/Algolume" target="_blank">GitHub</a>
-      <a href="https://forms.yandex.com/u/67bdd0b884227c398a06e849/">Feedback</a>
+        <a href="https://github.com/iskochergin/Algolume" target="_blank">GitHub</a>
+        <a href="https://forms.yandex.com/u/67bdd0b884227c398a06e849/">Feedback</a>
     </div>
-  </header>
+</header>
 
-  <div id="sidebar" class="sidebar closed">
+<div id="sidebar" class="sidebar closed">
     <nav>
-      <ul>
-        <li><a href="dp-turtle">DP (Задача с черепашкой)</a></li>
-        <li><a href="dp-grasshopper">DP (Задача с кузнечиком)</a></li>
-        <li><a href="dfs">DFS (Поиск в глубину)</a></li>
-        <li><a href="dijkstra">Алгоритм Дейкстры</a></li>
-      </ul>
+        <ul>
+            <li><a href="dp-turtle">DP (Задача с черепашкой)</a></li>
+            <li><a href="dp-grasshopper">DP (Задача с кузнечиком)</a></li>
+            <li><a href="dfs">DFS (Поиск в глубину)</a></li>
+            <li><a href="dijkstra">Алгоритм Дейкстры</a></li>
+        </ul>
     </nav>
-  </div>
+</div>
 
-    <!-- ───────────── Algolume Neuro ───────────── -->
-  <section id="neuro">
-    <h2 class="neuro-title">
-      Algolume <span class="neuro-accent">Neuro</span>
-    </h2>
-
-    <textarea id="code-input" name="code"></textarea>
-
-    <div class="run-button-area">
-      <button id="predict-btn" class="run-btn">🚀 Предсказать</button>
-    </div>
-
-    <div id="prediction-area" class="hidden">
-      <h3>Предполагаемый алгоритм</h3>
-      <div id="prediction-list"></div>
-
-      <p>Не угадали? Выберите правильный вариант:</p>
-      <select id="correction-select"></select>
-      <button id="correction-btn" class="run-btn">Отправить</button>
-    </div>
-  </section>
-
-  <div id="content-container" class="expanded">
+<div id="content-container" class="expanded">
     <main id="main-content">
-      <section>
-        <h1>Добро пожаловать в Algolume!</h1>
-        <p>
-          Здесь вы найдёте визуализации и краткие теоретические сведения
-          по распространённым алгоритмам. Используйте меню слева или ссылки ниже,
-          чтобы перейти к подробному описанию и примеру кода.
-        </p>
-        <p>
-          <strong>Алгоритмы:</strong>
-          <ul>
-            <li><a href="dp-turtle.html" class="light">Динамическое программирование (Задача с черепашкой)</a></li>
-            <li><a href="dp-grasshopper.html" class="light">Динамическое программирование (Задача с кузнечиком)</a></li>
-            <li><a href="dfs.html" class="light">Depth-first search (Поиск в глубину)</a></li>
-            <li><a href="dijkstra.html" class="light">Алгоритм Дейкстры</a></li>
-          </ul>
-        </p>
-      </section>
+        <section>
+            <h1>Добро пожаловать в Algolume!</h1>
+            <p>
+                Здесь вы найдёте визуализации и краткие теоретические сведения
+                по распространённым алгоритмам. Используйте меню слева. Вы также можете просто вставить
+                код
+                поле ниже, а Algolume Neuro определит алгоритм и визуализирует его!
+            </p>
+        </section>
     </main>
+    <!-- ───────────── Algolume Neuro ───────────── -->
+    <section id="neuro">
+        <div class="glass-card">
+            <h3 class="neuro-badge">🧠 Algolume Neuro</h3>
+
+            <textarea id="code-input" name="code"></textarea>
+
+            <div class="run-button-area">
+                <button id="predict-btn" class="run-btn-neuro">
+                    <span class="btn-label-neuro">Предсказать</span>
+                    <span class="loader hidden"></span>
+                </button>
+            </div>
+        </div>
+
+
+        <div id="prediction-area" class="hidden glass-card result-card">
+            <h3>🥁 Предполагаемый алгоритм</h3>
+            <div id="prediction-list"></div>
+
+            <p class="correction-label">Не угадали? Выберите правильный вариант:</p>
+            <div class="correction-row">
+                <select id="correction-select"></select>
+                <button id="correction-btn" class="run-btn small">Отправить</button>
+            </div>
+        </div>
+    </section>
+    <!-- ─────────────────────────────────────────── -->
+
 
     <footer class="credits">
-      <p>© 2025 Algolume. Created by Ivan Kochergin.</p>
+        <p>© 2025 Algolume. Created by Ivan Kochergin.</p>
     </footer>
-  </div>
+</div>
 
-  <script src="script.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
