@@ -521,6 +521,10 @@ article ol {
     position: relative;
     overflow: hidden;
     transition: box-shadow 0.3s ease, background-color 0.3s ease;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .run-btn-neuro:hover::before {
@@ -535,6 +539,14 @@ article ol {
     padding: 0 18px;
     width: auto;
 }
+
+/*.run-btn-neuro .btn-label-neuro,
+.run-btn-neuro .loader {
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+    z-index: 1;
+}*/
 
 .run-btn-neuro::before {
     content: "";
@@ -568,6 +580,43 @@ article ol {
     }
 }
 
+.loader {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    margin-left: 8px;
+    border: 3px solid transparent;
+    border-top: 3px solid #fff;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Hidden helper */
+.hidden {
+    display: none;
+}
+
+/* Correction select gradient */
+select#correction-select {
+    background: #0d1117;
+    border: 1px solid var(--accent1);
+    color: #c9d1d9;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    appearance: none;
+    background-image: linear-gradient(45deg, transparent 50%, var(--accent1) 50%),
+    linear-gradient(135deg, var(--accent1) 50%, transparent 50%);
+    background-position: right 8px center, right 4px center;
+    background-size: 4px 4px, 4px 4px;
+    background-repeat: no-repeat;
+}
 
 .gradient-icon {
     background: linear-gradient(90deg, var(--accent1), var(--accent2));

@@ -7,6 +7,12 @@ import os
 from get_py_debug_log import get_debug_log
 from debug_limits import get_debug_log_limited, TimeoutException, MemoryLimitException
 import shutil
+# import torch
+# from transformers import AutoTokenizer, AutoModel
+from pathlib import Path
+import time
+import numpy as np
+import onnxruntime as ort
 
 app = Flask(__name__)
 CORS(app)
@@ -14,6 +20,7 @@ CORS(app)
 SESSIONS_BASE = "/Users/ivankochergin/Yandex.Disk.localized/Data/1Projects/Algolume/python_debug_sessions"
 PATH_TO_SRC = "/Users/ivankochergin/Yandex.Disk.localized/Data/1Projects/Algolume/src"
 BASE_PATH = "/Users/ivankochergin/Yandex.Disk.localized/Data/1Projects/Algolume/python_debug_sessions"
+
 
 def generate_uuid():
     return str(uuid.uuid4())
@@ -408,6 +415,27 @@ def serve_src(filename):
 @app.route('/white_black_list_py.html')
 def white_black_list():
     return send_from_directory(PATH_TO_SRC, "white_black_list_py.html")
+
+
+@app.post("/api/predict")
+def api_predict():
+    from model_server import _predict
+    data = request.get_json(force=True)
+    code = data.get("code", "")
+    preds = _predict(code)
+    return jsonify(predictions=preds), 200
+
+
+@app.post("/api/log")
+def api_log():
+    data = request.get_json(force=True)
+    from model_server import _append_log
+    _append_log({
+        "ts": time.time(),
+        "code": data.get("code", ""),
+        "correct": data.get("correct", "")
+    })
+    return jsonify(status="ok"), 200
 
 
 if __name__ == '__main__':
