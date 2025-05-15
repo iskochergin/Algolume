@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" xmlns="http://www.w3.org/1999/html">
 <head>
     <link rel="icon" href="https://algolume.ru/a.ico" type="image/x-icon">
 
@@ -45,26 +45,48 @@
 
 <div id="content-container" class="expanded">
     <main id="main-content">
-        <section>
-            <h1>Добро пожаловать в Algolume!</h1>
-            <p>
-                Здесь вы найдёте визуализации и краткие теоретические сведения
-                по распространённым алгоритмам. Используйте меню слева. Вы также можете просто вставить
-                код
-                поле ниже, а Algolume Neuro определит алгоритм и визуализирует его!
-            </p>
+        <section class="intro">
+            <section>
+                <h1>Добро пожаловать в Algolume!</h1>
+
+                <p>
+                    <button
+                            onclick="toggleSidebar()"
+                            class="gradient-icon gradient-menu"
+                            aria-label="Открыть меню"
+                            style="font-size:1.5rem;
+                     background-color: transparent;
+                     border: none;
+                     padding: 0;
+                     margin-right: 6px;">
+                        ☰
+                    </button>
+                    Здесь вы найдёте визуализации и краткие теоретические сведения по распространённым алгоритмам
+                </p>
+
+                <p>
+                <span
+                        class="gradient-icon gradient-brain"
+                        aria-hidden="true"
+                        style="font-size:1.2rem; margin-right:6px;">
+      🧠
+                </span>
+                    Вы также можете просто вставить <code>код</code> в поле ниже, а Algolume Neuro определит алгоритм и
+                    визуализирует его!
+                </p>
+            </section>
         </section>
     </main>
-    <!-- ───────────── Algolume Neuro ───────────── -->
+
     <section id="neuro">
         <div class="glass-card">
-            <h3 class="neuro-badge">🧠 Algolume Neuro</h3>
+            <h3 class="neuro-badge">Algolume Neuro (Python3)</h3>
 
             <textarea id="code-input" name="code"></textarea>
 
             <div class="run-button-area">
-                <button id="predict-btn" class="run-btn-neuro">
-                    <span class="btn-label-neuro">Предсказать</span>
+                <button id="predict-btn" class="run-btn run-btn-neuro">
+                    <span class="btn-label-neuro">Запустить</span>
                     <span class="loader hidden"></span>
                 </button>
             </div>

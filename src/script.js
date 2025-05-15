@@ -43,7 +43,6 @@ function showTab(tabName) {
 }
 
 
-/* ───────────── Algolume Neuro logic ───────────── */
 document.addEventListener('DOMContentLoaded', () => {
     // инициализируем CodeMirror над textarea
     const cm = CodeMirror.fromTextArea(
