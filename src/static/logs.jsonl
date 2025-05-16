@@ -1,5 +1,0 @@
-{"ts": 1747252878.070188, "code": "print(", "correct": "DFS"}
-{"ts": 1747252881.845492, "code": "print(", "correct": "DFS"}
-{"ts": 1747253462.648447, "code": "print(", "correct": "BFS"}
-{"ts": 1747253485.673103, "code": "", "correct": "Grasshopper"}
-{"ts": 1747300321.781038, "code": "import heapq\nfrom collections import defaultdict\n\ndef weird_dijkstra(n: int, edges: list[tuple[int, int, int]], start: int) -> dict[int, int]:\n    graph = defaultdict(list)\n    for u, v, w in edges:\n        graph[u].append((v, w))\n\n    dist = {i: float('inf') for i in range(n)}\n    dist[start] = 0\n    visited = set()\n    heap = [(0, start)]\n\n    def dive():\n        if not heap:\n            return\n        d, u = heapq.heappop(heap)\n        if u in visited:\n            dive()\n            return\n        visited.add(u)\n        for v, w in graph[u]:\n            if d + w < dist[v]:\n                dist[v] = d + w\n                heapq.heappush(heap, (dist[v], v))\n        dive()  # recurse into next best node\n\n    dive()\n    return dist\n", "correct": "Grasshopper"}
