@@ -86,25 +86,30 @@
 
             <div class="run-button-area">
                 <button id="predict-btn" class="run-btn run-btn-neuro">
-                    <span class="btn-label-neuro">Запустить</span>
+                    <span class="btn-label-neuro">Определить</span>
                     <span class="loader hidden"></span>
                 </button>
             </div>
         </div>
 
 
-        <div id="prediction-area" class="hidden glass-card result-card">
-            <h3>🥁 Предполагаемый алгоритм</h3>
+        <div id="prediction-area" class="hidden result-card">
+            <h3>🥁 Предполагаемый алгоритм </h3>
             <div id="prediction-list"></div>
 
-            <p class="correction-label">Не угадали? Выберите правильный вариант:</p>
             <div class="correction-row">
                 <select id="correction-select"></select>
                 <button id="correction-btn" class="run-btn small">Отправить</button>
             </div>
         </div>
     </section>
-    <!-- ─────────────────────────────────────────── -->
+
+    <div id="customAlertModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <p id="alertMessage"></p>
+        </div>
+    </div>
 
 
     <footer class="credits">

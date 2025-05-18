@@ -467,15 +467,9 @@ article ol {
     padding-left: 10px;
     padding-right: 10px;
     padding-bottom: 14px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5), 0 6px 20px rgba(0, 0, 0, 0.19);
-    /*margin: 32px 0;*/
-    transition: box-shadow 0.3s ease;
-}
+    /*box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5), 0 6px 20px rgba(0, 0, 0, 0.19);*/
 
-.glass-card,
-.glass-card:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5),
-    0 6px 20px rgba(0, 0, 0, 0.19) !important;
+    /*transition: box-shadow 0.3s ease;*/
 }
 
 .neuro-badge {
@@ -488,19 +482,6 @@ article ol {
     background: linear-gradient(90deg, var(--accent1), var(--accent2));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-}
-
-.result-card {
-    margin-top: 12px;
-    opacity: 0;
-    transform: translateY(12px);
-    transition: opacity 0.45s cubic-bezier(.25, .8, .25, 1),
-    transform 0.45s cubic-bezier(.25, .8, .25, 1);
-}
-
-.result-card.show {
-    opacity: 1;
-    transform: translateY(0);
 }
 
 .run-btn-neuro {
@@ -539,14 +520,6 @@ article ol {
     padding: 0 18px;
     width: auto;
 }
-
-/*.run-btn-neuro .btn-label-neuro,
-.run-btn-neuro .loader {
-    display: inline-block;
-    vertical-align: middle;
-    position: relative;
-    z-index: 1;
-}*/
 
 .run-btn-neuro::before {
     content: "";
@@ -644,3 +617,39 @@ select#correction-select {
 .gradient-brain {
     pointer-events: none;
 }
+
+
+/* Верхняя карточка, после клика */
+.glass-card.prediction-open {
+    /* убираем всё, что создаёт «ступеньку»: */
+    border-bottom: none;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    /*padding-bottom: 0 !important; !* ← главное *!*/
+    margin-bottom: 0 !important;
+    box-shadow: none;
+}
+
+.result-card > :first-child {
+    margin-top: 0;
+}
+
+.result-card {
+    /* никаких скруглений сверху */
+    backdrop-filter: blur(14px) saturate(140%);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-brd);
+    border-radius: 8px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 14px;
+
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+
+    border-top: 0;
+
+/*    box-shadow: 0 6px 12px -4px rgba(0, 0, 0, .5),
+    0 12px 32px -6px rgba(0, 0, 0, .19);*/
+}
+

@@ -18,6 +18,21 @@ function toggleSidebar() {
     }
 }
 
+function CustomAlert(message) {
+    const modal = document.getElementById('customAlertModal');
+    const msgEl = document.getElementById('alertMessage');
+    if (!modal || !msgEl) return;
+    msgEl.textContent = message;
+    modal.style.display = 'block';
+}
+
+const modal = document.getElementById('customAlertModal');
+const closeBtn = modal?.querySelector('.close-button');
+closeBtn?.addEventListener('click', () => modal.style.display = 'none');
+window.addEventListener('click', e => {
+    if (e.target === modal) modal.style.display = 'none';
+});
+
 /* Show/Hide Tab Content */
 function showTab(tabName) {
     const exampleTab = document.getElementById('exampleTab');
@@ -63,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
         .addEventListener('click', async (e) => {
             const code = cm.getValue();
             if (!code.trim()) {
-                alert('Вставьте код');
+                CustomAlert('Вставьте код');
                 return;
             }
 
@@ -82,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const data = await res.json();
                 showPrediction(data.predictions);
             } catch (err) {
-                alert(err.message || 'Сбой сети');
+                CustomAlert(err.message || 'Сбой сети');
             } finally {
                 spinner.classList.add('hidden');
                 btn.disabled = false;
@@ -100,22 +115,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({correct, code})
             });
-            alert('Спасибо, поправили!');
+            CustomAlert('Спасибо, поправили!');
         });
 });
 
 function showPrediction(list) {
-    const [best] = list;                 // только самый вероятный
+    const [best] = list;
     const area = document.getElementById('prediction-area');
     const listDiv = document.getElementById('prediction-list');
     const select = document.getElementById('correction-select');
+    const topCard = document.querySelector('#neuro > .glass-card'); // первая карта
 
-    // текст результата
-    listDiv.innerHTML = `<p style="font-size:1.1rem;margin:6px 0;">
+    /* текст + селект как раньше */
+    listDiv.innerHTML = `
+    <p style="font-size:1.1rem;margin:6px 0;">
       <strong>${best[0]}</strong> — ${(best[1] * 100).toFixed(1)}%
     </p>`;
-
-    // выпадающий список со всеми классами
     select.innerHTML = '';
     list.forEach(([cls]) => {
         const opt = document.createElement('option');
@@ -124,9 +139,10 @@ function showPrediction(list) {
         select.appendChild(opt);
     });
 
+    /* показываем */
     area.classList.remove('hidden');
-    // маленькая пауза, чтобы браузер применил display:block,
-    // затем добавляем класс для анимации
+    topCard.classList.add('prediction-open');        // <= НОВОЕ
     requestAnimationFrame(() => area.classList.add('show'));
 }
+
 
