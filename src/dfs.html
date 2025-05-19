@@ -1,76 +1,86 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <link rel="icon" href="https://algolume.ru/a.ico" type="image/x-icon">
-  
-  <meta charset="UTF-8" />
-  <title>DFS | Algolume</title>
-  
-  <link rel="stylesheet" href="styles.css"/>
+    <link rel="icon" href="https://algolume.ru/a.ico" type="image/x-icon">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&display=swap&subset=cyrillic" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8"/>
+    <title>DFS | Algolume</title>
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/dracula.min.css" />
+    <link rel="stylesheet" href="styles.css"/>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&display=swap&subset=cyrillic"
+          rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/dracula.min.css"/>
 </head>
 <body>
-  <header class="top-bar">
+<header class="top-bar">
     <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
 
     <h1><a href="index">Algolume</a></h1>
     <div class="top-right-links">
-      <a href="https://github.com/iskochergin/Algolume" target="_blank">GitHub</a>
-      <a href="https://forms.yandex.com/u/67bdd0b884227c398a06e849/">Feedback</a>
+        <a href="https://github.com/iskochergin/Algolume" target="_blank">GitHub</a>
+        <a href="https://forms.yandex.com/u/67bdd0b884227c398a06e849/">Feedback</a>
     </div>
-  </header>
+</header>
 
-  <div id="sidebar" class="sidebar closed">
+<div id="sidebar" class="sidebar closed">
     <nav>
-      <ul>
-        <li><a href="dp-turtle">DP (Задача с черепашкой)</a></li>
-        <li><a href="dp-grasshopper">DP (Задача с кузнечиком)</a></li>
-        <li><a href="dfs" class="active">DFS (Поиск в глубину)</a></li>
-        <li><a href="dijkstra">Алгоритм Дейкстры</a></li>
-      </ul>
+        <ul>
+            <li><a href="index" class="neuro-link">Algolume Neuro</a></li>
+            <li><a href="dp-turtle">DP (Задача с черепашкой)</a></li>
+            <li><a href="dp-grasshopper">DP (Задача с кузнечиком)</a></li>
+            <li><a href="dfs" class="active">DFS (Поиск в глубину)</a></li>
+            <li><a href="dijkstra">Алгоритм Дейкстры</a></li>
+        </ul>
     </nav>
-  </div>
+</div>
 
-  <div id="content-container" class="expanded">
+<div id="content-container" class="expanded">
     <main id="main-content">
-      <section>
-        <h1>DFS: Обход графа</h1>
+        <section>
+            <h1>DFS: Обход графа</h1>
 
-        <article>
-          <p>
-            <span style="font-weight: bold; font-size: 1.2rem;">Задача:</span> 
-            Дан неориентированный связный граф, представленный списком смежности. Необходимо выполнить обход в глубину (DFS), начиная с заданной вершины.
-          </p>
-          <p>
-            <span style="font-weight: bold; font-size: 1.2rem;">Формат входных данных:</span> 
-            В первой строке заданы два числа: <code>n</code> и <code>m</code> (<code>1 ≤ n, m ≤ 100000</code>) – количество вершин и количество рёбер соответственно.
-            В следующих <code>m</code> строках заданы пары целых чисел <code>v</code> и <code>u</code> (<code>1 ≤ u, v ≤ n</code>), обозначающие ребро между вершинами <code>v</code> и <code>u</code> (граф неориентированный).
-            Последняя строка содержит одно число <code>s</code> – номер стартовой вершины.
-          </p>
-          <p>
-            <span style="font-weight: bold; font-size: 1.2rem;">Формат выходных данных:</span> 
-            В первой строке выведите порядок обхода вершин через пробел. Далее в <code>n</code> строках для каждой посещённой вершины выведите путь от стартовой вершины до неё.
-          </p>
-          <p>
-            <span style="font-weight: bold; font-size: 1.2rem;">Решение:</span> 
-            Для решения задачи используется алгоритм DFS. Создаётся список <code>used</code> для отметки посещённых вершин, а также массив <code>parent</code> для восстановления пути от текущей вершины до стартовой.
-          </p>
-          <p>Начальное условие:</p>
-          <p><code>used = [False] * n</code></p>
-          <p><code>parent = [-1] * n</code></p>
-          <p>
-            Рекурсивная функция <code>dfs</code> посещает вершину, отмечает её как посещённую, 
-            добавляет её в список обхода, а затем для каждого непосещённого соседа обновляет массив <code>parent</code> и рекурсивно вызывает себя.
-          </p>
-          <textarea id="theory-code-snippet-1" style="display:none;">
+            <article>
+                <p>
+                    <span style="font-weight: bold; font-size: 1.2rem;">Задача:</span>
+                    Дан неориентированный связный граф, представленный списком смежности. Необходимо выполнить обход в
+                    глубину (DFS), начиная с заданной вершины.
+                </p>
+                <p>
+                    <span style="font-weight: bold; font-size: 1.2rem;">Формат входных данных:</span>
+                    В первой строке заданы два числа: <code>n</code> и <code>m</code> (<code>1 ≤ n, m ≤ 100000</code>) –
+                    количество вершин и количество рёбер соответственно.
+                    В следующих <code>m</code> строках заданы пары целых чисел <code>v</code> и <code>u</code> (<code>1
+                    ≤ u, v ≤ n</code>), обозначающие ребро между вершинами <code>v</code> и <code>u</code> (граф
+                    неориентированный).
+                    Последняя строка содержит одно число <code>s</code> – номер стартовой вершины.
+                </p>
+                <p>
+                    <span style="font-weight: bold; font-size: 1.2rem;">Формат выходных данных:</span>
+                    В первой строке выведите порядок обхода вершин через пробел. Далее в <code>n</code> строках для
+                    каждой посещённой вершины выведите путь от стартовой вершины до неё.
+                </p>
+                <p>
+                    <span style="font-weight: bold; font-size: 1.2rem;">Решение:</span>
+                    Для решения задачи используется алгоритм DFS. Создаётся список <code>used</code> для отметки
+                    посещённых вершин, а также массив <code>parent</code> для восстановления пути от текущей вершины до
+                    стартовой.
+                </p>
+                <p>Начальное условие:</p>
+                <p><code>used = [False] * n</code></p>
+                <p><code>parent = [-1] * n</code></p>
+                <p>
+                    Рекурсивная функция <code>dfs</code> посещает вершину, отмечает её как посещённую,
+                    добавляет её в список обхода, а затем для каждого непосещённого соседа обновляет массив
+                    <code>parent</code> и рекурсивно вызывает себя.
+                </p>
+                <textarea id="theory-code-snippet-1" style="display:none;">
 def dfs(v):
     used[v] = True
     order.append(v)
@@ -79,28 +89,29 @@ def dfs(v):
         if not used[u]:
             parent[u] = v
             dfs(u)</textarea>
-          <p>
-            После завершения обхода, для восстановления пути от стартовой вершины до любой другой вершины, 
-            можно пройтись по массиву <code>parent</code>:
-          </p>
-          <textarea id="theory-code-snippet-2" style="display:none;">
+                <p>
+                    После завершения обхода, для восстановления пути от стартовой вершины до любой другой вершины,
+                    можно пройтись по массиву <code>parent</code>:
+                </p>
+                <textarea id="theory-code-snippet-2" style="display:none;">
 def get_path(v):
     path = []
     while v != -1:
         path.append(v)
         v = parent[v]
     return path[::-1]</textarea>
-        </article>
+            </article>
 
-        <div class="tab-buttons">
-          <button id="exampleTabBtn" onclick="showTab('example')">Пример кода</button>
-          <button id="userTabBtn" onclick="showTab('user')">Ваш код</button>
-        </div>
+            <div class="tab-buttons">
+                <button id="exampleTabBtn" onclick="showTab('example')">Пример кода</button>
+                <button id="userTabBtn" onclick="showTab('user')">Ваш код</button>
+            </div>
 
-        <div id="exampleTab" class="tab-content">
-          <p><span style="font-weight: bold; font-size: 1.2rem;">Визуализируйте алгоритм! (Python3)</span></p>
-          <p>Для стабильной работы визуализации, ограничения на входные данные следующие: <code>1 ≤ n ≤ 15</code>.</p>
-          <textarea id="example-code">
+            <div id="exampleTab" class="tab-content">
+                <p><span style="font-weight: bold; font-size: 1.2rem;">Визуализируйте алгоритм! (Python3)</span></p>
+                <p>Для стабильной работы визуализации, ограничения на входные данные следующие: <code>1 ≤ n ≤ 15</code>.
+                </p>
+                <textarea id="example-code">
 # Пример DFS (Обход графа) - Python
 n, m = map(int, input().split())
 graph = [[] for _ in range(n + 1)]
@@ -136,77 +147,78 @@ for v in order:
     print(f"{v}:", *path)
 </textarea>
 
-          <table class="variables-table">
-            <thead>
-              <tr>
-                <th>Логическое название</th>
-                <th>Название переменной</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>graph</td>
-                <td><input type="text" value="graph" disabled /></td>
-              </tr>
-              <tr>
-                <td>parent</td>
-                <td><input type="text" value="parent" disabled /></td>
-              </tr>
-            </tbody>
-          </table>
+                <table class="variables-table">
+                    <thead>
+                    <tr>
+                        <th>Логическое название</th>
+                        <th>Название переменной</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>graph</td>
+                        <td><input type="text" value="graph" disabled/></td>
+                    </tr>
+                    <tr>
+                        <td>parent</td>
+                        <td><input type="text" value="parent" disabled/></td>
+                    </tr>
+                    </tbody>
+                </table>
 
-          <div class="run-button-area">
-            <button id="exampleRunBtn" class="run-btn">Запустить</button>
-          </div>
-        </div>
+                <div class="run-button-area">
+                    <button id="exampleRunBtn" class="run-btn">Запустить</button>
+                </div>
+            </div>
 
-        <div id="userTab" class="tab-content hidden">
-          <p><span style="font-weight: bold; font-size: 1.2rem;">Визуализируйте алгоритм! (Python3)</span></p>
-          <p>Для стабильной работы визуализации, ограничения на входные данные следующие: <code>1 ≤ n ≤ 15</code>.</p>
-          <textarea id="user-code"></textarea>
+            <div id="userTab" class="tab-content hidden">
+                <p><span style="font-weight: bold; font-size: 1.2rem;">Визуализируйте алгоритм! (Python3)</span></p>
+                <p>Для стабильной работы визуализации, ограничения на входные данные следующие: <code>1 ≤ n ≤ 15</code>.
+                </p>
+                <textarea id="user-code"></textarea>
 
-          <table class="variables-table" id="user-variables-table">
-            <thead>
-              <tr>
-                <th>Логическое название</th>
-                <th>Название переменной (в вашем коде)</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>graph</td>
-                <td><input type="text" id="var-graph" placeholder="например, graph" /></td>
-              </tr>
-              <tr>
-                <td>parent</td>
-                <td><input type="text" id="var-parent" placeholder="например, parent" /></td>
-              </tr>
-            </tbody>
-          </table>
+                <table class="variables-table" id="user-variables-table">
+                    <thead>
+                    <tr>
+                        <th>Логическое название</th>
+                        <th>Название переменной (в вашем коде)</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>graph</td>
+                        <td><input type="text" id="var-graph" placeholder="например, graph"/></td>
+                    </tr>
+                    <tr>
+                        <td>parent</td>
+                        <td><input type="text" id="var-parent" placeholder="например, parent"/></td>
+                    </tr>
+                    </tbody>
+                </table>
 
-          <div class="run-button-area">
-            <button id="userRunBtn" class="run-btn">Запустить</button>
-          </div>
-        </div>
-      </section>
+                <div class="run-button-area">
+                    <button id="userRunBtn" class="run-btn">Запустить</button>
+                </div>
+            </div>
+        </section>
     </main>
 
     <footer class="credits">
-      <p>© 2025 Algolume. Created by Ivan Kochergin.</p>
+        <p>© 2025 Algolume. Created by Ivan Kochergin.</p>
     </footer>
-  </div>
+</div>
 
-  <div id="customAlertModal" class="modal">
+<div id="customAlertModal" class="modal">
     <div class="modal-content">
-      <span class="close-button">&times;</span>
-      <p id="alertMessage"></p>
+        <span class="close-button">&times;</span>
+        <p id="alertMessage"></p>
     </div>
-  </div>
+</div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/python/python.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/edit/closebrackets.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/python/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/edit/closebrackets.min.js"></script>
 
-  <script src="dfs-script.js"></script>
+<script src="dfs-script.js"></script>
 </body>
 </html>

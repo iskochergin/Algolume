@@ -69,7 +69,7 @@ code {
     color: #c9d1d9;
     text-decoration: none;
     color: #58a6ff;
-    margin-left: 9.2vw;
+    margin-left: 113px;
 }
 
 .menu-toggle {
@@ -145,6 +145,22 @@ code {
 .sidebar nav li a.active {
     font-weight: bold;
     color: #58a6ff;
+}
+
+/* градиент для ссылки на нейро */
+.sidebar a.neuro-link {
+  display: inline-block;
+  font-weight: bold;
+  background: linear-gradient(90deg, var(--accent1), var(--accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 1rem;
+}
+
+/* когда нейро-ссылка активна или при ховере — чуть ярче */
+.sidebar a.neuro-link:hover,
+.sidebar a.neuro-link:focus {
+  filter: brightness(1.1);
 }
 
 /* MAIN CONTENT */
@@ -309,7 +325,7 @@ article ol {
 
 .run-btn:hover {
     /*background-color: #2ea043;*/
-    background-color: #338ed0;
+    background-color: #58a6ff;
 }
 
 .variables-table {
@@ -622,10 +638,7 @@ select#correction-select {
     pointer-events: none;
 }
 
-
-/* Верхняя карточка, после клика */
 .glass-card.prediction-open {
-    /* убираем всё, что создаёт «ступеньку»: */
     border-bottom: none;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
@@ -654,11 +667,9 @@ select#correction-select {
     border-top: 0;
 }
 
-
-/* центрируем ряд и чуть вылизываем селект */
 .prediction-row {
     display: flex;
-    justify-content: center; /* центр всей пачки */
+    justify-content: center;
     align-items: center;
     gap: 8px;
     margin: 10px 0;
@@ -683,9 +694,7 @@ select#correction-select {
     transition: border-color .2s;
 }
 
-/* ▼ селект – тот же градиент-контур, что и у кнопки */
 #correction-select {
-    /* “двойной” фон: тёмный внутри + градиент по рамке */
     background: linear-gradient(#0d1117, #0d1117) padding-box,
     linear-gradient(90deg, var(--accent1), var(--accent2)) border-box;
     border: 1px solid transparent; /* границу рисует border-box-градиент */
@@ -711,9 +720,6 @@ select#correction-select {
     filter: brightness(1.15);
 }
 
-/* лёгкий хайлайт */
-
-/* ▼ процент – тот же градиент, но текстом */
 #prediction-prob {
     background: linear-gradient(90deg, var(--accent1), var(--accent2));
     -webkit-background-clip: text;
@@ -722,8 +728,6 @@ select#correction-select {
     font-size: 0.9rem;
 }
 
-/* Тёмная тема для всех полей переменных (динамических и статических) */
-/* Тёмная тема для всей таблицы переменных – даже в фокусе / при наведении */
 .variables-table input[type="text"],
 .variables-table input[type="text"]:focus,
 .variables-table input[type="text"]:hover {
@@ -743,52 +747,48 @@ select#correction-select {
 .run-button-area {
     width: 100%;
     display: flex;
-    justify-content: center; /* идеально по центру */
+    justify-content: center;
 }
 
 .run-button-area .run-btn,
 .run-button-area .run-btn-neuro {
-    margin: 0; /* убираем локальные margin-auto/left */
+    margin: 0;
 }
 
-/* ── исправление обрезания ────────────────────────── */
-.variables-table{
-  overflow: visible;          /*  ←  было hidden */
+.variables-table {
+    overflow: visible;
 }
 
-/* ── сам тултип (обновлённый) ─────────────────────── */
-.variables-table td.tooltip{
-  position: relative;
-  cursor: help;
-  z-index: 20;                /* поверх строк, а overflow уже не режет */
+.variables-table td.tooltip {
+    position: relative;
+    cursor: help;
+    z-index: 20;
 }
 
-/* стиль подсказки */
-.variables-table td.tooltip::before{
-  content: attr(data-tooltip);
-  position: absolute;
-  top: 15%;                  /* снизу ячейки */
-  left: 50%;
-  transform: translate(-50%, 6px);
-  max-width: 220px;
-  white-space: normal;
-  overflow-wrap: break-word;
+.variables-table td.tooltip::before {
+    content: attr(data-tooltip);
+    position: absolute;
+    top: 15%;
+    left: 50%;
+    transform: translate(-50%, 6px);
+    max-width: 220px;
+    white-space: normal;
+    overflow-wrap: break-word;
 
-  background: rgba(22,27,34,0.9);   /* чуть темнее и прозрачный */
-  border:1px solid var(--accent1);
-  border-radius:4px;
-  padding:6px 10px;
-  color: var(--accent1);
-  font-size: 0.85rem;
-  line-height:1.25;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.4);
-  opacity:0;
-  pointer-events:none;
-  transition:opacity .15s ease, transform .15s ease;
+    background: rgba(22, 27, 34, 0.9);
+    border: 1px solid var(--accent1);
+    border-radius: 4px;
+    padding: 6px 10px;
+    color: var(--accent1);
+    font-size: 0.85rem;
+    line-height: 1.25;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .15s ease, transform .15s ease;
 }
 
-/* лёгкий подъём при ховере */
-.variables-table td.tooltip:hover::before{
-  opacity:1;
-  transform: translate(-50%, 1px);
+.variables-table td.tooltip:hover::before {
+    opacity: 1;
+    transform: translate(-50%, 1px);
 }
