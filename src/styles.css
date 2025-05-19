@@ -648,8 +648,37 @@ select#correction-select {
     border-top-right-radius: 0;
 
     border-top: 0;
-
-/*    box-shadow: 0 6px 12px -4px rgba(0, 0, 0, .5),
-    0 12px 32px -6px rgba(0, 0, 0, .19);*/
 }
+
+
+/* Горизонтальное расположение */
+.prediction-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    margin:6px 0;
+}
+
+/* Красим селект под тёмную тему (тот же градиент, но тоньше) */
+#correction-select{
+    background:#0d1117;
+    border:1px solid var(--accent1);
+    color:#c9d1d9;
+    padding:6px 34px 6px 10px;   /* добавили, чтобы стрелка не липла */
+    border-radius:6px;
+    font-size:0.9rem;
+    appearance:none;
+
+    /* своя стрелка */
+    background-image:
+        linear-gradient(45deg,transparent 50%,var(--accent1) 50%),
+        linear-gradient(135deg,var(--accent1) 50%,transparent 50%);
+    background-position:right 12px center,right 8px center;
+    background-size:5px 5px,5px 5px;
+    background-repeat:no-repeat;
+    transition:border-color .2s;
+}
+#correction-select:hover{border-color:var(--accent2);}
+
 

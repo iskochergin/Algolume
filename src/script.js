@@ -103,34 +103,31 @@ document.addEventListener('DOMContentLoaded', () => {
                 btn.disabled = false;
             }
         });
-
-
-    // отправка исправления
-    document.getElementById('correction-btn')
-        .addEventListener('click', async () => {
-            const correct = document.getElementById('correction-select').value;
-            const code = cm.getValue();
-            await fetch('/api/log', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({correct, code})
-            });
-            CustomAlert('Спасибо, поправили!');
-        });
 });
 
-function showPrediction(list) {
-    const [best] = list;
-    const area = document.getElementById('prediction-area');
-    const listDiv = document.getElementById('prediction-list');
-    const select = document.getElementById('correction-select');
-    const topCard = document.querySelector('#neuro > .glass-card'); // первая карта
+/* ↓ убираем старый обработчик кнопки
+document.getElementById('correction-btn')
+...
+*/
 
-    /* текст + селект как раньше */
-    listDiv.innerHTML = `
-    <p style="font-size:1.1rem;margin:6px 0;">
-      <strong>${best[0]}</strong> — ${(best[1] * 100).toFixed(1)}%
-    </p>`;
+/* Храним последние предсказания глобально */
+let lastPreds = [];
+
+/* showPrediction теперь: */
+function showPrediction(list) {
+    lastPreds = list;                        // запоминаем топ-k
+    const [best] = list;
+
+    const area = document.getElementById('prediction-area');
+    const select = document.getElementById('correction-select');
+    const textNode = document.getElementById('prediction-text');
+    const topCard = document.querySelector('#neuro > .glass-card');
+
+    /* выводим из best */
+    textNode.innerHTML =
+        `<strong>${best[0]}</strong> — ${(best[1] * 100).toFixed(1)} %`;
+
+    /* собираем <option> */
     select.innerHTML = '';
     list.forEach(([cls]) => {
         const opt = document.createElement('option');
@@ -139,9 +136,30 @@ function showPrediction(list) {
         select.appendChild(opt);
     });
 
-    /* показываем */
+    /* авто-сохранение при смене */
+    select.onchange = async (e) => {
+        const chosen = e.target.value;
+
+        /* логируем выбор */
+        const code = window.userCM.getValue();
+        fetch('/api/log', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({correct: chosen, code})
+        }).catch(() => {
+        });   // тихо, ошибок не показываем
+
+        /* ищем вероятность в lastPreds,
+           если её нет – ставим 0 % (редкий случай) */
+        const entry = lastPreds.find(([cls]) => cls === chosen);
+        const p = entry ? (entry[1] * 100).toFixed(1) : '0.0';
+
+        textNode.innerHTML = `<strong>${chosen}</strong> — ${p} %`;
+    };
+
+    /* показываем блок */
     area.classList.remove('hidden');
-    topCard.classList.add('prediction-open');        // <= НОВОЕ
+    topCard.classList.add('prediction-open');
     requestAnimationFrame(() => area.classList.add('show'));
 }
 
