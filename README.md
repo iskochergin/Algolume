@@ -19,6 +19,7 @@ By this moment there are 4 algorithms available:
 - DP (Turtle task)
 - DP (Grasshopper task)
 - DFS
+- BFS
 - Dijkstra's
 
 ---
