@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" href="https://algolume.ru/a.ico" type="image/x-icon">
+
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Algolume BFS Visualization</title>
+    <!-- Link to your custom CSS -->
+    <link rel="stylesheet" href="../_templates/style-dfs-session.css"/>
+    <!-- CodeMirror CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/dracula.min.css"/>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Include vis-network for graph visualization -->
+    <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+</head>
+<body>
+<h1><a href="#" onclick="history.back(); return false;">Algolume: BFS (back)</a></h1>
+
+<div id="code-input-captions">
+    <div class="caption code-caption">Code</div>
+    <div class="caption input-caption">Input</div>
+</div>
+
+<div id="code-and-input">
+    <div id="code-area">
+        <textarea id="code-textarea"></textarea>
+    </div>
+    <textarea id="user-input" placeholder="Enter input..." rows="5"></textarea>
+</div>
+
+<div id="step-slider-container">
+    <div class="slider-label">
+        Step <span id="current-step">0</span> / <span id="total-steps">?</span>
+    </div>
+    <input type="range" id="step-slider" min="0" max="0" value="0" step="1"/>
+</div>
+
+<div id="control-area">
+    <button id="first-button" onclick="stepFirst()">First</button>
+    <button id="prev-button" onclick="stepBack()">Previous</button>
+    <button id="next-button" onclick="stepForward()">Next</button>
+    <button id="last-button" onclick="stepLast()">Last</button>
+</div>
+
+<pre id="execution-output"></pre>
+
+<!-- Graph visualization container -->
+<div id="graph-visualization-container">
+    <div class="graph-heading-container">
+        <h2>Динамическая визуализация графа</h2>
+        <span class="tooltip-text">
+        Порядок обхода BFS. Наведите на любую вершину массива для просмотра маршрута.❗Граф виден, когда переменные определены.
+      </span>
+        <p>Наведите курсор на вершину, чтобы посмотреть путь от начальной до нее!</p>
+    </div>
+    <div id="graph-visualization"></div>
+</div>
+
+<div id="variable-visualization" class="variables-container"></div>
+
+<div id="customAlertModal" class="modal">
+    <div class="modal-content">
+        <span class="close-button">&times;</span>
+        <p id="alertMessage">Your alert message goes here...</p>
+    </div>
+</div>
+
+<script>
+    // These variables are expected to be injected with your debug log and code.
+    let debugLog = {debug_log};
+    let needInput = 'WOIEJ:BWOIE J:WOEIJWGO:WIEJWEF:SODIFJ:WOEI:woiefj123t32joih2j34g;awii;ILOVEMYMOMANDDAD;lakw213;ri2jg2;3oi2gaJW23';
+    const codeLines = {code_lines};
+    // usedVar now holds your node data for BFS, and parentVar contains parent pointers.
+    let graphVar = "{graphVar}";
+    let parentVar = "{parentVar}";
+</script>
+
+<!-- CodeMirror Scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/python/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/edit/closebrackets.min.js"></script>
+<!-- Your interaction JS file (which contains the functional part and the graph visualization logic) -->
+<script src="interaction-bfs.js"></script>
+</body>
+</html>

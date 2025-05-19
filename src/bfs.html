@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <link rel="icon" href="https://algolume.ru/a.ico" type="image/x-icon">
+    <meta charset="UTF-8"/>
+    <title>BFS | Algolume</title>
+
+    <link rel="stylesheet" href="styles.css"/>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&display=swap&subset=cyrillic"
+          rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/dracula.min.css"/>
+</head>
+<body>
+<header class="top-bar">
+    <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+    <h1><a href="index">Algolume</a></h1>
+    <div class="top-right-links">
+        <a href="https://github.com/iskochergin/Algolume" target="_blank">GitHub</a>
+        <a href="https://forms.yandex.com/u/67bdd0b884227c398a06e849/">Feedback</a>
+    </div>
+</header>
+
+<div id="sidebar" class="sidebar closed">
+    <nav>
+        <ul>
+            <li><a href="index" class="neuro-link">Algolume Neuro</a></li>
+            <li><a href="dp-turtle">DP (Задача с черепашкой)</a></li>
+            <li><a href="dp-grasshopper">DP (Задача с кузнечиком)</a></li>
+            <li><a href="dfs">DFS (Поиск в глубину)</a></li>
+            <li><a href="bfs" class="active">BFS (Поиск в ширину)</a></li>
+            <li><a href="dijkstra">Алгоритм Дейкстры</a></li>
+        </ul>
+    </nav>
+</div>
+
+<div id="content-container" class="expanded">
+    <main id="main-content">
+        <section>
+            <h1>BFS: Обход графа в ширину</h1>
+
+            <article>
+                <p>
+                    <span style="font-weight: bold; font-size: 1.2rem;">Задача:</span>
+                    Дан неориентированный связный граф в виде списка смежности. Нужно выполнить обход в ширину (BFS),
+                    начиная с заданной стартовой вершины, и восстановить для каждой посещённой вершины путь от старта.
+                </p>
+                <p>
+                    <span style="font-weight: bold; font-size: 1.2rem;">Формат входных данных:</span>
+                    В первой строке два числа <code>n</code> и <code>m</code> (<code>1 ≤ n, m ≤ 100000</code>) — число
+                    вершин и рёбер.
+                    В следующих <code>m</code> строках — пары <code>v u</code>, обозначающие ребро. Последняя строка —
+                    стартовая вершина <code>s</code>.
+                </p>
+                <p>
+                    <span style="font-weight: bold; font-size: 1.2rem;">Формат выходных данных:</span>
+                    В первой строке выведите порядок обхода вершин через пробел. Затем для каждой посещённой вершины
+                    в отдельной строке выведите путь от стартовой вершины до неё.
+                </p>
+                <p>
+                    <span style="font-weight: bold; font-size: 1.2rem;">Решение:</span>
+                    Используем очередь (<code>deque</code>) из <code>collections</code>, массив <code>used</code> для
+                    отметки посещённых,
+                    и массив <code>parent</code> для восстановления пути.
+                </p>
+
+                <p>Начальные структуры:</p>
+                <p><code>used = [False] * (n + 1)</code></p>
+                <p><code>parent = [-1] * (n + 1)</code></p>
+
+                <p>
+                    Функция <code>bfs()</code> извлекает вершину из очереди, помечает соседей,
+                    ставит для них <code>parent</code> и добавляет в очередь.
+                </p>
+
+                <textarea id="theory-code-snippet-1" style="display:none;">
+from collections import deque
+
+def bfs(start):
+    q = deque([start])
+    used[start] = True
+    order.append(start)
+    while q:
+        v = q.popleft()
+        for u in graph[v]:
+            if not used[u]:
+                used[u] = True
+                parent[u] = v
+                order.append(u)
+                q.append(u)
+</textarea>
+
+                <p>
+                    Восстановление пути для вершины <code>v</code> через массив <code>parent</code>:
+                </p>
+                <textarea id="theory-code-snippet-2" style="display:none;">
+def get_path(v):
+    path = []
+    while v != -1:
+        path.append(v)
+        v = parent[v]
+    return path[::-1]
+</textarea>
+            </article>
+
+            <div class="tab-buttons">
+                <button id="exampleTabBtn" onclick="showTab('example')">Пример кода</button>
+                <button id="userTabBtn" onclick="showTab('user')">Ваш код</button>
+            </div>
+
+            <div id="exampleTab" class="tab-content">
+                <p><span style="font-weight: bold; font-size: 1.2rem;">Визуализируйте алгоритм! (Python3)</span></p>
+                <p>Ограничения: <code>1 ≤ n ≤ 15, m ≤ 30</code> для стабильной работы.</p>
+                <textarea id="example-code">
+# Пример BFS (Обход в ширину) - Python
+from collections import deque
+
+n, m = map(int, input().split())
+graph = [[] for _ in range(n + 1)]
+for _ in range(m):
+    a, b = map(int, input().split())
+    graph[a].append(b)
+    graph[b].append(a)
+
+start = int(input())
+used = [False] * (n + 1)
+parent = [-1] * (n + 1)
+order = []
+
+def bfs(start):
+    q = deque([start])
+    used[start] = True
+    order.append(start)
+    while q:
+        v = q.popleft()
+        for u in sorted(graph[v]):
+            if not used[u]:
+                used[u] = True
+                parent[u] = v
+                order.append(u)
+                q.append(u)
+
+bfs(start)
+
+print(*order)
+for v in order:
+    path = []
+    cur = v
+    while cur != -1:
+        path.append(cur)
+        cur = parent[cur]
+    print(*path)
+</textarea>
+
+                <table class="variables-table">
+                    <thead>
+                    <tr>
+                        <th>Логическое название</th>
+                        <th>Название переменной</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>graph</td>
+                        <td><input type="text" value="graph" disabled/></td>
+                    </tr>
+                    <tr>
+                        <td>parent</td>
+                        <td><input type="text" value="parent" disabled/></td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div class="run-button-area">
+                    <button id="exampleRunBtn" class="run-btn">Запустить</button>
+                </div>
+            </div>
+
+            <div id="userTab" class="tab-content hidden">
+                <p><span style="font-weight: bold; font-size: 1.2rem;">Визуализируйте алгоритм! (Python3)</span></p>
+                <p>Ограничения: <code>1 ≤ n ≤ 15, m ≤ 30</code>.</p>
+                <textarea id="user-code"></textarea>
+
+                <table class="variables-table" id="user-variables-table">
+                    <thead>
+                    <tr>
+                        <th>Логическое название</th>
+                        <th>Название переменной (в вашем коде)</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>graph</td>
+                        <td><input type="text" id="var-graph" placeholder="например, graph"/></td>
+                    </tr>
+                    <tr>
+                        <td>parent</td>
+                        <td><input type="text" id="var-parent" placeholder="например, parent"/></td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div class="run-button-area">
+                    <button id="userRunBtn" class="run-btn">Запустить</button>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <footer class="credits">
+        <p>© 2025 Algolume. Created by Ivan Kochergin.</p>
+    </footer>
+</div>
+
+<div id="customAlertModal" class="modal">
+    <div class="modal-content">
+        <span class="close-button">&times;</span>
+        <p id="alertMessage"></p>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/python/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/edit/closebrackets.min.js"></script>
+
+<script src="bfs-script.js"></script>
+</body>
+</html>

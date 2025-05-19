@@ -107,8 +107,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 const algoTemplates = {
-  Dijkstra: {
-    html: `
+    Dijkstra: {
+        html: `
       <table class="variables-table">
         <thead>
           <tr>
@@ -135,15 +135,15 @@ const algoTemplates = {
         <button id="userRunBtn" class="run-btn">Запустить</button>
       </div>
     `,
-    validate: (code) => {
-      const g = val('var-graph'), p = val('var-parent'), d = val('var-dist');
-      return checkFilled(g, p, d) && checkExists(code, g, p, d) && { graphVar: g, parentVar: p, distVar: d };
+        validate: (code) => {
+            const g = val('var-graph'), p = val('var-parent'), d = val('var-dist');
+            return checkFilled(g, p, d) && checkExists(code, g, p, d) && {graphVar: g, parentVar: p, distVar: d};
+        },
+        endpoint: '/new-debug-page-dijkstra'
     },
-    endpoint: '/new-debug-page-dijkstra'
-  },
 
-  DFS: {
-    html: `
+    DFS: {
+        html: `
       <table class="variables-table">
         <thead>
           <tr>
@@ -166,15 +166,46 @@ const algoTemplates = {
         <button id="userRunBtn" class="run-btn">Запустить</button>
       </div>
     `,
-    validate: (code) => {
-      const g = val('var-graph'), p = val('var-parent');
-      return checkFilled(g, p) && checkExists(code, g, p) && { graphVar: g, parentVar: p };
+        validate: (code) => {
+            const g = val('var-graph'), p = val('var-parent');
+            return checkFilled(g, p) && checkExists(code, g, p) && {graphVar: g, parentVar: p};
+        },
+        endpoint: '/new-debug-page-dfs'
     },
-    endpoint: '/new-debug-page-dfs'
-  },
 
-  Turtle: {
-    html: `
+    BFS: {
+        html: `
+      <table class="variables-table">
+        <thead>
+          <tr>
+            <th>Логическое название</th>
+            <th>Название переменной</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="tooltip" data-tooltip="Список смежности графа">graph</td>
+            <td><input type="text" id="var-graph" placeholder="например, graph"></td>
+          </tr>
+          <tr>
+            <td class="tooltip" data-tooltip="Массив предков для восстановления пути">parent</td>
+            <td><input type="text" id="var-parent" placeholder="например, parent"></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="run-button-area">
+        <button id="userRunBtn" class="run-btn">Запустить</button>
+      </div>
+    `,
+        validate: (code) => {
+            const g = val('var-graph'), p = val('var-parent');
+            return checkFilled(g, p) && checkExists(code, g, p) && {graphVar: g, parentVar: p};
+        },
+        endpoint: '/new-debug-page-bfs'
+    },
+
+    Turtle: {
+        html: `
       <table class="variables-table">
         <thead>
           <tr>
@@ -197,15 +228,15 @@ const algoTemplates = {
         <button id="userRunBtn" class="run-btn">Запустить</button>
       </div>
     `,
-    validate: (code) => {
-      const d = val('var-dp'), p = val('var-parent');
-      return checkFilled(d, p) && checkExists(code, d, p) && { dpVar: d, parentVar: p };
+        validate: (code) => {
+            const d = val('var-dp'), p = val('var-parent');
+            return checkFilled(d, p) && checkExists(code, d, p) && {dpVar: d, parentVar: p};
+        },
+        endpoint: '/new-debug-page-turtle'
     },
-    endpoint: '/new-debug-page-turtle'
-  },
 
-  Grasshopper: {
-    html: `
+    Grasshopper: {
+        html: `
       <table class="variables-table">
         <thead>
           <tr>
@@ -228,12 +259,12 @@ const algoTemplates = {
         <button id="userRunBtn" class="run-btn">Запустить</button>
       </div>
     `,
-    validate: (code) => {
-      const d = val('var-dp'), p = val('var-parent');
-      return checkFilled(d, p) && checkExists(code, d, p) && { dpVar: d, parentVar: p };
-    },
-    endpoint: '/new-debug-page-grasshopper'
-  }
+        validate: (code) => {
+            const d = val('var-dp'), p = val('var-parent');
+            return checkFilled(d, p) && checkExists(code, d, p) && {dpVar: d, parentVar: p};
+        },
+        endpoint: '/new-debug-page-grasshopper'
+    }
 };
 
 
