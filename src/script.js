@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const cm = CodeMirror.fromTextArea(
         document.getElementById('code-input'),
         {
-            mode: 'python',          // можно переключать динамически
+            mode: 'python',
             theme: 'dracula',
             lineNumbers: true,
             indentUnit: 4,
@@ -105,29 +105,205 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 });
 
-/* ↓ убираем старый обработчик кнопки
-document.getElementById('correction-btn')
-...
-*/
 
-/* Храним последние предсказания глобально */
+const algoTemplates = {
+  Dijkstra: {
+    html: `
+      <table class="variables-table">
+        <thead>
+          <tr>
+            <th>Логическое название</th>
+            <th>Название переменной</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="tooltip" data-tooltip="Список смежности графа">graph</td>
+            <td><input type="text" id="var-graph" placeholder="например, graph"></td>
+          </tr>
+          <tr>
+            <td class="tooltip" data-tooltip="Массив предков для восстановления пути">parent</td>
+            <td><input type="text" id="var-parent" placeholder="например, parent"></td>
+          </tr>
+          <tr>
+            <td class="tooltip" data-tooltip="Массив кратчайших расстояний от старта">dist</td>
+            <td><input type="text" id="var-dist" placeholder="например, dist"></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="run-button-area">
+        <button id="userRunBtn" class="run-btn">Запустить</button>
+      </div>
+    `,
+    validate: (code) => {
+      const g = val('var-graph'), p = val('var-parent'), d = val('var-dist');
+      return checkFilled(g, p, d) && checkExists(code, g, p, d) && { graphVar: g, parentVar: p, distVar: d };
+    },
+    endpoint: '/new-debug-page-dijkstra'
+  },
+
+  DFS: {
+    html: `
+      <table class="variables-table">
+        <thead>
+          <tr>
+            <th>Логическое название</th>
+            <th>Название переменной</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="tooltip" data-tooltip="Список смежности графа">graph</td>
+            <td><input type="text" id="var-graph" placeholder="например, graph"></td>
+          </tr>
+          <tr>
+            <td class="tooltip" data-tooltip="Массив предков для восстановления пути">parent</td>
+            <td><input type="text" id="var-parent" placeholder="например, parent"></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="run-button-area">
+        <button id="userRunBtn" class="run-btn">Запустить</button>
+      </div>
+    `,
+    validate: (code) => {
+      const g = val('var-graph'), p = val('var-parent');
+      return checkFilled(g, p) && checkExists(code, g, p) && { graphVar: g, parentVar: p };
+    },
+    endpoint: '/new-debug-page-dfs'
+  },
+
+  Turtle: {
+    html: `
+      <table class="variables-table">
+        <thead>
+          <tr>
+            <th>Логическое название</th>
+            <th>Название переменной</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="tooltip" data-tooltip="Таблица динамики (минимальная стоимость)">dp</td>
+            <td><input type="text" id="var-dp" placeholder="например, dp"></td>
+          </tr>
+          <tr>
+            <td class="tooltip" data-tooltip="Массив предков для восстановления пути">parent</td>
+            <td><input type="text" id="var-parent" placeholder="например, parent"></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="run-button-area">
+        <button id="userRunBtn" class="run-btn">Запустить</button>
+      </div>
+    `,
+    validate: (code) => {
+      const d = val('var-dp'), p = val('var-parent');
+      return checkFilled(d, p) && checkExists(code, d, p) && { dpVar: d, parentVar: p };
+    },
+    endpoint: '/new-debug-page-turtle'
+  },
+
+  Grasshopper: {
+    html: `
+      <table class="variables-table">
+        <thead>
+          <tr>
+            <th>Логическое название</th>
+            <th>Название переменной</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="tooltip" data-tooltip="Таблица динамики (число способов или стоимости)">dp</td>
+            <td><input type="text" id="var-dp" placeholder="например, dp"></td>
+          </tr>
+          <tr>
+            <td class="tooltip" data-tooltip="Массив предков для восстановления пути">parent</td>
+            <td><input type="text" id="var-parent" placeholder="например, parent"></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="run-button-area">
+        <button id="userRunBtn" class="run-btn">Запустить</button>
+      </div>
+    `,
+    validate: (code) => {
+      const d = val('var-dp'), p = val('var-parent');
+      return checkFilled(d, p) && checkExists(code, d, p) && { dpVar: d, parentVar: p };
+    },
+    endpoint: '/new-debug-page-grasshopper'
+  }
+};
+
+
+/* ───  Хелперы  ───────────────────────────────────────────── */
+const val = id => document.getElementById(id)?.value.trim();
+const checkFilled = (...vars) => vars.every(v => v) || (CustomAlert("Заполните все поля!"), false);
+const checkExists = (code, ...vars) =>
+    vars.every(v => code.includes(v)) || (CustomAlert("Не найдены указанные переменные в коде"), false);
+
+function mountAlgoConfig(algoName) {
+    const key = Object.keys(algoTemplates)
+        .find(k => algoName.toLowerCase().includes(k.toLowerCase()));
+    if (!key) return;
+    const {html, validate, endpoint} = algoTemplates[key];
+
+    const host = document.getElementById('algo-config');
+    host.innerHTML = html;
+
+    document.getElementById('userRunBtn').onclick = async (e) => {
+        e.preventDefault();
+        const code = window.userCM.getValue();
+        const extra = validate(code);
+        if (!extra) return;
+
+        const lines = code.split('\n').length;
+        if (lines > 300) {
+            CustomAlert('Слишком много строк кода (макс 300)');
+            return;
+        }
+
+        try {
+            const res = await fetch(`http://127.0.0.1:5000${endpoint}`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({code, ...extra})
+            });
+            if (!res.ok) {
+                const err = await res.json();
+                throw new Error(err.error || res.status);
+            }
+            const dbg = await res.json();
+            if (dbg.execution_time > 5 || dbg.memory_used > 256) {
+                CustomAlert(`Превышены лимиты: ${dbg.execution_time}s / ${dbg.memory_used}MB`);
+            } else if (dbg.error) {
+                CustomAlert("‼️ Ошибка: " + dbg.error);
+            } else {
+                window.location.href = dbg.url;
+            }
+        } catch (err) {
+            console.error(err);
+            CustomAlert('Ошибка при обращении к серверу');
+        }
+    };
+}
+
 let lastPreds = [];
+let currentPred = '';
 
-/* showPrediction теперь: */
 function showPrediction(list) {
-    lastPreds = list;                        // запоминаем топ-k
+    lastPreds = list;
     const [best] = list;
+    currentPred = best[0];
 
     const area = document.getElementById('prediction-area');
     const select = document.getElementById('correction-select');
-    const textNode = document.getElementById('prediction-text');
+    const probNode = document.getElementById('prediction-prob');
     const topCard = document.querySelector('#neuro > .glass-card');
 
-    /* выводим из best */
-    textNode.innerHTML =
-        `<strong>${best[0]}</strong> — ${(best[1] * 100).toFixed(1)} %`;
+    probNode.textContent = `— ${(best[1] * 100).toFixed(1)} %`;
 
-    /* собираем <option> */
     select.innerHTML = '';
     list.forEach(([cls]) => {
         const opt = document.createElement('option');
@@ -136,31 +312,31 @@ function showPrediction(list) {
         select.appendChild(opt);
     });
 
-    /* авто-сохранение при смене */
+    mountAlgoConfig(currentPred);
+
     select.onchange = async (e) => {
         const chosen = e.target.value;
-
-        /* логируем выбор */
         const code = window.userCM.getValue();
+
         fetch('/api/log', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({correct: chosen, code})
+            body: JSON.stringify({
+                code,
+                predicted: currentPred,
+                correct: chosen
+            })
         }).catch(() => {
-        });   // тихо, ошибок не показываем
+        });
 
-        /* ищем вероятность в lastPreds,
-           если её нет – ставим 0 % (редкий случай) */
         const entry = lastPreds.find(([cls]) => cls === chosen);
         const p = entry ? (entry[1] * 100).toFixed(1) : '0.0';
+        probNode.textContent = `— ${p} %`;
 
-        textNode.innerHTML = `<strong>${chosen}</strong> — ${p} %`;
+        mountAlgoConfig(chosen);
     };
 
-    /* показываем блок */
     area.classList.remove('hidden');
     topCard.classList.add('prediction-open');
     requestAnimationFrame(() => area.classList.add('show'));
 }
-
-

@@ -296,7 +296,8 @@ article ol {
 .run-btn {
     width: 120px;
     height: 40px;
-    background-color: #238636;
+    /*background-color: #238636;*/
+    background-color: #3b76c4;
     color: #fff;
     border: none;
     border-radius: 6px;
@@ -307,7 +308,8 @@ article ol {
 }
 
 .run-btn:hover {
-    background-color: #2ea043;
+    /*background-color: #2ea043;*/
+    background-color: #338ed0;
 }
 
 .variables-table {
@@ -367,7 +369,9 @@ article ol {
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0, 0, 0, 0.4);
+
+    /*background: transparent;*/
+    backdrop-filter: blur(4px);
 }
 
 .modal-content {
@@ -651,34 +655,140 @@ select#correction-select {
 }
 
 
-/* Горизонтальное расположение */
-.prediction-row{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:12px;
-    margin:6px 0;
+/* центрируем ряд и чуть вылизываем селект */
+.prediction-row {
+    display: flex;
+    justify-content: center; /* центр всей пачки */
+    align-items: center;
+    gap: 8px;
+    margin: 10px 0;
 }
 
-/* Красим селект под тёмную тему (тот же градиент, но тоньше) */
-#correction-select{
-    background:#0d1117;
-    border:1px solid var(--accent1);
-    color:#c9d1d9;
-    padding:6px 34px 6px 10px;   /* добавили, чтобы стрелка не липла */
-    border-radius:6px;
-    font-size:0.9rem;
-    appearance:none;
+#correction-select {
+    background: #0d1117;
+    border: 1px solid var(--accent1);
+    color: #c9d1d9;
+    font-size: 0.9rem;
+    padding: 8px 36px 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    appearance: none;
 
-    /* своя стрелка */
-    background-image:
-        linear-gradient(45deg,transparent 50%,var(--accent1) 50%),
-        linear-gradient(135deg,var(--accent1) 50%,transparent 50%);
-    background-position:right 12px center,right 8px center;
-    background-size:5px 5px,5px 5px;
-    background-repeat:no-repeat;
-    transition:border-color .2s;
+    /* «стрелочка» */
+    background-image: linear-gradient(45deg, transparent 50%, var(--accent1) 50%),
+    linear-gradient(135deg, var(--accent1) 50%, transparent 50%);
+    background-position: right 14px center, right 9px center;
+    background-size: 5px 5px, 5px 5px;
+    background-repeat: no-repeat;
+    transition: border-color .2s;
 }
-#correction-select:hover{border-color:var(--accent2);}
 
+/* ▼ селект – тот же градиент-контур, что и у кнопки */
+#correction-select {
+    /* “двойной” фон: тёмный внутри + градиент по рамке */
+    background: linear-gradient(#0d1117, #0d1117) padding-box,
+    linear-gradient(90deg, var(--accent1), var(--accent2)) border-box;
+    border: 1px solid transparent; /* границу рисует border-box-градиент */
 
+    color: #e6edf3; /* чуть светлее, читается лучше */
+    font-size: 0.9rem;
+    padding: 8px 42px 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    appearance: none;
+
+    /* стрелка тоже в тему */
+    background-image: linear-gradient(45deg, transparent 50%, var(--accent1) 50%),
+    linear-gradient(135deg, var(--accent2) 50%, transparent 50%),
+    linear-gradient(#0d1117, #0d1117); /* ← базовый фон, чтобы не съехал */
+    background-position: right 18px center, right 13px center, center;
+    background-size: 6px 6px, 6px 6px, 100% 100%;
+    background-repeat: no-repeat;
+    transition: filter .2s;
+}
+
+#correction-select:hover {
+    filter: brightness(1.15);
+}
+
+/* лёгкий хайлайт */
+
+/* ▼ процент – тот же градиент, но текстом */
+#prediction-prob {
+    background: linear-gradient(90deg, var(--accent1), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    white-space: nowrap;
+    font-size: 0.9rem;
+}
+
+/* Тёмная тема для всех полей переменных (динамических и статических) */
+/* Тёмная тема для всей таблицы переменных – даже в фокусе / при наведении */
+.variables-table input[type="text"],
+.variables-table input[type="text"]:focus,
+.variables-table input[type="text"]:hover {
+    background-color: #161b22 !important;
+    color: #c9d1d9 !important;
+    border: 1px solid #30363d !important;
+    border-radius: 4px;
+    padding: 4px 8px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.variables-table input::placeholder {
+    color: #8b949e !important;
+}
+
+.run-button-area {
+    width: 100%;
+    display: flex;
+    justify-content: center; /* идеально по центру */
+}
+
+.run-button-area .run-btn,
+.run-button-area .run-btn-neuro {
+    margin: 0; /* убираем локальные margin-auto/left */
+}
+
+/* ── исправление обрезания ────────────────────────── */
+.variables-table{
+  overflow: visible;          /*  ←  было hidden */
+}
+
+/* ── сам тултип (обновлённый) ─────────────────────── */
+.variables-table td.tooltip{
+  position: relative;
+  cursor: help;
+  z-index: 20;                /* поверх строк, а overflow уже не режет */
+}
+
+/* стиль подсказки */
+.variables-table td.tooltip::before{
+  content: attr(data-tooltip);
+  position: absolute;
+  top: 15%;                  /* снизу ячейки */
+  left: 50%;
+  transform: translate(-50%, 6px);
+  max-width: 220px;
+  white-space: normal;
+  overflow-wrap: break-word;
+
+  background: rgba(22,27,34,0.9);   /* чуть темнее и прозрачный */
+  border:1px solid var(--accent1);
+  border-radius:4px;
+  padding:6px 10px;
+  color: var(--accent1);
+  font-size: 0.85rem;
+  line-height:1.25;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .15s ease, transform .15s ease;
+}
+
+/* лёгкий подъём при ховере */
+.variables-table td.tooltip:hover::before{
+  opacity:1;
+  transform: translate(-50%, 1px);
+}

@@ -94,27 +94,28 @@
 
 
         <div id="prediction-area" class="hidden result-card">
-<!--            <h3>🥁 Предполагаемый алгоритм </h3>-->
-<!--            <div id="prediction-list"></div>-->
-
             <div class="prediction-row">
-                <p id="prediction-text"></p>        <!-- сюда выводим «Dijkstra — 30.1 %» -->
                 <select id="correction-select"></select>
+                <span id="prediction-prob"></span>
             </div>
+
+            <div id="algo-config"></div>
         </div>
+
+
+
     </section>
-
-    <div id="customAlertModal" class="modal">
-        <div class="modal-content">
-            <span class="close-button">&times;</span>
-            <p id="alertMessage"></p>
-        </div>
-    </div>
-
 
     <footer class="credits">
         <p>© 2025 Algolume. Created by Ivan Kochergin.</p>
     </footer>
+</div>
+
+<div id="customAlertModal" class="modal">
+    <div class="modal-content">
+        <span class="close-button">&times;</span>
+        <p id="alertMessage"></p>
+    </div>
 </div>
 
 <script src="script.js"></script>

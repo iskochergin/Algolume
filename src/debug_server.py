@@ -433,6 +433,7 @@ def api_log():
     _append_log({
         "ts": time.time(),
         "code": data.get("code", ""),
+        "predicted": data.get("predicted", ""),
         "correct": data.get("correct", "")
     })
     return jsonify(status="ok"), 200

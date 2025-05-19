@@ -1,107 +1,125 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <link rel="icon" href="https://algolume.ru/a.ico" type="image/x-icon">
+    <link rel="icon" href="https://algolume.ru/a.ico" type="image/x-icon">
 
-  <meta charset="UTF-8" />
-  <title>DP (Кузнечик) | Algolume</title>
-  
-  <link rel="stylesheet" href="styles.css"/>
+    <meta charset="UTF-8"/>
+    <title>DP (Кузнечик) | Algolume</title>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&display=swap&subset=cyrillic" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css"/>
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/dracula.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&display=swap&subset=cyrillic"
+          rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/dracula.min.css"/>
 </head>
 <body>
-  <header class="top-bar">
+<header class="top-bar">
     <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
 
     <h1><a href="index.html">Algolume</a></h1>
     <div class="top-right-links">
-      <a href="https://github.com/iskochergin/Algolume" target="_blank">GitHub</a>
-      <a href="https://forms.yandex.com/u/67bdd0b884227c398a06e849/">Feedback</a>
+        <a href="https://github.com/iskochergin/Algolume" target="_blank">GitHub</a>
+        <a href="https://forms.yandex.com/u/67bdd0b884227c398a06e849/">Feedback</a>
     </div>
-  </header>
+</header>
 
-  <div id="sidebar" class="sidebar closed">
+<div id="sidebar" class="sidebar closed">
     <nav>
-      <ul>
-        <li><a href="dp-turtle.html">DP (Задача с черепашкой)</a></li>
-        <li><a href="dp-grasshopper.html" class="active">DP (Задача с кузнечиком)</a></li>
-        <li><a href="dfs.html">DFS (Поиск в глубину)</a></li>
-        <li><a href="dijkstra.html">Алгоритм Дейкстры</a></li>
-      </ul>
+        <ul>
+            <li><a href="dp-turtle.html">DP (Задача с черепашкой)</a></li>
+            <li><a href="dp-grasshopper.html" class="active">DP (Задача с кузнечиком)</a></li>
+            <li><a href="dfs.html">DFS (Поиск в глубину)</a></li>
+            <li><a href="dijkstra.html">Алгоритм Дейкстры</a></li>
+        </ul>
     </nav>
-  </div>
+</div>
 
-  <div id="content-container" class="expanded">
+<div id="content-container" class="expanded">
     <main id="main-content">
-      <section>
-        <h1>ДП: Задача с кузнечиком</h1>
+        <section>
+            <h1>ДП: Задача с кузнечиком</h1>
 
-        <article>
-          <p>
-            <span style="font-weight: bold; font-size: 1.2rem;">Условие задачи:</span> Вам дан одномерный массив <code>route</code> длиной <code>n</code>, где каждая ячейка содержит число – стоимость прохождения через неё. Кузнечик начинает движение непосредственно перед первой клеткой и может прыгать на одну или две клетки вперёд. Необходимо пройти весь путь, <b>прибыв в последнюю клетку</b>, с минимальной суммарной стоимостью, а также вывести номера клеток, которые кузнечик посетит.
-          </p>
-          <p>
-            <span style="font-weight: bold; font-size: 1.2rem;">Формат входных данных:</span> В первой строке задано число <code>n</code> (<code>2 ≤ n ≤ 1,000,000</code>). Во второй строке содержится <code>n</code> целых чисел, где <code>0 ≤ route[i] ≤ 100</code>.
-          </p>
-          <p>
-            <span style="font-weight: bold; font-size: 1.2rem;">Формат выходных данных:</span> В первой строке выведите минимальную суммарную стоимость прохождения. Во второй строке через пробел — номера клеток (целые числа от 1 до n), которые кузнечик посетит при оптимальном перемещении (например: <code>1 3 4 6</code>).
-          </p>
-          <p>
-            <span style="font-weight: bold; font-size: 1.2rem;">Решение:</span>
-            Для решения задачи применяется метод динамического программирования. Создаётся одномерный массив <code>dp</code>, где <code>dp[i]</code> обозначает минимальную стоимость пути до клетки <code>i</code>. Одновременно формируется массив <code>parent</code> для восстановления маршрута, где <code>parent[i]</code> хранит индекс предыдущей клетки, через которую проходил оптимальный путь.
-          </p>
+            <article>
+                <p>
+                    <span style="font-weight: bold; font-size: 1.2rem;">Условие задачи:</span> Вам дан одномерный массив
+                    <code>route</code> длиной <code>n</code>, где каждая ячейка содержит число – стоимость прохождения
+                    через неё. Кузнечик начинает движение непосредственно перед первой клеткой и может прыгать на одну
+                    или две клетки вперёд. Необходимо пройти весь путь, <b>прибыв в последнюю клетку</b>, с минимальной
+                    суммарной стоимостью, а также вывести номера клеток, которые кузнечик посетит.
+                </p>
+                <p>
+                    <span style="font-weight: bold; font-size: 1.2rem;">Формат входных данных:</span> В первой строке
+                    задано число <code>n</code> (<code>2 ≤ n ≤ 1,000,000</code>). Во второй строке содержится
+                    <code>n</code> целых чисел, где <code>0 ≤ route[i] ≤ 100</code>.
+                </p>
+                <p>
+                    <span style="font-weight: bold; font-size: 1.2rem;">Формат выходных данных:</span> В первой строке
+                    выведите минимальную суммарную стоимость прохождения. Во второй строке через пробел — номера клеток
+                    (целые числа от 1 до n), которые кузнечик посетит при оптимальном перемещении (например: <code>1 3 4
+                    6</code>).
+                </p>
+                <p>
+                    <span style="font-weight: bold; font-size: 1.2rem;">Решение:</span>
+                    Для решения задачи применяется метод динамического программирования. Создаётся одномерный массив
+                    <code>dp</code>, где <code>dp[i]</code> обозначает минимальную стоимость пути до клетки
+                    <code>i</code>. Одновременно формируется массив <code>parent</code> для восстановления маршрута, где
+                    <code>parent[i]</code> хранит индекс предыдущей клетки, через которую проходил оптимальный путь.
+                </p>
 
-          <p><span style="font-weight: bold; font-size: 1.2rem;">Начальные условия:</span></p>
-          <p><code>dp[0] = route[0]</code></p>
-          <p><code>dp[1] = route[1]</code></p>
-          <p>Для остальных клеток выбираем оптимальный переход – из клетки <code>i - 1</code> или <code>i - 2</code>, одновременно обновляя индекс предка:</p>
-          <textarea id="theory-code-snippet-1" style="display:none;">
+                <p><span style="font-weight: bold; font-size: 1.2rem;">Начальные условия:</span></p>
+                <p><code>dp[0] = route[0]</code></p>
+                <p><code>dp[1] = route[1]</code></p>
+                <p>Для остальных клеток выбираем оптимальный переход – из клетки <code>i - 1</code> или <code>i -
+                    2</code>, одновременно обновляя индекс предка:</p>
+                <textarea id="theory-code-snippet-1" style="display:none;">
 for i in range(2, n):
     dp[i] = route[i] + min(dp[i - 1], dp[i - 2])
     parent[i] = i - 1 if dp[i - 1] < dp[i - 2] else i - 2</textarea>
 
-          <p>
-            После заполнения массива <code>dp</code> значение <code>dp[n-1]</code> является минимальной суммарной стоимостью, а массив <code>parent</code> позволяет восстановить оптимальный маршрут.
-          </p>
-          
-          <p>Например, если дан следующий массив:</p>
-          <textarea id="theory-code-snippet-2" style="display:none;">
+                <p>
+                    После заполнения массива <code>dp</code> значение <code>dp[n-1]</code> является минимальной
+                    суммарной стоимостью, а массив <code>parent</code> позволяет восстановить оптимальный маршрут.
+                </p>
+
+                <p>Например, если дан следующий массив:</p>
+                <textarea id="theory-code-snippet-2" style="display:none;">
 route = [5, 2, 8, 9, 9, 1, 4, 2, 4]</textarea>
 
-          <p>то после вычислений получится:</p>
-          <textarea id="theory-code-snippet-3" style="display:none;">
+                <p>то после вычислений получится:</p>
+                <textarea id="theory-code-snippet-3" style="display:none;">
 dp = [5, 2, 10, 11, 19, 12, 16, 14, 18]</textarea>
 
-          <p>
-            <span style="font-weight: bold; font-size: 1.2rem;">Восстановление пути:</span>
-            Начиная с клетки с индексом <code>n - 1</code>, последовательно следуйте по массиву <code>parent</code>, пока не достигнете начальной позиции (индекс 0 или 1). Полученный путь затем разворачивается для вывода правильной последовательности посещённых клеток.
-          </p>
-          <textarea id="theory-code-snippet-4" style="display:none;">
+                <p>
+                    <span style="font-weight: bold; font-size: 1.2rem;">Восстановление пути:</span>
+                    Начиная с клетки с индексом <code>n - 1</code>, последовательно следуйте по массиву
+                    <code>parent</code>, пока не достигнете начальной позиции (индекс 0 или 1). Полученный путь затем
+                    разворачивается для вывода правильной последовательности посещённых клеток.
+                </p>
+                <textarea id="theory-code-snippet-4" style="display:none;">
 path = []
 cur = n - 1
 while cur != -1:
     path.append(cur + 1)
     cur = parent[cur]
 path.reverse()</textarea>
-        </article>
+            </article>
 
-        <div class="tab-buttons">
-          <button id="exampleTabBtn" onclick="showTab('example')">Пример кода</button>
-          <button id="userTabBtn" onclick="showTab('user')">Ваш код</button>
-        </div>
+            <div class="tab-buttons">
+                <button id="exampleTabBtn" onclick="showTab('example')">Пример кода</button>
+                <button id="userTabBtn" onclick="showTab('user')">Ваш код</button>
+            </div>
 
-        <div id="exampleTab" class="tab-content">
-          <p><span style="font-weight: bold; font-size: 1.2rem;">Визуализация алгоритма (Python3)</span></p>
-          <p>Для корректной работы визуализации ограничения на входные данные следующие: <code>2 ≤ n ≤ 30</code>.</p>
-          <textarea id="example-code">
+            <div id="exampleTab" class="tab-content">
+                <p><span style="font-weight: bold; font-size: 1.2rem;">Визуализация алгоритма (Python3)</span></p>
+                <p>Для корректной работы визуализации ограничения на входные данные следующие: <code>2 ≤ n ≤ 30</code>.
+                </p>
+                <textarea id="example-code">
 # Пример решения задачи с использованием ДП (Python)
 n = int(input())
 route = list(map(int, input().split()))
@@ -125,78 +143,80 @@ print(dp[n - 1])
 print(*path)
           </textarea>
 
-          <table class="variables-table">
-            <thead>
-              <tr>
-                <th>Логическое название</th>
-                <th>Название переменной</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>dp</td>
-                <td><input type="text" value="dp" disabled /></td>
-              </tr>
-              <tr>
-                <td>parent</td>
-                <td><input type="text" value="parent" disabled /></td>
-              </tr>
-            </tbody>
-          </table>
+                <table class="variables-table">
+                    <thead>
+                    <tr>
+                        <th>Логическое название</th>
+                        <th>Название переменной</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>dp</td>
+                        <td><input type="text" value="dp" disabled/></td>
+                    </tr>
+                    <tr>
+                        <td>parent</td>
+                        <td><input type="text" value="parent" disabled/></td>
+                    </tr>
+                    </tbody>
+                </table>
 
-          <div class="run-button-area">
-            <button id="exampleRunBtn" class="run-btn">Запустить</button>
-          </div>
-        </div>
+                <div class="run-button-area">
+                    <button id="exampleRunBtn" class="run-btn">Запустить</button>
+                </div>
+            </div>
 
-        <div id="userTab" class="tab-content hidden">
-          <p><span style="font-weight: bold; font-size: 1.2rem;">Визуализация алгоритма (Python3)</span></p>
-          <p>Для корректной работы визуализации ограничения на входные данные следующие: <code>2 ≤ n ≤ 30</code>.</p>
-          <p>Обратите внимание, что ваша реализация должна использовать <b>0-индексацию</b> при работе с массивами, иначе визуализация может работать некорректно.</p>
-          <textarea id="user-code"></textarea>
+            <div id="userTab" class="tab-content hidden">
+                <p><span style="font-weight: bold; font-size: 1.2rem;">Визуализация алгоритма (Python3)</span></p>
+                <p>Для корректной работы визуализации ограничения на входные данные следующие: <code>2 ≤ n ≤ 30</code>.
+                </p>
+                <p>Обратите внимание, что ваша реализация должна использовать <b>0-индексацию</b> при работе с
+                    массивами, иначе визуализация может работать некорректно.</p>
+                <textarea id="user-code"></textarea>
 
-          <table class="variables-table" id="user-variables-table">
-            <thead>
-              <tr>
-                <th>Логическое название</th>
-                <th>Название переменной (в вашем коде)</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>dp</td>
-                <td><input type="text" id="var-dp" placeholder="например, dp" /></td>
-              </tr>
-              <tr>
-                <td>parent</td>
-                <td><input type="text" id="var-parent" placeholder="например, parent" /></td>
-              </tr>
-            </tbody>
-          </table>
+                <table class="variables-table" id="user-variables-table">
+                    <thead>
+                    <tr>
+                        <th>Логическое название</th>
+                        <th>Название переменной (в вашем коде)</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>dp</td>
+                        <td><input type="text" id="var-dp" placeholder="например, dp"/></td>
+                    </tr>
+                    <tr>
+                        <td>parent</td>
+                        <td><input type="text" id="var-parent" placeholder="например, parent"/></td>
+                    </tr>
+                    </tbody>
+                </table>
 
-          <div class="run-button-area">
-            <button id="userRunBtn" class="run-btn">Запустить</button>
-          </div>
-        </div>
-      </section>
+                <div class="run-button-area">
+                    <button id="userRunBtn" class="run-btn">Запустить</button>
+                </div>
+            </div>
+        </section>
     </main>
 
     <footer class="credits">
-      <p>© 2025 Algolume. Created by Ivan Kochergin.</p>
+        <p>© 2025 Algolume. Created by Ivan Kochergin.</p>
     </footer>
-  </div>
+</div>
 
-  <div id="customAlertModal" class="modal">
+<div id="customAlertModal" class="modal">
     <div class="modal-content">
-      <span class="close-button">&times;</span>
-      <p id="alertMessage"></p>
+        <span class="close-button">&times;</span>
+        <p id="alertMessage"></p>
     </div>
-  </div>
+</div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/python/python.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/edit/closebrackets.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/python/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/edit/closebrackets.min.js"></script>
 
-  <script src="grasshopper-script.js"></script>
+<script src="grasshopper-script.js"></script>
 </body>
 </html>

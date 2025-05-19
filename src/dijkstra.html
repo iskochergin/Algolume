@@ -1,77 +1,89 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <link rel="icon" href="https://algolume.ru/a.ico" type="image/x-icon">
+    <link rel="icon" href="https://algolume.ru/a.ico" type="image/x-icon">
 
-  <meta charset="UTF-8" />
-  <title>Дейкстра | Algolume</title>
-  
-  <link rel="stylesheet" href="styles.css"/>
+    <meta charset="UTF-8"/>
+    <title>Дейкстра | Algolume</title>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&display=swap&subset=cyrillic" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css"/>
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/dracula.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&display=swap&subset=cyrillic"
+          rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/dracula.min.css"/>
 </head>
 <body>
-  <header class="top-bar">
+<header class="top-bar">
     <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
     <h1><a href="index">Algolume</a></h1>
     <div class="top-right-links">
-      <a href="https://github.com/iskochergin/Algolume" target="_blank">GitHub</a>
-      <a href="https://forms.yandex.com/u/67bdd0b884227c398a06e849/">Feedback</a>
+        <a href="https://github.com/iskochergin/Algolume" target="_blank">GitHub</a>
+        <a href="https://forms.yandex.com/u/67bdd0b884227c398a06e849/">Feedback</a>
     </div>
-  </header>
+</header>
 
-  <div id="sidebar" class="sidebar closed">
+<div id="sidebar" class="sidebar closed">
     <nav>
-      <ul>
-        <li><a href="dp-turtle">DP (Задача с черепашкой)</a></li>
-        <li><a href="dp-grasshopper">DP (Задача с кузнечиком)</a></li>
-        <li><a href="dfs">DFS (Поиск в глубину)</a></li>
-        <li><a href="dijkstra" class="active">Алгоритм Дейкстры</a></li>
-      </ul>
+        <ul>
+            <li><a href="dp-turtle">DP (Задача с черепашкой)</a></li>
+            <li><a href="dp-grasshopper">DP (Задача с кузнечиком)</a></li>
+            <li><a href="dfs">DFS (Поиск в глубину)</a></li>
+            <li><a href="dijkstra" class="active">Алгоритм Дейкстры</a></li>
+        </ul>
     </nav>
-  </div>
+</div>
 
-  <div id="content-container" class="expanded">
+<div id="content-container" class="expanded">
     <main id="main-content">
-      <section>
-        <h1>Дейкстра: Поиск кратчайших путей</h1>
+        <section>
+            <h1>Дейкстра: Поиск кратчайших путей</h1>
 
-        <article>
-          <p>
-            <span style="font-weight: bold; font-size: 1.2rem;">Задача:</span> 
-            Дан неориентированный (или ориентированный) взвешенный граф, представленный списком смежности. Необходимо найти кратчайшие расстояния от заданной стартовой вершины до всех остальных вершин, используя алгоритм Дейкстры.
-          </p>
-          <p>
-            <span style="font-weight: bold; font-size: 1.2rem;">Формат входных данных:</span> 
-            В первой строке заданы два числа: <code>n</code> и <code>m</code> (<code>1 ≤ n, m ≤ 100,000</code>) – количество вершин и количество рёбер соответственно.
-            В следующих <code>m</code> строках заданы тройки целых чисел <code>v</code>, <code>u</code> и <code>w</code> (<code>1 ≤ u, v ≤ n, 0 ≤ w ≤ 1e9</code>), обозначающие ребро между вершинами <code>v</code> и <code>u</code> с весом <code>w</code>.
-            Если граф неориентированный, каждое ребро нужно добавить в список смежности обеих вершин.
-            Последняя строка содержит одно число <code>s</code> – номер стартовой вершины.
-          </p>
-          <p>
-            <span style="font-weight: bold; font-size: 1.2rem;">Формат выходных данных:</span> 
-            В первой строке выведите расстояния до каждой вершины (или некоторую метку, если вершина недостижима).
-            В следующих <code>n</code> строках можно вывести пути от стартовой вершины до каждой посещённой вершины, восстанавливая их по массиву <code>parent</code>.
-          </p>
-          <p>
-            <span style="font-weight: bold; font-size: 1.2rem;">Решение:</span> 
-            Для решения задачи используется алгоритм Дейкстры. Создаётся массив <code>dist</code>, где <code>dist[v]</code> хранит текущее известное кратчайшее расстояние от стартовой вершины до <code>v</code>. 
-            Массив <code>parent</code> позволяет восстановить путь. В реализации обычно используется очередь с приоритетами (heapq в Python).
-          </p>
-          <p>Начальное условие:</p>
-          <p><code>dist = [∞] * n</code></p>
-          <p><code>parent = [-1] * n</code></p>
-          <p>
-            Устанавливаем <code>dist[start] = 0</code>, помещаем стартовую вершину в приоритетную очередь. Далее, пока очередь не пуста, извлекаем вершину с наименьшим расстоянием, и пытаемся улучшить расстояния до её соседей.
-          </p>
-          <textarea id="theory-code-snippet-1" style="display:none;">
+            <article>
+                <p>
+                    <span style="font-weight: bold; font-size: 1.2rem;">Задача:</span>
+                    Дан неориентированный (или ориентированный) взвешенный граф, представленный списком смежности.
+                    Необходимо найти кратчайшие расстояния от заданной стартовой вершины до всех остальных вершин,
+                    используя алгоритм Дейкстры.
+                </p>
+                <p>
+                    <span style="font-weight: bold; font-size: 1.2rem;">Формат входных данных:</span>
+                    В первой строке заданы два числа: <code>n</code> и <code>m</code> (<code>1 ≤ n, m ≤ 100,000</code>)
+                    – количество вершин и количество рёбер соответственно.
+                    В следующих <code>m</code> строках заданы тройки целых чисел <code>v</code>, <code>u</code> и <code>w</code>
+                    (<code>1 ≤ u, v ≤ n, 0 ≤ w ≤ 1e9</code>), обозначающие ребро между вершинами <code>v</code> и <code>u</code>
+                    с весом <code>w</code>.
+                    Если граф неориентированный, каждое ребро нужно добавить в список смежности обеих вершин.
+                    Последняя строка содержит одно число <code>s</code> – номер стартовой вершины.
+                </p>
+                <p>
+                    <span style="font-weight: bold; font-size: 1.2rem;">Формат выходных данных:</span>
+                    В первой строке выведите расстояния до каждой вершины (или некоторую метку, если вершина
+                    недостижима).
+                    В следующих <code>n</code> строках можно вывести пути от стартовой вершины до каждой посещённой
+                    вершины, восстанавливая их по массиву <code>parent</code>.
+                </p>
+                <p>
+                    <span style="font-weight: bold; font-size: 1.2rem;">Решение:</span>
+                    Для решения задачи используется алгоритм Дейкстры. Создаётся массив <code>dist</code>, где <code>dist[v]</code>
+                    хранит текущее известное кратчайшее расстояние от стартовой вершины до <code>v</code>.
+                    Массив <code>parent</code> позволяет восстановить путь. В реализации обычно используется очередь с
+                    приоритетами (heapq в Python).
+                </p>
+                <p>Начальное условие:</p>
+                <p><code>dist = [∞] * n</code></p>
+                <p><code>parent = [-1] * n</code></p>
+                <p>
+                    Устанавливаем <code>dist[start] = 0</code>, помещаем стартовую вершину в приоритетную очередь.
+                    Далее, пока очередь не пуста, извлекаем вершину с наименьшим расстоянием, и пытаемся улучшить
+                    расстояния до её соседей.
+                </p>
+                <textarea id="theory-code-snippet-1" style="display:none;">
 import heapq
 
 def dijkstra(start):
@@ -87,27 +99,29 @@ def dijkstra(start):
                 dist[u] = cand
                 parent[u] = v
                 heapq.heappush(pq, (cand, u))</textarea>
-          <p>
-            После выполнения алгоритма в <code>dist[v]</code> будет кратчайшее расстояние от <code>start</code> до <code>v</code> (или ∞, если вершина недостижима).
-            Для восстановления пути используем <code>parent</code>:
-          </p>
-          <textarea id="theory-code-snippet-2" style="display:none;">
+                <p>
+                    После выполнения алгоритма в <code>dist[v]</code> будет кратчайшее расстояние от <code>start</code>
+                    до <code>v</code> (или ∞, если вершина недостижима).
+                    Для восстановления пути используем <code>parent</code>:
+                </p>
+                <textarea id="theory-code-snippet-2" style="display:none;">
 path = []
 while v != -1:
     path.append(v)
     v = parent[v]
 return path[::-1]</textarea>
-        </article>
+            </article>
 
-        <div class="tab-buttons">
-          <button id="exampleTabBtn" onclick="showTab('example')">Пример кода</button>
-          <button id="userTabBtn" onclick="showTab('user')">Ваш код</button>
-        </div>
+            <div class="tab-buttons">
+                <button id="exampleTabBtn" onclick="showTab('example')">Пример кода</button>
+                <button id="userTabBtn" onclick="showTab('user')">Ваш код</button>
+            </div>
 
-        <div id="exampleTab" class="tab-content">
-          <p><span style="font-weight: bold; font-size: 1.2rem;">Визуализируйте алгоритм! (Python3)</span></p>
-          <p>Для стабильной работы визуализации, ограничения на входные данные следующие: <code>1 ≤ n ≤ 15</code>.</p>
-          <textarea id="example-code">
+            <div id="exampleTab" class="tab-content">
+                <p><span style="font-weight: bold; font-size: 1.2rem;">Визуализируйте алгоритм! (Python3)</span></p>
+                <p>Для стабильной работы визуализации, ограничения на входные данные следующие: <code>1 ≤ n ≤ 15</code>.
+                </p>
+                <textarea id="example-code">
 # Пример Дейкстры (Поиск кратчайших путей) - Python
 import heapq
 
@@ -157,87 +171,88 @@ for v in range(1, n + 1):
         print(f"{v}: way =", *path)
 </textarea>
 
-          <table class="variables-table">
-            <thead>
-              <tr>
-                <th>Логическое название</th>
-                <th>Название переменной</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>graph</td>
-                <td><input type="text" value="graph" disabled /></td>
-              </tr>
-              <tr>
-                <td>parent</td>
-                <td><input type="text" value="parent" disabled /></td>
-              </tr>
-              <tr>
-                <td>dist</td>
-                <td><input type="text" value="dist" disabled /></td>
-              </tr>
-            </tbody>
-          </table>
+                <table class="variables-table">
+                    <thead>
+                    <tr>
+                        <th>Логическое название</th>
+                        <th>Название переменной</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>graph</td>
+                        <td><input type="text" value="graph" disabled/></td>
+                    </tr>
+                    <tr>
+                        <td>parent</td>
+                        <td><input type="text" value="parent" disabled/></td>
+                    </tr>
+                    <tr>
+                        <td>dist</td>
+                        <td><input type="text" value="dist" disabled/></td>
+                    </tr>
+                    </tbody>
+                </table>
 
-          <div class="run-button-area">
-            <button id="exampleRunBtn" class="run-btn">Запустить</button>
-          </div>
-        </div>
+                <div class="run-button-area">
+                    <button id="exampleRunBtn" class="run-btn">Запустить</button>
+                </div>
+            </div>
 
-        <div id="userTab" class="tab-content hidden">
-          <p><span style="font-weight: bold; font-size: 1.2rem;">Визуализируйте алгоритм! (Python3)</span></p>
-          <p>Для стабильной работы визуализации, ограничения на входные данные следующие: <code>1 ≤ n ≤ 15</code>.</p>
-          <textarea id="user-code"></textarea>
+            <div id="userTab" class="tab-content hidden">
+                <p><span style="font-weight: bold; font-size: 1.2rem;">Визуализируйте алгоритм! (Python3)</span></p>
+                <p>Для стабильной работы визуализации, ограничения на входные данные следующие: <code>1 ≤ n ≤ 15</code>.
+                </p>
+                <textarea id="user-code"></textarea>
 
-          <table class="variables-table" id="user-variables-table">
-            <thead>
-              <tr>
-                <th>Логическое название</th>
-                <th>Название переменной (в вашем коде)</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>graph</td>
-                <td><input type="text" id="var-graph" placeholder="например, graph" /></td>
-              </tr>
-              <tr>
-                <td>parent</td>
-                <td><input type="text" id="var-parent" placeholder="например, parent" /></td>
-              </tr>
-              <tr>
-                <td>dist</td>
-                <td><input type="text" id="var-dist" placeholder="например, dist" /></td>
-              </tr>
-            </tbody>
-          </table>
+                <table class="variables-table" id="user-variables-table">
+                    <thead>
+                    <tr>
+                        <th>Логическое название</th>
+                        <th>Название переменной (в вашем коде)</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>graph</td>
+                        <td><input type="text" id="var-graph" placeholder="например, graph"/></td>
+                    </tr>
+                    <tr>
+                        <td>parent</td>
+                        <td><input type="text" id="var-parent" placeholder="например, parent"/></td>
+                    </tr>
+                    <tr>
+                        <td>dist</td>
+                        <td><input type="text" id="var-dist" placeholder="например, dist"/></td>
+                    </tr>
+                    </tbody>
+                </table>
 
-          <div class="run-button-area">
-            <button id="userRunBtn" class="run-btn">Запустить</button>
-          </div>
-        </div>
-      </section>
+                <div class="run-button-area">
+                    <button id="userRunBtn" class="run-btn">Запустить</button>
+                </div>
+            </div>
+        </section>
     </main>
 
     <footer class="credits">
-      <p>© 2025 Algolume. Created by Ivan Kochergin.</p>
+        <p>© 2025 Algolume. Created by Ivan Kochergin.</p>
     </footer>
-  </div>
+</div>
 
-  <div id="customAlertModal" class="modal">
+<div id="customAlertModal" class="modal">
     <div class="modal-content">
-      <span class="close-button">&times;</span>
-      <p id="alertMessage"></p>
+        <span class="close-button">&times;</span>
+        <p id="alertMessage"></p>
     </div>
-  </div>
+</div>
 
-  <!-- CodeMirror scripts -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/python/python.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/edit/closebrackets.min.js"></script>
+<!-- CodeMirror scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/python/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/edit/closebrackets.min.js"></script>
 
-  <!-- Your Dijkstra logic / visualization JS (similar to dfs-script.js) -->
-  <script src="dijkstra-script.js"></script>
+<!-- Your Dijkstra logic / visualization JS (similar to dfs-script.js) -->
+<script src="dijkstra-script.js"></script>
 </body>
 </html>
