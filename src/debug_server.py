@@ -1,3 +1,10 @@
+import os, sys
+
+sys.path.insert(
+  0,
+  os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+)
+
 from flask import Flask, redirect, request, jsonify, send_from_directory
 from flask_cors import CORS
 from datetime import datetime
@@ -541,7 +548,7 @@ def api_log():
 
 
 def replace_localhost_links(base_link: str, root_dir: str = '.'):
-    patterns = ('http://127.0.0.1:5000/',)
+    patterns = ('https://algolume.ru',)
     exts = ('.html', '.js', '.css', '.py', '.json')
 
     for dirpath, dirnames, filenames in os.walk(root_dir):
