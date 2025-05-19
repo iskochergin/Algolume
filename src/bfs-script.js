@@ -163,7 +163,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 parentVar = 'parent';
                 graphVar = 'graph';
 
-                const response = await fetch('http://127.0.0.1:5000/new-debug-page-bfs', {
+                const response = await fetch('https://algolume.ru/new-debug-page-bfs', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({code, parentVar, graphVar})
@@ -217,7 +217,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             try {
-                const response = await fetch('http://127.0.0.1:5000/new-debug-page-bfs', {
+                const response = await fetch('https://algolume.ru/new-debug-page-bfs', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({code, parentVar, graphVar})

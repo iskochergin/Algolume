@@ -7,19 +7,56 @@ import os
 from get_py_debug_log import get_debug_log
 from debug_limits import get_debug_log_limited, TimeoutException, MemoryLimitException
 import shutil
-# import torch
-# from transformers import AutoTokenizer, AutoModel
 from pathlib import Path
 import time
-import numpy as np
-import onnxruntime as ort
+from config import *
+from apscheduler.schedulers.background import BackgroundScheduler
 
 app = Flask(__name__)
 CORS(app)
 
-SESSIONS_BASE = "/Users/ivankochergin/Yandex.Disk.localized/Data/1Projects/Algolume/python_debug_sessions"
-PATH_TO_SRC = "/Users/ivankochergin/Yandex.Disk.localized/Data/1Projects/Algolume/src"
-BASE_PATH = "/Users/ivankochergin/Yandex.Disk.localized/Data/1Projects/Algolume/python_debug_sessions"
+
+def clean_old_debug_sessions():
+    """
+    Each 1 hour delete everything from SESSION_BASE (except templates),
+    WHICH is created 24 hours ago or later
+    """
+    now = time.time()
+    cutoff = 24 * 3600
+
+    for name in os.listdir(SESSIONS_BASE):
+        if name == "_templates":
+            continue
+
+        path = os.path.join(SESSIONS_BASE, name)
+        try:
+            ctime = os.path.getctime(path)
+        except Exception:
+            continue
+
+        if now - ctime > cutoff:
+            try:
+                if os.path.isdir(path):
+                    shutil.rmtree(path)
+                else:
+                    os.remove(path)
+                print(f"[{datetime.now():%Y-%m-%d %H:%M:%S}] removed old session: {path}")
+            except Exception as e:
+                print(f"[WARNING] cannot remove {path}: {e}")
+
+
+scheduler = BackgroundScheduler()
+scheduler.add_job(
+    clean_old_debug_sessions,
+    trigger="date",
+    run_date=datetime.now()
+)
+scheduler.add_job(
+    clean_old_debug_sessions,
+    trigger="interval",
+    hours=1
+)
+scheduler.start()
 
 
 def generate_uuid():
@@ -32,11 +69,11 @@ def get_current_datetime():
 
 def create_new_debugging_session(debug_id, debug_log, code, input_data):
     folder_name = debug_id
-    full_path = os.path.join(BASE_PATH, folder_name)
+    full_path = os.path.join(SESSIONS_BASE, folder_name)
 
     os.makedirs(full_path, exist_ok=True)
 
-    template_path = os.path.join(BASE_PATH, "_templates")
+    template_path = os.path.join(SESSIONS_BASE, "_templates")
     html_template_path = os.path.join(template_path, "py_session.html")
     js_template_path = os.path.join(template_path, "interaction.js")
 
@@ -56,17 +93,17 @@ def create_new_debugging_session(debug_id, debug_log, code, input_data):
 
     shutil.copy(js_template_path, os.path.join(full_path, "interaction.js"))
 
-    file_url = f'http://127.0.0.1:5000/python_debug_sessions/{folder_name}/py_session.html'
+    file_url = f'https://algolume.ru/python_debug_sessions/{folder_name}/py_session.html'
     return file_url
 
 
 def create_new_tutle_session(debug_id, debug_log, code, input_data, dp, parent):
     folder_name = debug_id
-    full_path = os.path.join(BASE_PATH, folder_name)
+    full_path = os.path.join(SESSIONS_BASE, folder_name)
 
     os.makedirs(full_path, exist_ok=True)
 
-    template_path = os.path.join(BASE_PATH, "_templates")
+    template_path = os.path.join(SESSIONS_BASE, "_templates")
     html_template_path = os.path.join(template_path, "pysession-turtle.html")
     js_template_path = os.path.join(template_path, "interaction-turtle.js")
 
@@ -86,17 +123,17 @@ def create_new_tutle_session(debug_id, debug_log, code, input_data, dp, parent):
 
     shutil.copy(js_template_path, os.path.join(full_path, "interaction-turtle.js"))
 
-    file_url = f'http://127.0.0.1:5000/python_debug_sessions/{folder_name}/pysession-turtle.html'
+    file_url = f'https://algolume.ru/python_debug_sessions/{folder_name}/pysession-turtle.html'
     return file_url
 
 
 def create_new_grasshopper_session(debug_id, debug_log, code, input_data, dp, parent):
     folder_name = debug_id
-    full_path = os.path.join(BASE_PATH, folder_name)
+    full_path = os.path.join(SESSIONS_BASE, folder_name)
 
     os.makedirs(full_path, exist_ok=True)
 
-    template_path = os.path.join(BASE_PATH, "_templates")
+    template_path = os.path.join(SESSIONS_BASE, "_templates")
     html_template_path = os.path.join(template_path, "pysession-grasshopper.html")
     js_template_path = os.path.join(template_path, "interaction-grasshopper.js")
 
@@ -116,17 +153,17 @@ def create_new_grasshopper_session(debug_id, debug_log, code, input_data, dp, pa
 
     shutil.copy(js_template_path, os.path.join(full_path, "interaction-grasshopper.js"))
 
-    file_url = f'http://127.0.0.1:5000/python_debug_sessions/{folder_name}/pysession-grasshopper.html'
+    file_url = f'https://algolume.ru/python_debug_sessions/{folder_name}/pysession-grasshopper.html'
     return file_url
 
 
 def create_new_dfs_session(debug_id, debug_log, code, input_data, parent, graph):
     folder_name = debug_id
-    full_path = os.path.join(BASE_PATH, folder_name)
+    full_path = os.path.join(SESSIONS_BASE, folder_name)
 
     os.makedirs(full_path, exist_ok=True)
 
-    template_path = os.path.join(BASE_PATH, "_templates")
+    template_path = os.path.join(SESSIONS_BASE, "_templates")
     html_template_path = os.path.join(template_path, "pysession-dfs.html")
     js_template_path = os.path.join(template_path, "interaction-dfs.js")
 
@@ -146,19 +183,19 @@ def create_new_dfs_session(debug_id, debug_log, code, input_data, parent, graph)
 
     shutil.copy(js_template_path, os.path.join(full_path, "interaction-dfs.js"))
 
-    file_url = f'http://127.0.0.1:5000/python_debug_sessions/{folder_name}/pysession-dfs.html'
+    file_url = f'https://algolume.ru/python_debug_sessions/{folder_name}/pysession-dfs.html'
     return file_url
 
 
 def create_new_bfs_session(debug_id, debug_log, code, input_data, parent, graph):
     folder_name = debug_id
-    full_path = os.path.join(BASE_PATH, folder_name)
+    full_path = os.path.join(SESSIONS_BASE, folder_name)
 
     os.makedirs(full_path, exist_ok=True)
 
-    template_path = os.path.join(BASE_PATH, "_templates")
+    template_path = os.path.join(SESSIONS_BASE, "_templates")
     html_template_path = os.path.join(template_path, "pysession-bfs.html")
-    js_template_path = os.path.join(template_path, "interaction-bfs.js")
+    js_template_path = os.path.join(template_path, "interaction-dfs.js")
 
     code_lines = code.split('\n')
 
@@ -174,18 +211,18 @@ def create_new_bfs_session(debug_id, debug_log, code, input_data, parent, graph)
     with open(os.path.join(full_path, html_filename), 'w', encoding='utf-8') as file:
         file.write(html_content)
 
-    shutil.copy(js_template_path, os.path.join(full_path, "interaction-bfs.js"))
+    shutil.copy(js_template_path, os.path.join(full_path, "interaction-dfs.js"))
 
-    file_url = f'http://127.0.0.1:5000/python_debug_sessions/{folder_name}/pysession-bfs.html'
+    file_url = f'https://algolume.ru/python_debug_sessions/{folder_name}/pysession-bfs.html'
     return file_url
 
 
 def create_new_dijkstra_session(debug_id, debug_log, code, input_data, parent, graph, dist):
     folder_name = debug_id
-    full_path = os.path.join(BASE_PATH, folder_name)
+    full_path = os.path.join(SESSIONS_BASE, folder_name)
     os.makedirs(full_path, exist_ok=True)
 
-    template_path = os.path.join(BASE_PATH, "_templates")
+    template_path = os.path.join(SESSIONS_BASE, "_templates")
     html_template_path = os.path.join(template_path, "pysession-dijkstra.html")
     js_template_path = os.path.join(template_path,
                                     "interaction-dijkstra.js")
@@ -206,7 +243,7 @@ def create_new_dijkstra_session(debug_id, debug_log, code, input_data, parent, g
         file.write(html_content)
 
     shutil.copy(js_template_path, os.path.join(full_path, "interaction-dijkstra.js"))
-    file_url = f'http://127.0.0.1:5000/python_debug_sessions/{folder_name}/pysession-dijkstra.html'
+    file_url = f'https://algolume.ru/python_debug_sessions/{folder_name}/pysession-dijkstra.html'
     return file_url
 
 
@@ -454,7 +491,7 @@ def sessions(filename):
 
 @app.route('/a.ico')
 def serve_ico():
-    return send_from_directory("/root/Algolume/", "a.ico")
+    return send_from_directory(BASE_PATH, "/media/a.ico")
 
 
 @app.route('/<path:filename>')
@@ -503,5 +540,39 @@ def api_log():
     return jsonify(status="ok"), 200
 
 
+def replace_localhost_links(base_link: str, root_dir: str = '.'):
+    patterns = ('http://127.0.0.1:5000/',)
+    exts = ('.html', '.js', '.css', '.py', '.json')
+
+    for dirpath, dirnames, filenames in os.walk(root_dir):
+        rel = os.path.relpath(dirpath, root_dir)
+        parts = rel.split(os.sep)
+
+        if any(skip in parts for skip in ('venv', '__pycache__', 'migrations', 'node_modules', 'static', 'logs')):
+            continue
+
+        if parts and parts[0] == 'python_debug_sessions':
+            if len(parts) == 1 or parts[1] != '_templates':
+                continue
+
+        for fname in filenames:
+            if not fname.endswith(exts):
+                continue
+            full = os.path.join(dirpath, fname)
+            try:
+                with open(full, 'r', encoding='utf-8') as f:
+                    text = f.read()
+            except UnicodeDecodeError:
+                continue
+            new_text = text
+            for pat in patterns:
+                new_text = new_text.replace(pat, base_link)
+            if new_text is not text:
+                with open(full, 'w', encoding='utf-8') as f:
+                    f.write(new_text)
+                print(f"[replace] {full}")
+
+
 if __name__ == '__main__':
+    replace_localhost_links(BASE_LINK, root_dir=os.path.dirname(__file__))
     app.run(host='0.0.0.0', port=5000, debug=True)

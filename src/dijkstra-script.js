@@ -142,7 +142,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 parentVar = 'parent';
                 graphVar = 'graph';
                 distVar = 'dist';
-                const response = await fetch('http://127.0.0.1:5000/new-debug-page-dijkstra', {
+                const response = await fetch('https://algolume.ru/new-debug-page-dijkstra', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({code, parentVar, graphVar, distVar})
@@ -198,7 +198,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
             try {
-                const response = await fetch('http://127.0.0.1:5000/new-debug-page-dijkstra', {
+                const response = await fetch('https://algolume.ru/new-debug-page-dijkstra', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({
