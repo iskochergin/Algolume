@@ -79,7 +79,7 @@ document.addEventListener("DOMContentLoaded", function () {
             indentUnit: 4,
             readOnly: true,
             viewportMargin: Infinity,
-            lineWrapping: true
+
         });
         theoryCM1.getWrapperElement().classList.add('theory-cm');
     }
@@ -93,7 +93,7 @@ document.addEventListener("DOMContentLoaded", function () {
             indentUnit: 4,
             readOnly: true,
             viewportMargin: Infinity,
-            lineWrapping: true
+
         });
         theoryCM2.getWrapperElement().classList.add('theory-cm');
     }
@@ -107,7 +107,7 @@ document.addEventListener("DOMContentLoaded", function () {
             indentUnit: 4,
             readOnly: true,
             viewportMargin: Infinity,
-            lineWrapping: true
+
         });
         theoryCM3.getWrapperElement().classList.add('theory-cm');
     }
@@ -121,7 +121,7 @@ document.addEventListener("DOMContentLoaded", function () {
             indentUnit: 4,
             readOnly: true,
             viewportMargin: Infinity,
-            lineWrapping: true
+
         });
         theoryCM4.getWrapperElement().classList.add('theory-cm');
     }

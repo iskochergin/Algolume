@@ -793,83 +793,189 @@ select#correction-select {
     transform: translate(-50%, 1px);
 }
 
-* {
-    box-sizing: border-box;
-}
 
-body {
-    margin: 0;
-    /* font-family: 'PT Serif', serif; */
-    font-family: 'Open Sans', sans-serif;
-    background-color: #0d1117;
-    color: #c9d1d9;
-    line-height: 1.5;
-    text-align: justify;
-    margin-left: 17vw;
-    margin-right: 17vw;
-}
-
-/* ── MOBILE ─────────────────────────────────────── */
+/* ───────────────── MOBILE  ≤768 px ───────────────── */
 @media (max-width: 768px) {
 
-  /* базовая типографика и отступы */
-  body{
-    margin-left:5vw;
-    margin-right:5vw;
-    font-size:0.9rem;
-  }
+    /* базовая типографика */
+    body {
+        margin-left: 5vw;
+        margin-right: 5vw;
+        font-size: 0.95rem; /* общий текст чуть меньше */
+    }
 
-  /* шапка компактнее */
-  .top-bar h1{
-    font-size:1.2rem;
-    margin-left:0;
-  }
+    h1 {
+        margin-top: 2vh;
+        font-family: 'Open Sans', sans-serif;
+    }
 
-  /* ресайз бургер-меню и ссылок */
-  .menu-toggle{font-size:22px;}
-  .top-right-links a{margin-left:10px;}
+    /* ── TOP-BAR ───────────────────────────── */
+    .top-bar {
+        display: grid; /* три колонки: бургер | центр | иконки  */
+        grid-template-columns:auto 1fr auto;
+        padding: 8px 12px;
+    }
 
-  /* сайдбар уже */
-  .sidebar{width:220px;}
-  .sidebar nav li a{font-size:0.9rem;}
+    .top-bar h1 {
+        margin: 0;
+        font-size: 1.25rem;
+        text-align: center;
+        margin-left: -17vw;
+        flex: none; /* перестаёт растягиваться */
+    }
 
-  /* ГЛАВНЫЙ контейнер больше не flex, чтобы карточка не «липла» к низу */
-  #content-container{
-    display:block !important;
-    min-height:auto !important;
-    transform:none !important;           /* убираем translateX */
-    margin-top:56px;                     /* 40px шапка + 16px воздух */
-  }
+    .top-bar.sidebar-open h1 {
+        margin-left: -17vw !important;
+    }
 
-  /* главный контент — по фактической высоте, не растягивается */
-  #main-content{
-    flex:none !important;
-    margin:0;
-    padding:12px 0;
-  }
+    .top-right-links a {
+        display: inline-block;
+        width: 26px;
+        height: 26px;
+        text-indent: -9999px; /* скрываем надпись */
+        overflow: hidden;
+        background-size: 24px 24px;
+        background-repeat: no-repeat;
+        background-position: center;
+    }
 
-  /* карточка алгоритма — обычный поток, чуть воздуху сверху */
-  .glass-card{
-    margin-top:1rem;
-  }
+    /* GitHub (первая ссылка) */
+    .top-right-links a:nth-child(1) {
+        background-image: url('data:image/svg+xml;utf8,\
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="%23c9d1d9">\
+        <path d="M8 0C3.58 0 0 3.58 0 8a8 8 0 0 0 5.47 7.59c.4.07.55-.17.55-.38\
+        0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82\
+        .72 1.22 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95\
+        0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 2-.27c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.15\
+        0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.19 0 .21.15.46.55.38A8 8 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>\
+        </svg>');
+    }
 
-  /* код-инпут ниже ростом, чтобы влезал на экран */
-  textarea#code-input{
-    height:220px;
-  }
+    /* Envelope (вторая ссылка) */
+    .top-right-links a:nth-child(2) {
+        background-image: url('data:image/svg+xml;utf8,\
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="%23c9d1d9">\
+        <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v.217L8 8 0 4.217V4z"/>\
+        <path d="M0 4.697v7.104l5.803-3.55L0 4.697zM6.761 8.83l-6.761 4.138v.335A2 2 0 0 0 2 16h12a2 2 0 0 0 1.999-2.697v-.335l-6.761-4.138L8 9.583l-1.239-.753zM10.197 8.251L16 11.801V4.697l-5.803 3.554z"/>\
+        </svg>');
+    }
 
-  /* кнопка – на всю ширину карточки */
-  .run-btn,
-  .run-btn-neuro{
-    width:100%;
-  }
+    /* бургер-кнопка поменьше */
+    .menu-toggle {
+        font-size: 22px;
+    }
 
-  /* таблица переменных – компактнее */
-  .variables-table th,
-  .variables-table td{
-    padding:6px;
-    font-size:0.85rem;
-  }
+    /* ссылки справа превращаем в иконки-кнопки */
+    .top-right-links {
+        display: flex;
+        gap: 12px;
+    }
+
+    .top-right-links a {
+        position: relative;
+        width: 24px;
+        height: 24px;
+        display: inline-block;
+        overflow: hidden;
+        text-indent: -9999px; /* скрываем текст, оставляем доступность */
+    }
+
+    .top-right-links a:nth-child(1)::before { /* GitHub */
+        content: "🐙";
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+    }
+
+    .top-right-links a:nth-child(2)::before { /* Feedback */
+        content: "✉️";
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+    }
+
+    /* шапка больше не сдвигается при открытии сайдбара */
+    .top-bar.sidebar-open {
+        transform: none;
+        width: 100%;
+    }
+
+    /* ── SIDEBAR ──────────────────────────── */
+    .sidebar {
+        margin-top: 0 !important;
+        top: 55px !important; /* ровно под шапкой */
+        border-top-left-radius: 0 !important; /* скругления не наезжают */
+        border-top-right-radius: 0 !important;
+        height: calc(100vh - 55px) !important; /* весь экран, минус шапка */
+    }
+
+    .sidebar:not(.closed) {
+        transform: translateX(0) !important;
+        left: 0 !important;
+        width: 100vw !important;
+    }
+
+    .sidebar.closed {
+        pointer-events: none;
+    }
+
+    /* показ */
+    /* 1. CodeMirror — вернём компактный шрифт и нормальный отступ */
+    .CodeMirror {
+        font-size: 0.85rem !important; /* такой же, как на десктопе */
+        line-height: 1.35 !important;
+        padding: 2px 4px !important;
+    }
+
+    /* 2. Бургер-кнопка: расширяем «зону тапа» и поднимаем над всем */
+    .menu-toggle {
+        position: relative; /* чтобы z-index сработал */
+        z-index: 3000; /* выше сайдбара и контента */
+        padding: 8px 10px; /* +невидимый край для тапа */
+        margin-left: -6px; /* визуально остаётся на месте */
+    }
+
+    /* ── ОСНОВНОЙ КОНТЕЙНЕР ──────────────── */
+    #content-container {
+        display: block !important; /* убираем flex-растяжение */
+        min-height: auto !important;
+        transform: none !important;
+        margin-top: 56px; /* 40 (бар) + 16 отступ */
+    }
+
+    #main-content {
+        flex: none !important; /* перестаём занимать всё vh */
+        padding: 12px 0;
+    }
+
+    /* ── КАРТОЧКА АЛГОРИТМА ─────────────── */
+    .glass-card {
+        margin-top: 1rem;
+    }
+
+    textarea#code-input {
+        height: 230px;
+    }
+
+    /* кнопка «Определить» на всю ширину карточки */
+    .run-btn,
+    .run-btn-neuro {
+        width: 100%;
+    }
+
+    /* таблица переменных – компактнее */
+    .variables-table th,
+    .variables-table td {
+        padding: 6px;
+        font-size: 0.85rem;
+    }
+
 }
-/* ── END MOBILE ────────────────────────────────── */
 
+/* ─────────────── END MOBILE ─────────────── */
