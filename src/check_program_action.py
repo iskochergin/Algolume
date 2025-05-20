@@ -9,7 +9,7 @@ IMPORT_WHITE_LIST = ['__future__', 'abc', 'array', 'bisect', 'calendar', 'cmath'
 FUNCTIONS_BLACK_LIST = ['exec', 'eval', 'compile', 'open', '__import__', 'getattr', 'setattr', 
                         'delattr', 'globals', 'locals']
 
-LINK_TO_WHITE_BLACK_LIST_PY = 'https://algolume.ru/white_black_list_py.html'
+LINK_TO_WHITE_BLACK_LIST_PY = 'http://127.0.0.1:5000//white_black_list_py.html'
 
 def check_program_action(code) -> bool:
     """

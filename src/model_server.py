@@ -7,24 +7,21 @@ from pathlib import Path
 import time
 import numpy as np
 import onnxruntime as ort
+from config import *
 
 app = Flask(__name__)
 CORS(app)
 
-SESSIONS_BASE = "/Users/ivankochergin/Yandex.Disk.localized/Data/1Projects/Algolume/python_debug_sessions"
-PATH_TO_SRC = "/Users/ivankochergin/Yandex.Disk.localized/Data/1Projects/Algolume/src"
-BASE_PATH = "/Users/ivankochergin/Yandex.Disk.localized/Data/1Projects/Algolume/python_debug_sessions"
-
 
 # ─── ЗАГРУЗКА МОДЕЛИ ─────────────────────────────────────────────
-CKPT       = Path("model_ckpt")                         # ваша папка
+CKPT       = Path(PATH_TO_SRC) / "model_ckpt"                      # ваша папка
 LABELS_TXT = CKPT / "labels.txt"
 classes    = LABELS_TXT.read_text(encoding="utf-8").splitlines()
 # ожидается: ["DFS", "BFS", "Dijkstra's", "Grasshopper", "Turtle"]
 
 tokenizer = AutoTokenizer.from_pretrained(str(CKPT), use_fast=False)
 ort_sess  = ort.InferenceSession(
-    str(Path("static") / "model.onnx"),
+    str(Path(PATH_TO_SRC) / "static/model.onnx"),
     providers=["CPUExecutionProvider"]
 )
 

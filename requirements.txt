@@ -1,6 +1,8 @@
-Flask>=2.0
-Flask-Cors>=3.0
-APScheduler>=3.0
-numpy>=1.20
-onnxruntime>=1.8
-transformers>=4.0
+flask
+flask-cors
+flask-limiter
+redis
+apscheduler
+transformers
+onnxruntime
+numpy

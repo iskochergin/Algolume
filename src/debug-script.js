@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const input = document.getElementById('input') ? document.getElementById('input').value : '';
         
         try {
-            const response = await fetch('https://algolume.ru/new-debug-page', {
+            const response = await fetch('http://127.0.0.1:5000/new-debug-page', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

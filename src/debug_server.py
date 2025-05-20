@@ -1,26 +1,39 @@
-import os, sys
+import os, sys, re, json, time, uuid, shutil
+from datetime import datetime
+from pathlib import Path
 
 sys.path.insert(
-  0,
-  os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+    0,
+    os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 )
 
 from flask import Flask, redirect, request, jsonify, send_from_directory
 from flask_cors import CORS
-from datetime import datetime
-import uuid
-import json
-import os
+from apscheduler.schedulers.background import BackgroundScheduler
+from flask_limiter import Limiter
+from redis import Redis
+from flask_limiter.util import get_remote_address
+
 from get_py_debug_log import get_debug_log
 from debug_limits import get_debug_log_limited, TimeoutException, MemoryLimitException
-import shutil
-from pathlib import Path
-import time
 from config import *
-from apscheduler.schedulers.background import BackgroundScheduler
 
 app = Flask(__name__)
 CORS(app)
+
+redis_client = Redis(host="localhost", port=6379, db=0, socket_timeout=1, socket_connect_timeout=1)
+
+limiter = Limiter(
+    app=app,
+    key_func=get_remote_address,
+    storage_uri="redis://localhost:6379/0",
+    storage_options={
+        "socket_timeout": 1,
+        "socket_connect_timeout": 1
+    },
+    default_limits=["150 per minute", "10 per second"],
+    headers_enabled=True
+)
 
 
 def clean_old_debug_sessions():
@@ -100,7 +113,7 @@ def create_new_debugging_session(debug_id, debug_log, code, input_data):
 
     shutil.copy(js_template_path, os.path.join(full_path, "interaction.js"))
 
-    file_url = f'https://algolume.ru/python_debug_sessions/{folder_name}/py_session.html'
+    file_url = f'{BASE_LINK}/python_debug_sessions/{folder_name}/py_session.html'
     return file_url
 
 
@@ -130,7 +143,7 @@ def create_new_tutle_session(debug_id, debug_log, code, input_data, dp, parent):
 
     shutil.copy(js_template_path, os.path.join(full_path, "interaction-turtle.js"))
 
-    file_url = f'https://algolume.ru/python_debug_sessions/{folder_name}/pysession-turtle.html'
+    file_url = f'{BASE_LINK}/python_debug_sessions/{folder_name}/pysession-turtle.html'
     return file_url
 
 
@@ -160,7 +173,7 @@ def create_new_grasshopper_session(debug_id, debug_log, code, input_data, dp, pa
 
     shutil.copy(js_template_path, os.path.join(full_path, "interaction-grasshopper.js"))
 
-    file_url = f'https://algolume.ru/python_debug_sessions/{folder_name}/pysession-grasshopper.html'
+    file_url = f'{BASE_LINK}/python_debug_sessions/{folder_name}/pysession-grasshopper.html'
     return file_url
 
 
@@ -190,7 +203,7 @@ def create_new_dfs_session(debug_id, debug_log, code, input_data, parent, graph)
 
     shutil.copy(js_template_path, os.path.join(full_path, "interaction-dfs.js"))
 
-    file_url = f'https://algolume.ru/python_debug_sessions/{folder_name}/pysession-dfs.html'
+    file_url = f'{BASE_LINK}/python_debug_sessions/{folder_name}/pysession-dfs.html'
     return file_url
 
 
@@ -220,7 +233,7 @@ def create_new_bfs_session(debug_id, debug_log, code, input_data, parent, graph)
 
     shutil.copy(js_template_path, os.path.join(full_path, "interaction-dfs.js"))
 
-    file_url = f'https://algolume.ru/python_debug_sessions/{folder_name}/pysession-bfs.html'
+    file_url = f'{BASE_LINK}/python_debug_sessions/{folder_name}/pysession-bfs.html'
     return file_url
 
 
@@ -250,16 +263,18 @@ def create_new_dijkstra_session(debug_id, debug_log, code, input_data, parent, g
         file.write(html_content)
 
     shutil.copy(js_template_path, os.path.join(full_path, "interaction-dijkstra.js"))
-    file_url = f'https://algolume.ru/python_debug_sessions/{folder_name}/pysession-dijkstra.html'
+    file_url = f'{BASE_LINK}/python_debug_sessions/{folder_name}/pysession-dijkstra.html'
     return file_url
 
 
 @app.route('/')
+@limiter.limit("30 per minute; 5 per second")
 def index():
     return send_from_directory('.', 'index.html')
 
 
 @app.route('/new-debug-page', methods=['POST'])
+@limiter.limit("30 per minute; 5 per second")
 def new_debug_page():
     try:
         # Get code and inputs from the request
@@ -291,6 +306,7 @@ def new_debug_page():
 
 
 @app.route('/new-debug-page-turtle', methods=['POST'])
+@limiter.limit("30 per minute; 5 per second")
 def new_debug_page_turtle():
     try:
         data = request.get_json()
@@ -325,6 +341,7 @@ def new_debug_page_turtle():
 
 
 @app.route('/new-debug-page-grasshopper', methods=['POST'])
+@limiter.limit("30 per minute; 5 per second")
 def new_debug_page_grasshopper():
     try:
         data = request.get_json()
@@ -359,6 +376,7 @@ def new_debug_page_grasshopper():
 
 
 @app.route('/new-debug-page-dfs', methods=['POST'])
+@limiter.limit("30 per minute; 5 per second")
 def new_debug_page_dfs():
     try:
         data = request.get_json()
@@ -393,6 +411,7 @@ def new_debug_page_dfs():
 
 
 @app.route('/new-debug-page-bfs', methods=['POST'])
+@limiter.limit("30 per minute; 5 per second")
 def new_debug_page_bfs():
     try:
         data = request.get_json()
@@ -427,6 +446,7 @@ def new_debug_page_bfs():
 
 
 @app.route('/new-debug-page-dijkstra', methods=['POST'])
+@limiter.limit("30 per minute; 5 per second")
 def new_debug_page_dijkstra():
     try:
         data = request.get_json()
@@ -461,6 +481,7 @@ def new_debug_page_dijkstra():
 
 
 @app.route('/request-debug-log', methods=['POST'])
+@limiter.limit("30 per minute; 5 per second")
 def request_debug_log():
     try:
         data = request.get_json()
@@ -486,22 +507,26 @@ def request_debug_log():
 
 
 @app.route('/python_debug_sessions/<debug_id>/<path:filename>')
+@limiter.limit("30 per minute; 5 per second")
 def debug_sessions(debug_id, filename):
     session_folder = os.path.join(SESSIONS_BASE, debug_id)
     return send_from_directory(session_folder, filename)
 
 
 @app.route('/sessions/<path:filename>')
+@limiter.limit("30 per minute; 5 per second")
 def sessions(filename):
     return send_from_directory(SESSIONS_BASE, filename)
 
 
 @app.route('/a.ico')
+@limiter.limit("30 per minute; 5 per second")
 def serve_ico():
-    return send_from_directory(BASE_PATH, "/media/a.ico")
+    return send_from_directory(BASE_PATH, "media/a.ico")
 
 
 @app.route('/<path:filename>')
+@limiter.limit("30 per minute; 5 per second")
 def serve_src(filename):
     if filename.endswith('.py'):
         return
@@ -521,11 +546,13 @@ def serve_src(filename):
 
 
 @app.route('/white_black_list_py.html')
+@limiter.limit("30 per minute; 5 per second")
 def white_black_list():
     return send_from_directory(PATH_TO_SRC, "white_black_list_py.html")
 
 
 @app.post("/api/predict")
+@limiter.limit("30 per minute; 5 per second")
 def api_predict():
     from model_server import _predict
     data = request.get_json(force=True)
@@ -535,6 +562,7 @@ def api_predict():
 
 
 @app.post("/api/log")
+@limiter.limit("30 per minute; 5 per second")
 def api_log():
     data = request.get_json(force=True)
     from model_server import _append_log
@@ -547,39 +575,45 @@ def api_log():
     return jsonify(status="ok"), 200
 
 
-def replace_localhost_links(base_link: str, root_dir: str = '.'):
-    patterns = ('https://algolume.ru',)
-    exts = ('.html', '.js', '.css', '.py', '.json')
+# ─── замена ссылок ────────────────────────────────────────────
+DEV_HOST_RE = re.compile(r'https?://127\.0\.0\.1:5000/?')
+TEXT_EXTS = ('.html', '.js', '.css')
+SESSION_ROOT = 'python_debug_sessions'
+SKIP_DIRS = {'venv', '__pycache__', 'migrations',
+             'node_modules', 'static', 'logs'}
 
-    for dirpath, dirnames, filenames in os.walk(root_dir):
-        rel = os.path.relpath(dirpath, root_dir)
-        parts = rel.split(os.sep)
 
-        if any(skip in parts for skip in ('venv', '__pycache__', 'migrations', 'node_modules', 'static', 'logs')):
+def replace_localhost_links(base_link: str, root_dir: Path):
+    base_link = base_link.rstrip('/')  # https://algolume.ru
+    squeeze_re = re.compile(re.escape(base_link) + r'/+')  # <-- трогаем ТОЛЬКО после хоста
+
+    for dirpath, _, filenames in os.walk(root_dir):
+        parts = Path(dirpath).relative_to(root_dir).parts
+        if SKIP_DIRS.intersection(parts):
+            continue
+        if parts and parts[0] == SESSION_ROOT and (len(parts) < 2 or parts[1] != '_templates'):
             continue
 
-        if parts and parts[0] == 'python_debug_sessions':
-            if len(parts) == 1 or parts[1] != '_templates':
-                continue
-
         for fname in filenames:
-            if not fname.endswith(exts):
+            if not fname.endswith(TEXT_EXTS):
                 continue
-            full = os.path.join(dirpath, fname)
+            full = Path(dirpath) / fname
             try:
-                with open(full, 'r', encoding='utf-8') as f:
-                    text = f.read()
+                text = full.read_text('utf-8')
             except UnicodeDecodeError:
                 continue
-            new_text = text
-            for pat in patterns:
-                new_text = new_text.replace(pat, base_link)
-            if new_text is not text:
-                with open(full, 'w', encoding='utf-8') as f:
-                    f.write(new_text)
-                print(f"[replace] {full}")
+
+            # ① меняем localhost-URL на прод-URL
+            new = DEV_HOST_RE.sub(base_link + '/', text)
+
+            # ② убираем лишние '/'   ТОЛЬКО   прямо после prod-URL
+            new = squeeze_re.sub(base_link + '/', new)
+
+            if new != text:
+                full.write_text(new, encoding='utf-8')
+                print(f'[replace] {full}')
 
 
 if __name__ == '__main__':
-    replace_localhost_links(BASE_LINK, root_dir=os.path.dirname(__file__))
+    replace_localhost_links(BASE_LINK, root_dir=BASE_PATH)
     app.run(host='0.0.0.0', port=5000, debug=True)

@@ -149,18 +149,18 @@ code {
 
 /* градиент для ссылки на нейро */
 .sidebar a.neuro-link {
-  display: inline-block;
-  font-weight: bold;
-  background: linear-gradient(90deg, var(--accent1), var(--accent2));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  margin-bottom: 1rem;
+    display: inline-block;
+    font-weight: bold;
+    background: linear-gradient(90deg, var(--accent1), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 1rem;
 }
 
 /* когда нейро-ссылка активна или при ховере — чуть ярче */
 .sidebar a.neuro-link:hover,
 .sidebar a.neuro-link:focus {
-  filter: brightness(1.1);
+    filter: brightness(1.1);
 }
 
 /* MAIN CONTENT */
@@ -792,3 +792,84 @@ select#correction-select {
     opacity: 1;
     transform: translate(-50%, 1px);
 }
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    /* font-family: 'PT Serif', serif; */
+    font-family: 'Open Sans', sans-serif;
+    background-color: #0d1117;
+    color: #c9d1d9;
+    line-height: 1.5;
+    text-align: justify;
+    margin-left: 17vw;
+    margin-right: 17vw;
+}
+
+/* ── MOBILE ─────────────────────────────────────── */
+@media (max-width: 768px) {
+
+  /* базовая типографика и отступы */
+  body{
+    margin-left:5vw;
+    margin-right:5vw;
+    font-size:0.9rem;
+  }
+
+  /* шапка компактнее */
+  .top-bar h1{
+    font-size:1.2rem;
+    margin-left:0;
+  }
+
+  /* ресайз бургер-меню и ссылок */
+  .menu-toggle{font-size:22px;}
+  .top-right-links a{margin-left:10px;}
+
+  /* сайдбар уже */
+  .sidebar{width:220px;}
+  .sidebar nav li a{font-size:0.9rem;}
+
+  /* ГЛАВНЫЙ контейнер больше не flex, чтобы карточка не «липла» к низу */
+  #content-container{
+    display:block !important;
+    min-height:auto !important;
+    transform:none !important;           /* убираем translateX */
+    margin-top:56px;                     /* 40px шапка + 16px воздух */
+  }
+
+  /* главный контент — по фактической высоте, не растягивается */
+  #main-content{
+    flex:none !important;
+    margin:0;
+    padding:12px 0;
+  }
+
+  /* карточка алгоритма — обычный поток, чуть воздуху сверху */
+  .glass-card{
+    margin-top:1rem;
+  }
+
+  /* код-инпут ниже ростом, чтобы влезал на экран */
+  textarea#code-input{
+    height:220px;
+  }
+
+  /* кнопка – на всю ширину карточки */
+  .run-btn,
+  .run-btn-neuro{
+    width:100%;
+  }
+
+  /* таблица переменных – компактнее */
+  .variables-table th,
+  .variables-table td{
+    padding:6px;
+    font-size:0.85rem;
+  }
+}
+/* ── END MOBILE ────────────────────────────────── */
+
