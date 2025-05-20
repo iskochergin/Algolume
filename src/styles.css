@@ -65,7 +65,7 @@ code {
     color: #58a6ff;
 }
 
-.top-bar h1 a {
+.top-bar a {
     color: #c9d1d9;
     text-decoration: none;
     color: #58a6ff;
@@ -795,7 +795,7 @@ select#correction-select {
 
 
 /* ───────────────── MOBILE  ≤768 px ───────────────── */
-@media (max-width: 768px) {
+@media (max-width: 900px) {
 
     /* базовая типографика */
     body {
@@ -814,29 +814,30 @@ select#correction-select {
         display: grid; /* три колонки: бургер | центр | иконки  */
         grid-template-columns:auto 1fr auto;
         padding: 8px 12px;
+        align-items: center;
     }
 
     .top-bar h1 {
         margin: 0;
         font-size: 1.25rem;
         text-align: center;
-        margin-left: -17vw;
         flex: none; /* перестаёт растягиваться */
-    }
-
-    .top-bar.sidebar-open h1 {
-        margin-left: -17vw !important;
+        margin: 0 !important;              /* сбросим старый margin-left */
+        grid-column: 2;                    /* во вторую колонку */
+        justify-self: center !important; 
+        transform: translateX(-32px) !important;
     }
 
     .top-right-links a {
         display: inline-block;
-        width: 26px;
-        height: 26px;
+        width: 22px;
+        height: 22px;
         text-indent: -9999px; /* скрываем надпись */
         overflow: hidden;
         background-size: 24px 24px;
         background-repeat: no-repeat;
         background-position: center;
+        margin-right: 0px;
     }
 
     /* GitHub (первая ссылка) */
@@ -868,7 +869,8 @@ select#correction-select {
     /* ссылки справа превращаем в иконки-кнопки */
     .top-right-links {
         display: flex;
-        gap: 12px;
+        gap: 4px;
+        margin-right: 10px;
     }
 
     .top-right-links a {
@@ -928,7 +930,7 @@ select#correction-select {
     /* показ */
     /* 1. CodeMirror — вернём компактный шрифт и нормальный отступ */
     .CodeMirror {
-        font-size: 0.85rem !important; /* такой же, как на десктопе */
+        font-size: 1rem !important; /* такой же, как на десктопе */
         line-height: 1.35 !important;
         padding: 2px 4px !important;
     }
@@ -940,6 +942,7 @@ select#correction-select {
         padding: 8px 10px; /* +невидимый край для тапа */
         margin-left: -6px; /* визуально остаётся на месте */
     }
+
 
     /* ── ОСНОВНОЙ КОНТЕЙНЕР ──────────────── */
     #content-container {
