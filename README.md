@@ -9,7 +9,11 @@ To visualize your code, you can point the needed names of variables specifically
 Then the engine of Python returns the execution trace of the code and a JS script builds the visualization for the algorithm you have chosen.  
 Also, if you don't want to find the algorithm through the list and simply want to visualize it, you can use Algolume Neuro!
 
-[![Algolume Neuro](media/algolume-neuro.svg)](https://algolume.ru)
+[//]: # ([![Algolume Neuro]&#40;media/algolume-neuro.svg&#41;]&#40;https://algolume.ru&#41;)
+
+<a href="https://algolume.ru" target="_blank" rel="noopener">
+  <img src="./media/algolume-neuro.svg" alt="Algolume Neuro">
+</a>
 
 ---
 

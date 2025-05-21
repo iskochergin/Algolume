@@ -17,13 +17,13 @@
   </defs>
 
   <!-- background -->
-  <rect x="0" y="0" width="600" height="120" rx="15" ry="15"
+  <rect x="0" y="0" width="550" height="100" rx="15" ry="15"
         fill="#fff" fill-opacity="0.04"
         stroke="#fff" stroke-opacity="0.08"
         stroke-width="1.5"/>
 
   <!-- logo -->
-  <text x="15" y="38"
+  <text x="10" y="30"
         font-family="Open Sans, sans-serif"
         font-size="24"
         font-weight="600"
@@ -32,15 +32,15 @@
   </text>
 
   <!-- description -->
-  <text x="15" y="72"
+  <text x="10" y="62"
         font-family="Open Sans, sans-serif"
-        font-size="17"
+        font-size="16"
         fill="#ddd">
     A neural-network powered tool to distinguish your algorithms.
   </text>
-  <text x="15" y="96"
+  <text x="10" y="84"
         font-family="Open Sans, sans-serif"
-        font-size="17"
+        font-size="16"
         fill="#ddd">
     Paste your code and it will visualize the most appropriate algorithm for you!
   </text>
