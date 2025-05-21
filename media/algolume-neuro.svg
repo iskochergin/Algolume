@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg"
-     width="500" height="90"
-     viewBox="0 0 500 90"
+     viewBox="0 0 600 120"
+     preserveAspectRatio="xMinYMin meet"
      role="img" aria-labelledby="title desc">
   <title id="title">Algolume Neuro</title>
   <desc id="desc">
@@ -16,31 +16,31 @@
     </linearGradient>
   </defs>
 
-  <!-- Фон -->
-  <rect x="0" y="0" width="500" height="90" rx="10" ry="10"
-        fill="#ffffff" fill-opacity="0.04"
-        stroke="#ffffff" stroke-opacity="0.08"
-        stroke-width="1"/>
+  <!-- background -->
+  <rect x="0" y="0" width="600" height="120" rx="15" ry="15"
+        fill="#fff" fill-opacity="0.04"
+        stroke="#fff" stroke-opacity="0.08"
+        stroke-width="1.5"/>
 
-  <!-- Логотип -->
-  <text x="20" y="34"
+  <!-- logo -->
+  <text x="15" y="38"
         font-family="Open Sans, sans-serif"
-        font-size="20"
-        fill="url(#gradient)"
-        font-weight="600">
+        font-size="24"
+        font-weight="600"
+        fill="url(#gradient)">
     Algolume Neuro
   </text>
 
-  <!-- Описание -->
-  <text x="20" y="58"
+  <!-- description -->
+  <text x="15" y="72"
         font-family="Open Sans, sans-serif"
-        font-size="14"
+        font-size="17"
         fill="#ddd">
     A neural-network powered tool to distinguish your algorithms.
   </text>
-  <text x="20" y="76"
+  <text x="15" y="96"
         font-family="Open Sans, sans-serif"
-        font-size="14"
+        font-size="17"
         fill="#ddd">
     Paste your code and it will visualize the most appropriate algorithm for you!
   </text>
