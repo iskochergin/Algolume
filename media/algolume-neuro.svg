@@ -1,5 +1,14 @@
-<!-- algolume-banner.svg -->
-<svg xmlns="http://www.w3.org/2000/svg" width="420" height="70">
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="420" height="70"
+     viewBox="0 0 420 70"
+     role="img" aria-labelledby="title desc">
+  <title id="title">Algolume Neuro</title>
+  <desc id="desc">
+    A neural-network powered tool to distinguish your algorithms.
+    Paste your code and it will visualize the most appropriate algorithm for you!
+  </desc>
+
   <defs>
     <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
       <stop offset="0%" stop-color="#58a6ff"/>
@@ -7,43 +16,32 @@
     </linearGradient>
   </defs>
 
-  <!-- Фон -->
-  <rect
-    x="0" y="0"
-    width="420" height="70"
-    rx="8" ry="8"
-    fill="rgba(255,255,255,0.04)"
-    stroke="rgba(255,255,255,0.08)"
-    stroke-width="1"
-  />
+  <!-- Background rounded rectangle -->
+  <rect x="0" y="0" width="420" height="70" rx="8" ry="8"
+        fill="#ffffff" fill-opacity="0.04"
+        stroke="#ffffff" stroke-opacity="0.08"
+        stroke-width="1"/>
 
-  <!-- Логотип -->
-  <a href="https://algolume.ru" target="_blank">
-    <text
-      x="10" y="24"
-      font-family="Open Sans, sans-serif"
-      font-size="16"
-      fill="url(#gradient)"
-    >
-      Algolume Neuro
-    </text>
-  </a>
+  <!-- Logo text -->
+  <text x="14" y="24"
+        font-family="Open Sans, sans-serif"
+        font-size="16"
+        fill="url(#gradient)"
+        font-weight="600">
+    Algolume Neuro
+  </text>
 
-  <!-- Описание -->
-  <text
-    x="10" y="42"
-    font-family="Open Sans, sans-serif"
-    font-size="12"
-    fill="#ddd"
-  >
+  <!-- Description lines -->
+  <text x="14" y="44"
+        font-family="Open Sans, sans-serif"
+        font-size="12"
+        fill="#ddd">
     A neural-network powered tool to distinguish your algorithms.
   </text>
-  <text
-    x="10" y="58"
-    font-family="Open Sans, sans-serif"
-    font-size="12"
-    fill="#ddd"
-  >
+  <text x="14" y="58"
+        font-family="Open Sans, sans-serif"
+        font-size="12"
+        fill="#ddd">
     Paste your code and it will visualize the most appropriate algorithm for you!
   </text>
 </svg>
