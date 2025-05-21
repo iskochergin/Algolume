@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg"
-     viewBox="0 0 600 120"
+     viewBox="0 0 540 108"
      preserveAspectRatio="xMinYMin meet"
      role="img" aria-labelledby="title desc">
   <title id="title">Algolume Neuro</title>
@@ -17,30 +17,30 @@
   </defs>
 
   <!-- background -->
-  <rect x="0" y="0" width="600" height="120" rx="15" ry="15"
+  <rect x="0" y="0" width="540" height="108" rx="14" ry="14"
         fill="#fff" fill-opacity="0.04"
         stroke="#fff" stroke-opacity="0.08"
-        stroke-width="1.5"/>
+        stroke-width="1.4"/>
 
   <!-- logo -->
-  <text x="15" y="38"
+  <text x="14" y="34"
         font-family="Open Sans, sans-serif"
-        font-size="24"
+        font-size="22"
         font-weight="600"
         fill="url(#gradient)">
     Algolume Neuro
   </text>
 
   <!-- description -->
-  <text x="15" y="72"
+  <text x="14" y="64"
         font-family="Open Sans, sans-serif"
-        font-size="17"
+        font-size="15"
         fill="#ddd">
     A neural-network powered tool to distinguish your algorithms.
   </text>
-  <text x="15" y="96"
+  <text x="14" y="86"
         font-family="Open Sans, sans-serif"
-        font-size="17"
+        font-size="15"
         fill="#ddd">
     Paste your code and it will visualize the most appropriate algorithm for you!
   </text>
