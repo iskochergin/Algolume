@@ -1,14 +1,49 @@
-<!-- algolume-neuro.svg -->
-<svg xmlns="http://www.w3.org/2000/svg" width="400" height="24">
+<!-- algolume-banner.svg -->
+<svg xmlns="http://www.w3.org/2000/svg" width="420" height="70">
   <defs>
     <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
       <stop offset="0%" stop-color="#58a6ff"/>
       <stop offset="100%" stop-color="#d4bfff"/>
     </linearGradient>
   </defs>
+
+  <!-- Фон -->
+  <rect
+    x="0" y="0"
+    width="420" height="70"
+    rx="8" ry="8"
+    fill="rgba(255,255,255,0.04)"
+    stroke="rgba(255,255,255,0.08)"
+    stroke-width="1"
+  />
+
+  <!-- Логотип -->
   <a href="https://algolume.ru" target="_blank">
-    <text x="0" y="16" font-family="Open Sans, sans-serif" font-size="16" fill="url(#gradient)">
+    <text
+      x="10" y="24"
+      font-family="Open Sans, sans-serif"
+      font-size="16"
+      fill="url(#gradient)"
+    >
       Algolume Neuro
     </text>
   </a>
+
+  <!-- Описание -->
+  <text
+    x="10" y="42"
+    font-family="Open Sans, sans-serif"
+    font-size="12"
+    fill="#ddd"
+  >
+    A neural-network powered tool to distinguish your algorithms.
+  </text>
+  <text
+    x="10" y="58"
+    font-family="Open Sans, sans-serif"
+    font-size="12"
+    fill="#ddd"
+  >
+    Paste your code and it will visualize the most appropriate algorithm for you!
+  </text>
 </svg>

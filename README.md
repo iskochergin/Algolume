@@ -11,9 +11,6 @@ Also, if you don't want to find the algorithm through the list and simply want t
 
 [![Algolume Neuro](media/algolume-neuro.svg)](https://algolume.ru)
 
-A neural-network powered tool to distinguish your algorithms.  
-Paste your code and it will visualize the most appropriate algorithm for you!
-
 ---
 
 By this moment there are 4 algorithms available:
