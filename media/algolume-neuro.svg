@@ -1,0 +1,14 @@
+<!-- algolume-neuro.svg -->
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="24">
+  <defs>
+    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#58a6ff"/>
+      <stop offset="100%" stop-color="#d4bfff"/>
+    </linearGradient>
+  </defs>
+  <a href="https://algolume.ru" target="_blank">
+    <text x="0" y="16" font-family="Open Sans, sans-serif" font-size="16" fill="url(#gradient)">
+      Algolume Neuro
+    </text>
+  </a>
+</svg>
