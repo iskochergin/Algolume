@@ -15,8 +15,6 @@ Also, if you don't want to find the algorithm through the list and simply want t
   <img src="./media/algolume-neuro.svg" alt="Algolume Neuro">
 </a>
 
----
-
 By this moment there are 4 algorithms available:
 
 - DP (Turtle task)
