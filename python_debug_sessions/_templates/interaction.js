@@ -414,9 +414,10 @@ function makeMarker() {
 
 function processNextInputLine() {
     inputNeeded = false;
+    if (!nextButton) {
+        nextButton = document.getElementById('next-button');
+    }
     nextButton.disabled = false;
-
-    // Send input to the server and update debugLog
     sendInputAndGetNewTrace();
 }
 
@@ -443,7 +444,7 @@ async function sendInputAndGetNewTrace() {
 
         const debugging_result = await response.json();
         // console.log(debugging_result);
-        
+
         waitingServer = false;
         if (debugging_result.execution_time > 5 || debugging_result.memory_used > 256) {
             document.querySelectorAll("input, button").forEach(elem => elem.disabled = true);
@@ -470,7 +471,6 @@ function renderExecutionTrace() {
     if (currentLog.stdout && currentStep == maxCurrentStep && !usedMax) {
         // console.log('AAAAAAAA', currentLog.stdout, currentStep);
         stepsContent[currentStep] += currentLog.stdout + '\n';
-        
         usedMax = true;
         reinitUserInputFront();
     }
@@ -538,7 +538,7 @@ function reinitUserInputFront() {
     initializeUserInput();
 }
 
-function stepForward() {    
+function stepForward() {
     if (waitingServer) {
         return;
     }
@@ -616,4 +616,16 @@ function stepLast() {
     currentStep = maxCurrentStep;
     reinitUserInputFront()
     displayStep(currentStep);
+}
+
+function searchVariableRecursively(obj, varName) {
+    if (obj === null || typeof obj !== 'object') return undefined;
+    if (Object.prototype.hasOwnProperty.call(obj, varName)) return obj[varName];
+    for (let key in obj) {
+        if (typeof obj[key] === 'object') {
+            let found = searchVariableRecursively(obj[key], varName);
+            if (found !== undefined) return found;
+        }
+    }
+    return undefined;
 }

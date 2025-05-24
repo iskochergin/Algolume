@@ -126,6 +126,7 @@ def create_new_tutle_session(debug_id, debug_log, code, input_data, dp, parent):
     template_path = os.path.join(SESSIONS_BASE, "_templates")
     html_template_path = os.path.join(template_path, "pysession-turtle.html")
     js_template_path = os.path.join(template_path, "interaction-turtle.js")
+    interaction_js_template_path = os.path.join(template_path, "interaction.js")
 
     code_lines = code.split('\n')
 
@@ -142,6 +143,7 @@ def create_new_tutle_session(debug_id, debug_log, code, input_data, dp, parent):
         file.write(html_content)
 
     shutil.copy(js_template_path, os.path.join(full_path, "interaction-turtle.js"))
+    shutil.copy(interaction_js_template_path, os.path.join(full_path, "interaction.js"))
 
     file_url = f'{BASE_LINK}/python_debug_sessions/{folder_name}/pysession-turtle.html'
     return file_url
@@ -156,6 +158,7 @@ def create_new_grasshopper_session(debug_id, debug_log, code, input_data, dp, pa
     template_path = os.path.join(SESSIONS_BASE, "_templates")
     html_template_path = os.path.join(template_path, "pysession-grasshopper.html")
     js_template_path = os.path.join(template_path, "interaction-grasshopper.js")
+    interaction_js_template_path = os.path.join(template_path, "interaction.js")
 
     code_lines = code.split('\n')
 
@@ -172,6 +175,7 @@ def create_new_grasshopper_session(debug_id, debug_log, code, input_data, dp, pa
         file.write(html_content)
 
     shutil.copy(js_template_path, os.path.join(full_path, "interaction-grasshopper.js"))
+    shutil.copy(interaction_js_template_path, os.path.join(full_path, "interaction.js"))
 
     file_url = f'{BASE_LINK}/python_debug_sessions/{folder_name}/pysession-grasshopper.html'
     return file_url
@@ -186,6 +190,7 @@ def create_new_dfs_session(debug_id, debug_log, code, input_data, parent, graph)
     template_path = os.path.join(SESSIONS_BASE, "_templates")
     html_template_path = os.path.join(template_path, "pysession-dfs.html")
     js_template_path = os.path.join(template_path, "interaction-dfs.js")
+    interaction_js_template_path = os.path.join(template_path, "interaction.js")
 
     code_lines = code.split('\n')
 
@@ -202,6 +207,7 @@ def create_new_dfs_session(debug_id, debug_log, code, input_data, parent, graph)
         file.write(html_content)
 
     shutil.copy(js_template_path, os.path.join(full_path, "interaction-dfs.js"))
+    shutil.copy(interaction_js_template_path, os.path.join(full_path, "interaction.js"))
 
     file_url = f'{BASE_LINK}/python_debug_sessions/{folder_name}/pysession-dfs.html'
     return file_url
@@ -216,6 +222,7 @@ def create_new_bfs_session(debug_id, debug_log, code, input_data, parent, graph)
     template_path = os.path.join(SESSIONS_BASE, "_templates")
     html_template_path = os.path.join(template_path, "pysession-bfs.html")
     js_template_path = os.path.join(template_path, "interaction-dfs.js")
+    interaction_js_template_path = os.path.join(template_path, "interaction.js")
 
     code_lines = code.split('\n')
 
@@ -232,6 +239,7 @@ def create_new_bfs_session(debug_id, debug_log, code, input_data, parent, graph)
         file.write(html_content)
 
     shutil.copy(js_template_path, os.path.join(full_path, "interaction-dfs.js"))
+    shutil.copy(interaction_js_template_path, os.path.join(full_path, "interaction.js"))
 
     file_url = f'{BASE_LINK}/python_debug_sessions/{folder_name}/pysession-bfs.html'
     return file_url
@@ -244,8 +252,8 @@ def create_new_dijkstra_session(debug_id, debug_log, code, input_data, parent, g
 
     template_path = os.path.join(SESSIONS_BASE, "_templates")
     html_template_path = os.path.join(template_path, "pysession-dijkstra.html")
-    js_template_path = os.path.join(template_path,
-                                    "interaction-dijkstra.js")
+    js_template_path = os.path.join(template_path, "interaction-dijkstra.js")
+    interaction_js_template_path = os.path.join(template_path, "interaction.js")
 
     code_lines = code.split('\n')
 
@@ -263,6 +271,8 @@ def create_new_dijkstra_session(debug_id, debug_log, code, input_data, parent, g
         file.write(html_content)
 
     shutil.copy(js_template_path, os.path.join(full_path, "interaction-dijkstra.js"))
+    shutil.copy(interaction_js_template_path, os.path.join(full_path, "interaction.js"))
+
     file_url = f'{BASE_LINK}/python_debug_sessions/{folder_name}/pysession-dijkstra.html'
     return file_url
 

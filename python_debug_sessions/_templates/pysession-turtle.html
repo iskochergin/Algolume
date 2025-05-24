@@ -1,84 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="icon" href="https://algolume.ru/a.ico" type="image/x-icon">
+    <link rel="icon" href="https://algolume.ru/a.ico" type="image/x-icon">
 
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Algolume</title>
-  <link rel="stylesheet" href="../_templates/style-turtle-session.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/dracula.min.css" />
-  
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Algolume</title>
+    <link rel="stylesheet" href="../_templates/style-turtle-session.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/dracula.min.css"/>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <h1><a href="#" onclick="history.back(); return false;">Algolume: Turtle (back)</a></h1>
+<h1><a href="#" onclick="history.back(); return false;">Algolume: Turtle (back)</a></h1>
 
-  <div id="code-input-captions">
+<div id="code-input-captions">
     <div class="caption code-caption">Code</div>
     <div class="caption input-caption">Input</div>
-  </div>
+</div>
 
-  <div id="code-and-input">
+<div id="code-and-input">
     <div id="code-area">
-      <textarea id="code-textarea"></textarea>
+        <textarea id="code-textarea"></textarea>
     </div>
     <textarea id="user-input" placeholder="Enter input..." rows="5"></textarea>
-  </div>
+</div>
 
-  <div id="step-slider-container">
+<div id="step-slider-container">
     <div class="slider-label">
-      Step <span id="current-step">0</span> / <span id="total-steps">?</span>
+        Step <span id="current-step">0</span> / <span id="total-steps">?</span>
     </div>
-    <input type="range" id="step-slider" min="0" max="0" value="0" step="1" />
-  </div>
+    <input type="range" id="step-slider" min="0" max="0" value="0" step="1"/>
+</div>
 
-  <div id="control-area">
+<div id="control-area">
     <button id="first-button" onclick="stepFirst()">First</button>
     <button id="prev-button" onclick="stepBack()">Previous</button>
     <button id="next-button" onclick="stepForward()">Next</button>
     <button id="last-button" onclick="stepLast()">Last</button>
-  </div>
-  
-  <pre id="execution-output"></pre>
+</div>
+
+<pre id="execution-output"></pre>
 
 
-  <div id="var-and-dp-wrapper">
+<div id="var-and-dp-wrapper">
     <div id="variable-visualization" class="variables-container"></div>
-  
+
     <div id="dp-visualization-container">
         <div class="dp-heading-container">
-          <h2>Визуализация таблицы DP</h2>
-          <p>Наведите курсор на ячейку, чтобы посмотреть путь до нее!</p>
-          <span class="tooltip-text">
+            <h2>Визуализация таблицы DP</h2>
+            <p>Наведите курсор на ячейку, чтобы посмотреть путь до нее!</p>
+            <span class="tooltip-text">
             Оптимальный путь: от начальной ячейки (0,0) до выбранной. Наведите на любую ячейку таблицы для просмотра маршрута.❗Таблица видна, когда DP определено.
           </span>
         </div>
         <div id="dp-visualization"></div>
     </div>
-  </div>  
-  
-  <div id="customAlertModal" class="modal">
-    <div class="modal-content">
-      <span class="close-button">&times;</span>
-      <p id="alertMessage">Your alert message goes here...</p>
-    </div>
-  </div>
+</div>
 
-  <script>
+<div id="customAlertModal" class="modal">
+    <div class="modal-content">
+        <span class="close-button">&times;</span>
+        <p id="alertMessage">Your alert message goes here...</p>
+    </div>
+</div>
+
+<script>
     let debugLog = {debug_log};
     let needInput = 'WOIEJ:BWOIE J:WOEIJWGO:WIEJWEF:SODIFJ:WOEI:woiefj123t32joih2j34g;awii;ILOVEMYMOMANDDAD;lakw213;ri2jg2;3oi2gaJW23';
     const codeLines = {code_lines};
     let dpVar = "{dpVar}";
     let parentVar = "{parentVar}";
-  </script>
+</script>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/python/python.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/edit/closebrackets.min.js"></script>
-  <script src="interaction-turtle.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/python/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/edit/closebrackets.min.js"></script>
+
+<script src="interaction.js"></script>
+<script src="interaction-turtle.js"></script>
 </body>
 </html>
