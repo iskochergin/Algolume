@@ -6,7 +6,7 @@ import traceback
 from copy import deepcopy
 from typing import Any, Optional, Dict, List, Callable, Iterator, NoReturn
 from types import FrameType
-from check_program_action import check_program_action
+from backend.code_exec.check_program_action import check_program_action
 
 
 execution_trace: List[Dict[str, Any]] = []

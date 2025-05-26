@@ -2,7 +2,7 @@ import os
 import psutil
 import multiprocessing
 import time
-from get_py_debug_log import get_debug_log
+from backend.code_exec.get_py_debug_log import get_debug_log
 
 # Custom Exceptions
 class TimeoutException(Exception):

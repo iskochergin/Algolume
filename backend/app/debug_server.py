@@ -2,11 +2,6 @@ import os, sys, re, json, time, uuid, shutil
 from datetime import datetime
 from pathlib import Path
 
-sys.path.insert(
-    0,
-    os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-)
-
 from flask import Flask, redirect, request, jsonify, send_from_directory
 from flask_cors import CORS
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -14,9 +9,8 @@ from flask_limiter import Limiter
 from redis import Redis
 from flask_limiter.util import get_remote_address
 
-from get_py_debug_log import get_debug_log
-from debug_limits import get_debug_log_limited, TimeoutException, MemoryLimitException
-from config import *
+from backend.code_exec.debug_limits import get_debug_log_limited, TimeoutException, MemoryLimitException
+from backend.config import *
 
 app = Flask(__name__)
 CORS(app)
@@ -280,7 +274,25 @@ def create_new_dijkstra_session(debug_id, debug_log, code, input_data, parent, g
 @app.route('/')
 @limiter.limit("30 per minute; 5 per second")
 def index():
-    return send_from_directory('.', 'index.html')
+    return send_from_directory(PATH_TO_THEORY, 'index.html')
+
+
+@app.route('/debug')
+@limiter.limit("30 per minute; 5 per second")
+def debug_route():
+    return send_from_directory(PATH_TO_FRONTEND, 'simple_debug/debug.html')
+
+
+@app.route('/style-debug.css')
+@limiter.limit("30 per minute; 5 per second")
+def debug_style_route():
+    return send_from_directory(PATH_TO_FRONTEND, 'simple_debug/style-debug.css')
+
+
+@app.route('/debug-script.js')
+@limiter.limit("30 per minute; 5 per second")
+def debug_script_route():
+    return send_from_directory(PATH_TO_FRONTEND, 'simple_debug/debug-script.js')
 
 
 @app.route('/new-debug-page', methods=['POST'])
@@ -544,13 +556,13 @@ def serve_src(filename):
     if filename == "index.html" or filename == "index":
         return redirect("/", code=301)
 
-    file_path = os.path.join(PATH_TO_SRC, filename)
+    file_path = os.path.join(PATH_TO_THEORY, filename)
     if os.path.exists(file_path):
-        return send_from_directory(PATH_TO_SRC, filename)
+        return send_from_directory(PATH_TO_THEORY, filename)
 
-    html_path = os.path.join(PATH_TO_SRC, f"{filename}.html")
+    html_path = os.path.join(PATH_TO_THEORY, f"{filename}.html")
     if os.path.exists(html_path):
-        return send_from_directory(PATH_TO_SRC, f"{filename}.html")
+        return send_from_directory(PATH_TO_THEORY, f"{filename}.html")
 
     return "File not found", 404
 
@@ -558,7 +570,7 @@ def serve_src(filename):
 @app.route('/white_black_list_py.html')
 @limiter.limit("30 per minute; 5 per second")
 def white_black_list():
-    return send_from_directory(PATH_TO_SRC, "white_black_list_py.html")
+    return send_from_directory(PATH_TO_THEORY, "../../frontend/theory/white_black_list_py.html")
 
 
 @app.post("/api/predict")

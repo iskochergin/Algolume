@@ -1,33 +1,32 @@
-from flask import Flask, redirect, request, jsonify, send_from_directory
+from flask import Flask
 from flask_cors import CORS
 import json
 # import torch
-from transformers import AutoTokenizer, AutoModel
+from transformers import AutoTokenizer
 from pathlib import Path
-import time
 import numpy as np
 import onnxruntime as ort
-from config import *
+from backend.config import *
 
 app = Flask(__name__)
 CORS(app)
 
 
 # ─── ЗАГРУЗКА МОДЕЛИ ─────────────────────────────────────────────
-CKPT       = Path(PATH_TO_SRC) / "model_ckpt"                      # ваша папка
+CKPT       = Path(PATH_TO_APP) / "model_ckpt"                      # ваша папка
 LABELS_TXT = CKPT / "labels.txt"
 classes    = LABELS_TXT.read_text(encoding="utf-8").splitlines()
 # ожидается: ["DFS", "BFS", "Dijkstra's", "Grasshopper", "Turtle"]
 
 tokenizer = AutoTokenizer.from_pretrained(str(CKPT), use_fast=False)
 ort_sess  = ort.InferenceSession(
-    str(Path(PATH_TO_SRC) / "static/model.onnx"),
+    str(Path(PATH_TO_APP) / "static/model.onnx"),
     providers=["CPUExecutionProvider"]
 )
 
 def _safe_preprocess(src: str) -> str:
     try:
-        from model import preprocess
+        from backend.model import preprocess
         return preprocess.preprocess_and_canonicalize(src)
     except Exception:
         return src + "\n"
