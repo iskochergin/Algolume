@@ -597,7 +597,6 @@ def api_log():
     return jsonify(status="ok"), 200
 
 
-# ─── замена ссылок ────────────────────────────────────────────
 DEV_HOST_RE = re.compile(r'https?://127\.0\.0\.1:5000/?')
 TEXT_EXTS = ('.html', '.js', '.css')
 SESSION_ROOT = 'python_debug_sessions'
@@ -607,7 +606,7 @@ SKIP_DIRS = {'venv', '__pycache__', 'migrations',
 
 def replace_localhost_links(base_link: str, root_dir: Path):
     base_link = base_link.rstrip('/')  # https://algolume.ru
-    squeeze_re = re.compile(re.escape(base_link) + r'/+')  # <-- трогаем ТОЛЬКО после хоста
+    squeeze_re = re.compile(re.escape(base_link) + r'/+')
 
     for dirpath, _, filenames in os.walk(root_dir):
         parts = Path(dirpath).relative_to(root_dir).parts
@@ -625,10 +624,8 @@ def replace_localhost_links(base_link: str, root_dir: Path):
             except UnicodeDecodeError:
                 continue
 
-            # ① меняем localhost-URL на прод-URL
             new = DEV_HOST_RE.sub(base_link + '/', text)
 
-            # ② убираем лишние '/'   ТОЛЬКО   прямо после prod-URL
             new = squeeze_re.sub(base_link + '/', new)
 
             if new != text:

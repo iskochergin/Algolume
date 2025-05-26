@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="500" height="92"
+        viewBox="0 0 540 100"
+        preserveAspectRatio="xMinYMin meet"
+        role="img" aria-labelledby="title desc"
+>
+    <title id="title">Algolume Neuro</title>
+    <desc id="desc">
+        A neural-network powered tool to distinguish your algorithms.
+        Paste your code and it will visualize the most appropriate algorithm for you!
+    </desc>
+
+    <defs>
+        <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#58a6ff"/>
+            <stop offset="100%" stop-color="#d4bfff"/>
+        </linearGradient>
+    </defs>
+
+    <rect
+            x="0" y="0"
+            width="540" height="100"
+            rx="14" ry="14"
+            fill="rgba(255, 255, 255, 0.04)"
+            stroke="rgba(255, 255, 255, 0.08)"
+            stroke-width="1.4"
+    />
+
+    <text
+            x="14" y="32"
+            font-family="Open Sans, sans-serif"
+            font-size="22"
+            font-weight="600"
+            fill="url(#gradient)"
+    >
+        Algolume Neuro
+    </text>
+
+    <text
+            x="14" y="62"
+            font-family="Open Sans, sans-serif"
+            font-size="15"
+            fill="#dddddd"
+    >
+        A neural-network powered tool to distinguish your algorithms.
+    </text>
+    <text
+            x="14" y="82"
+            font-family="Open Sans, sans-serif"
+            font-size="15"
+            fill="#dddddd"
+    >
+        Paste your code and it will visualize the most appropriate algorithm for you!
+    </text>
+</svg>
