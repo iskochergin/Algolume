@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <link rel="icon" href="http://127.0.0.1:5000/a.ico" type="image/x-icon">
+    <meta charset="UTF-8"/>
+    <title>Префикс-функция | Algolume</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="styles.css"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&display=swap&subset=cyrillic" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/dracula.min.css"/>
+</head>
+<body>
+<header class="top-bar">
+    <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+    <h1><a href="index.html">Algolume</a></h1>
+    <div class="top-right-links">
+        <a href="https://github.com/iskochergin/Algolume" target="_blank">GitHub</a>
+        <a href="https://forms.yandex.com/u/67bdd0b884227c398a06e849/">Feedback</a>
+    </div>
+</header>
+
+<div id="sidebar" class="sidebar closed">
+    <nav>
+        <ul>
+            <li><a href="index.html" class="neuro-link">Algolume Neuro</a></li>
+            <li><a href="dp-turtle.html">DP (Задача с черепашкой)</a></li>
+            <li><a href="dp-grasshopper.html">DP (Задача с кузнечиком)</a></li>
+            <li><a href="dfs.html">DFS (Поиск в глубину)</a></li>
+            <li><a href="bfs.html">BFS (Поиск в ширину)</a></li>
+            <li><a href="dijkstra.html">Алгоритм Дейкстры</a></li>
+            <li><a href="z-function.html">Z-функция</a></li>
+            <li><a href="prefix-function.html" class="active">Префикс-функция</a></li>
+        </ul>
+    </nav>
+</div>
+
+<div id="content-container" class="expanded">
+    <main id="main-content">
+        <section>
+            <h1>Алгоритм префикс-функции</h1>
+            <article>
+                <p><span style="font-weight:bold; font-size:1.2rem;">Условие задачи:</span>
+                   Дана строка <code>s</code> длины <code>n</code>. Требуется вычислить префикс-функцию — массив <code>p</code> длины <code>n</code>, где <code>p[i]</code> равно длине наибольшего собственного префикса подстроки <code>s[0…i]</code>, совпадающего с её суффиксом.</p>
+
+                <p><span style="font-weight:bold; font-size:1.2rem;">Формат входных данных:</span><br>
+                   Первая строка — целое число <code>n</code> (<code>1 ≤ n ≤ 1 000 000</code>).<br>
+                   Вторая строка — сама строка <code>s</code> длины <code>n</code> (латиница, без пробелов).</p>
+
+                <p><span style="font-weight:bold; font-size:1.2rem;">Формат выходных данных:</span>
+                   <code>n</code> чисел <code>p[0] … p[n-1]</code>, разделённых пробелом (как правило <code>p[0] = 0</code>).</p>
+
+                <p><span style="font-weight:bold; font-size:1.2rem;">Решение:</span>
+                   Поддерживаем переменную <code>k</code> — значение <code>p[i-1]</code>.
+                   Для позиции <code>i</code> уменьшением <code>k ← p[k-1]</code> «поднимаемся» по ссылкам, пока символы <code>s[i]</code> и <code>s[k]</code> не совпадут или <code>k = 0</code>.
+                   Если совпали, увеличиваем <code>k++</code> и сохраняем <code>p[i] = k</code>.
+                   Алгоритм обходит строку один раз, сложность <code>O(n)</code>, память <code>O(n)</code>.</p>
+
+                <textarea id="theory-code-snippet-1" style="display:none;">
+n = int(input())
+s = input().strip()
+p = [0] * n
+for i in range(1, n):
+    k = p[i-1]
+    while k > 0 and s[i] != s[k]:
+        k = p[k-1]
+    if s[i] == s[k]:
+        k += 1
+    p[i] = k
+                </textarea>
+
+                <p>После цикла массив <code>p</code> содержит префикс-функцию.</p>
+
+                <p>Например,</p>
+                <textarea id="theory-code-snippet-2" style="display:none;">s = "abacaba"</textarea>
+                <p>даёт</p>
+                <textarea id="theory-code-snippet-3" style="display:none;">p = [0,0,1,0,1,2,3]</textarea>
+
+                <p><span style="font-weight:bold; font-size:1.2rem;">Доказательство корректности (скетч):</span>
+                   Инвариант: перед обработкой позиции <code>i</code> переменная <code>k</code> равна <code>p[i-1]</code>.
+                   Цикл <code>while</code> гарантирует, что после выхода <code>k</code> — длина наибольшего собствен­ного префикса, совпадающего с суффиксом <code>s[0…i-1]</code>, который ещё может расшириться символом <code>s[i]</code>. Если расширение возможно, прибавляем 1; иначе <code>p[i]=0</code>. Следовательно, каждое <code>p[i]</code> корректно, а работа линейна, так как <code>k</code> только уменьшается внутри цикла.</p>
+            </article>
+
+            <div class="tab-buttons">
+                <button id="exampleTabBtn" onclick="showTab('example')">Пример кода</button>
+                <button id="userTabBtn" onclick="showTab('user')">Ваш код</button>
+            </div>
+
+            <div id="exampleTab" class="tab-content">
+                <p><span style="font-weight:bold; font-size:1.2rem;">Пример реализации (Python 3)</span></p>
+                <p>Ограничения для визуализации: <code>1 ≤ n ≤ 200</code>.</p>
+                <textarea id="example-code">
+n = int(input())
+s = input().strip()
+p = [0] * n
+for i in range(1, n):
+    k = p[i-1]
+    while k > 0 and s[i] != s[k]:
+        k = p[k-1]
+    if s[i] == s[k]:
+        k += 1
+    p[i] = k
+
+print(*p)
+                </textarea>
+
+                <table class="variables-table">
+                    <thead>
+                    <tr><th>Логическое название</th><th>Название переменной</th></tr>
+                    </thead>
+                    <tbody>
+                    <tr><td>входная строка</td><td><input type="text" value="s" disabled/></td></tr>
+                    <tr><td>префикс-функция</td><td><input type="text" value="p" disabled/></td></tr>
+                    </tbody>
+                </table>
+
+                <div class="run-button-area">
+                    <button id="exampleRunBtn" class="run-btn">Запустить</button>
+                </div>
+            </div>
+
+            <div id="userTab" class="tab-content hidden">
+                <p><span style="font-weight:bold; font-size:1.2rem;">Ваша реализация (Python 3)</span></p>
+                <p>Не забудьте: первая строка — <code>n</code>, вторая — строка <code>s</code>, 0-индексация.</p>
+                <textarea id="user-code"></textarea>
+
+                <table class="variables-table" id="user-variables-table">
+                    <thead>
+                    <tr><th>Логическое название</th><th>Название переменной (в вашем коде)</th></tr>
+                    </thead>
+                    <tbody>
+                    <tr><td>входная строка</td><td><input type="text" id="var-s" placeholder="например, s"/></td></tr>
+                    <tr><td>префикс-функция</td><td><input type="text" id="var-p" placeholder="например, p"/></td></tr>
+                    </tbody>
+                </table>
+
+                <div class="run-button-area">
+                    <button id="userRunBtn" class="run-btn">Запустить</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="credits">
+        <p>© 2025 Algolume. Created by Ivan Kochergin.</p>
+    </footer>
+</div>
+
+<div id="customAlertModal" class="modal">
+    <div class="modal-content">
+        <span class="close-button">&times;</span>
+        <p id="alertMessage"></p>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/python/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/edit/closebrackets.min.js"></script>
+<script src="script-prefixfunction.js"></script>
+</body>
+</html>
