@@ -423,35 +423,32 @@ function showPrediction(list) {
 }
 
 
-/* ─── CodeMirror skin swap + icon size fix ─── */
 (function () {
     applyCMTheme();
-
-    /* hook into the existing toggle */
-    document.getElementById('themeToggle')
-        .addEventListener('click', applyCMTheme);
+    document.getElementById('themeToggle').addEventListener('click', applyCMTheme);
 })();
 
 (function () {
     const SUN = `
-    <g fill="currentColor" transform="translate(0,2)">
-      <circle cx="12" cy="12" r="5"/>
-      <g>
-        <rect x="11" y="1"  width="2" height="4" rx="1"/>
-        <rect x="11" y="19" width="2" height="4" rx="1"/>
-        <rect x="1"  y="11" width="4" height="2" rx="1"/>
-        <rect x="19" y="11" width="4" height="2" rx="1"/>
-        <rect x="3.5"  y="3.5"  width="2" height="4" rx="1" transform="rotate(-45 4.5 5.5)"/>
-        <rect x="18.5" y="16.5" width="2" height="4" rx="1" transform="rotate(-45 19.5 18.5)"/>
-        <rect x="3.5"  y="16.5" width="2" height="4" rx="1" transform="rotate(45 4.5 18.5)"/>
-        <rect x="18.5" y="3.5"  width="2" height="4" rx="1" transform="rotate(45 19.5 5.5)"/>
-      </g>
-    </g>`;
+<g fill="currentColor">
+  <circle cx="12" cy="12" r="5"/>
+  <g>
+    <rect x="11" y="0" width="2" height="4" rx="1"/>
+    <rect x="11" y="20" width="2" height="4" rx="1"/>
+    <rect x="0" y="11" width="4" height="2" rx="1"/>
+    <rect x="20" y="11" width="4" height="2" rx="1"/>
+    <rect x="3.5" y="3.5" width="2" height="4" rx="1" transform="rotate(-45 4.5 5.5)"/>
+    <rect x="18.5" y="16.5" width="2" height="4" rx="1" transform="rotate(-45 19.5 18.5)"/>
+    <rect x="3.5" y="16.5" width="2" height="4" rx="1" transform="rotate(45 4.5 18.5)"/>
+    <rect x="18.5" y="3.5" width="2" height="4" rx="1" transform="rotate(45 19.5 5.5)"/>
+  </g>
+</g>`;
 
+    const MOON_TRANSLATE_Y = 3;
     const MOON = `
-    <g fill="currentColor" transform="translate(0,3) scale(1.1)">
-      <path d="M22 12.79A10 10 0 0 1 11.21 2 8 8 0 1 0 22 12.79z"/>
-    </g>`;
+<g fill="currentColor" transform="translate(0, ${MOON_TRANSLATE_Y})">
+  <path d="M22 12.79A10 10 0 0 1 11.21 2 8 8 0 1 0 22 12.79z"/>
+</g>`;
 
     const btn = document.getElementById('themeToggle');
     const ico = document.getElementById('themeIcon');

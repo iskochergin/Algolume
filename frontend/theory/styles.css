@@ -316,10 +316,12 @@ body.light-theme .menu-toggle:hover {
 
 .top-bar h1 {
     margin: 0;
+    margin-left: -34px;
     flex-grow: 1;
     font-size: 1.5rem;
     text-align: center;
     color: #58a6ff;
+    z-index: 0;
 }
 
 .top-bar a {
@@ -336,6 +338,7 @@ body.light-theme .menu-toggle:hover {
     font-size: 24px;
     cursor: pointer;
     margin-right: 10px;
+    z-index: 1;
 }
 
 .menu-toggle:hover {
@@ -355,6 +358,10 @@ body.light-theme .menu-toggle:hover {
 .top-bar.sidebar-open {
     transform: translateX(260px);
     width: calc(100% - 260px);
+}
+
+.top-right-links {
+    margin-top: 4px;
 }
 
 /* SIDEBAR */
@@ -1077,13 +1084,17 @@ select#correction-select {
 
     .top-bar h1 {
         margin: 0;
-        font-size: 1.25rem;
+        margin-left: 40px;
+        font-size: 1.35rem;
         text-align: center;
         flex: none; /* перестаёт растягиваться */
-        margin: 0 !important; /* сбросим старый margin-left */
         grid-column: 2; /* во вторую колонку */
         justify-self: center !important;
         transform: translateX(-32px) !important;
+    }
+
+    .top-right-links {
+        margin-top: -1px;
     }
 
     .top-right-links a {
@@ -1099,7 +1110,7 @@ select#correction-select {
     }
 
     /* GitHub (первая ссылка) */
-    .top-right-links a:nth-child(1) {
+    .top-right-links a:nth-child(2) {
         background-image: url('data:image/svg+xml;utf8,\
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="%23c9d1d9">\
         <path d="M8 0C3.58 0 0 3.58 0 8a8 8 0 0 0 5.47 7.59c.4.07.55-.17.55-.38\
@@ -1111,7 +1122,7 @@ select#correction-select {
     }
 
     /* Envelope (вторая ссылка) */
-    .top-right-links a:nth-child(2) {
+    .top-right-links a:nth-child(3) {
         background-image: url('data:image/svg+xml;utf8,\
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="%23c9d1d9">\
         <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v.217L8 8 0 4.217V4z"/>\
