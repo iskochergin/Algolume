@@ -50,31 +50,6 @@ window.addEventListener('click', e => {
     if (e.target === modal) modal.style.display = 'none';
 });
 
-/* Show/Hide Tab Content */
-function showTab(tabName) {
-    const exampleTab = document.getElementById('exampleTab');
-    const userTab = document.getElementById('userTab');
-    const exampleTabBtn = document.getElementById('exampleTabBtn');
-    const userTabBtn = document.getElementById('userTabBtn');
-
-    exampleTab.classList.add('hidden');
-    userTab.classList.add('hidden');
-
-    exampleTabBtn.classList.remove('active-tab');
-    userTabBtn.classList.remove('active-tab');
-
-    if (tabName === 'example') {
-        exampleTab.classList.remove('hidden');
-        exampleTabBtn.classList.add('active-tab');
-        if (window.exampleCM) window.exampleCM.refresh();
-    } else {
-        userTab.classList.remove('hidden');
-        userTabBtn.classList.add('active-tab');
-        if (window.userCM) window.userCM.refresh();
-    }
-}
-
-
 document.addEventListener('DOMContentLoaded', () => {
     // инициализируем CodeMirror над textarea
     const cm = CodeMirror.fromTextArea(

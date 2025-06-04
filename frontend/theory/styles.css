@@ -1060,7 +1060,7 @@ select#correction-select {
 
 
 /* ───────────────── MOBILE  ≤768 px ───────────────── */
-@media (max-width: 900px) {
+@media (max-width: 768px) {
 
     /* базовая типографика */
     body {
@@ -1085,7 +1085,7 @@ select#correction-select {
     .top-bar h1 {
         margin: 0;
         margin-left: 40px;
-        font-size: 1.35rem;
+        font-size: 1.25rem;
         text-align: center;
         flex: none; /* перестаёт растягиваться */
         grid-column: 2; /* во вторую колонку */
@@ -1135,12 +1135,34 @@ select#correction-select {
         font-size: 22px;
     }
 
-    /* ссылки справа превращаем в иконки-кнопки */
     .top-right-links {
         display: flex;
-        gap: 4px;
+        gap: 1px;
         margin-right: 10px;
     }
+
+    .top-right-links .icon-btn {
+        width: 24px;
+        height: 24px;
+        padding: 0;
+    }
+
+    .top-right-links .icon-btn svg {
+        width: 100%;
+        height: 100%;
+        transform: scale(0.75);
+        transform-origin: center center;
+    }
+
+    .top-right-links a {
+        width: 24px;
+        height: 24px;
+
+        background-position: center center;
+        background-repeat: no-repeat;
+        background-size: 18px 18px;
+    }
+
 
     .top-right-links a {
         position: relative;
