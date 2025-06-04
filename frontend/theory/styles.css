@@ -26,229 +26,6 @@ code {
     /* font-style: italic; */
 }
 
-
-
-/*------LIGHT THEME------*/
-/* ==========  icon buttons & hover animation  ========== */
-.icon-btn{
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    width:28px;height:28px;
-    margin-left:12px;
-    padding:0;border:none;background:none;
-    cursor:pointer;color:inherit;
-    transition:transform .22s ease,color .22s ease;
-}
-.icon-btn svg{width:100%;height:100%;fill:currentColor;}
-.icon-btn:hover{transform:scale(1.15);color:var(--accent1);}
-.icon-btn:active{transform:scale(.9);}
-
-/* ==========  very small a11y helper  ========== */
-.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0;}
-
-/* ==========  Light-theme palette  ========== */
-:root{/* dark defaults already in your file */
-    --bg-dark:#0d1117;
-    --surface-dark:#161b22;
-    --text-dark:#c9d1d9;
-    --accent-dark:#58a6ff;
-
-    --bg-light:#ffffff;
-    --surface-light:#f6f8fa;
-    --text-light:#1f2328;
-    --accent-light:#0969da;
-}
-
-/* Transition so the switch isn’t jarring */
-body,.top-bar,.sidebar,.tab-content,.CodeMirror,code{transition:background-color .3s ease,color .3s ease;}
-
-/* ---------- Light mode overrides ---------- */
-body.light-theme{
-    background-color:var(--bg-light);
-    color:var(--text-light);
-}
-body.light-theme .top-bar{
-    background-color:var(--surface-light);
-    box-shadow:2px 0 10px rgba(140,149,159,.15);
-}
-body.light-theme .sidebar{background-color:var(--surface-light);}
-body.light-theme .tab-content,
-body.light-theme .CodeMirror{background-color:#fff;color:var(--text-light);}
-body.light-theme a,
-body.light-theme .top-bar a,
-body.light-theme #main-content a{color:var(--accent-light);}
-body.light-theme code{
-    background-color:var(--surface-light);
-    border-color:#d0d7de;
-    color:var(--text-light);
-}
-
-/* run buttons look washed-out on white; boost them */
-body.light-theme .run-btn,
-body.light-theme .run-btn-neuro{background:#0d6efd;}
-body.light-theme .run-btn:hover,
-body.light-theme .run-btn-neuro:hover{background:#0b5ed7;}
-
-
-/* ─────  LIGHT-THEME UPGRADE  ───── */
-:root{
-    /* extras for separation */
-    --surface2-light:#f0f2f5;
-    --border-light:#e1e4e8;
-    --accent-light:#3b7bfd;          /* calmer than the old #0969da */
-}
-
-/* clear structural edges */
-body.light-theme .top-bar,
-body.light-theme .sidebar,
-body.light-theme article,
-body.light-theme .glass-card,
-body.light-theme .result-card,
-body.light-theme .tab-content{
-    border:1px solid var(--border-light);
-    background-color:var(--surface-light);
-    box-shadow:0 1px 3px rgba(0,0,0,.06);
-}
-
-/* give cards a slightly darker fill so they don’t melt into the page */
-body.light-theme .glass-card,
-body.light-theme .result-card{
-    background:var(--surface2-light);
-}
-
-/* CodeMirror finally gets a light coat */
-body.light-theme .CodeMirror{
-    background:#fafbfc !important;
-    color:var(--text-light) !important;
-    border:1px solid var(--border-light) !important;
-}
-
-/* buttons & links – lean into the new accent */
-body.light-theme a,
-body.light-theme .run-btn,
-body.light-theme .run-btn-neuro{
-    color:var(--accent-light);
-}
-body.light-theme .run-btn,
-body.light-theme .run-btn-neuro{
-    background:var(--accent-light);
-}
-body.light-theme .run-btn:hover,
-body.light-theme .run-btn-neuro:hover{
-    background:#2f66e0;
-}
-
-/* tab header contrast */
-body.light-theme .tab-buttons button{
-    background:var(--surface2-light);
-    border-color:var(--border-light);
-    color:var(--text-light);
-}
-body.light-theme .tab-buttons button.active-tab{
-    background:var(--surface-light);
-}
-
-/* fine-grained separators that existed in dark mode */
-body.light-theme .variables-table,
-body.light-theme .variables-table th{
-    background:#fff;
-    border-color:var(--border-light);
-}
-
-/* pastel code highlight block */
-body.light-theme code{
-    background:var(--surface2-light);
-    border-color:var(--border-light);
-    color:#0f1117;      /* a smidge darker than --text-light for readability */
-}
-
-/* ——  ICON polishing  —— */
-.icon-btn svg{width:22px;height:22px;vertical-align:middle;}
-.icon-btn svg .moon{transform:scale(1.18) translateY(0.5px);transform-origin:center;}
-.icon-btn:hover{color:var(--accent-light);}
-
-
-
-/* ── LIGHT-TUNE v2 ───────────────────────────────────────── */
-:root{
-    --accent-light:#2f6ae6;      /* +10 % saturation, still pastel  */
-    --surface-light:#f9fafc;     /* brighter cards / top-bar       */
-    --surface2-light:#eef2f8;    /* sidebar & secondary slabs      */
-    --text-light:#22272d;        /* darker body text               */
-}
-
-/* overall body text */
-body.light-theme{color:var(--text-light);}
-
-/* top-bar gets a hair-line base & heavier shadow for depth */
-body.light-theme .top-bar{
-    background:var(--surface-light);
-    border-bottom:1px solid var(--border-light);
-    box-shadow:0 2px 4px rgba(0,0,0,.06);
-}
-
-/* sidebar pops a bit more */
-body.light-theme .sidebar{
-    background:var(--surface2-light);
-    border-right:1px solid var(--border-light);
-}
-
-/* sidebar links: darker by default, blue on hover   */
-body.light-theme .sidebar nav li a{
-    color:#6b7280;
-    transition:color .15s;
-}
-body.light-theme .sidebar nav li a:hover,
-body.light-theme .sidebar nav li a.active{
-    color:var(--accent-light);
-}
-
-/* cards & tab panels: stronger outline + tiny radius */
-body.light-theme article,
-body.light-theme .glass-card,
-body.light-theme .result-card,
-body.light-theme .tab-content{
-    border:1px solid var(--border-light);
-    background:var(--surface-light);
-    border-radius:8px;
-}
-
-/* CodeMirror gutter & background stronger separation   */
-body.light-theme .CodeMirror{
-    background:#ffffff!important;
-    border:1px solid var(--border-light)!important;
-}
-body.light-theme .CodeMirror-gutters{
-    background:var(--surface2-light);
-    border-right:1px solid var(--border-light);
-}
-
-/* run buttons: tweak to match new accent                */
-body.light-theme .run-btn,
-body.light-theme .run-btn-neuro{
-    background:var(--accent-light);
-}
-body.light-theme .run-btn:hover,
-body.light-theme .run-btn-neuro:hover{
-    background:#2457c4;
-}
-
-/* icon sizing & hover punch-up                          */
-.icon-btn svg{width:24px;height:24px;}
-.icon-btn:hover{transform:scale(1.22);color:var(--accent-light);}
-
-
-/* ——  MOBILE light overrides (≤900 px) —— */
-@media (max-width:900px){
-  body.light-theme .top-bar{background:var(--surface-light);}
-  body.light-theme .sidebar{background:var(--surface-light);}
-}
-
-
-
-
-
 #content-container {
     display: flex;
     flex-direction: column;
@@ -263,6 +40,263 @@ body.light-theme .run-btn-neuro:hover{
     transform: translateX(135px);
     /* width: calc(100% - 260px); */
 }
+
+.icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    margin-left: 12px;
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: inherit;
+    transition: transform 0.22s ease, color 0.22s ease;
+}
+
+.icon-btn svg {
+    width: 100%;
+    height: 100%;
+    fill: currentColor;
+}
+
+.icon-btn:hover {
+    transform: scale(1.15);
+    color: var(--accent-light);
+}
+
+.icon-btn:active {
+    transform: scale(0.9);
+}
+
+
+:root {
+    --bg-light: #ffffff;
+    --surface-light: #f9fafc;
+    --surface2-light: #eef2f8;
+    --text-light: #22272d;
+    --border-light: #e1e4e8;
+    --accent-light: #58a6ff;
+    --light-button: #93a4b9;
+    --light-button-accent: #3f86d0;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+/* ==========  Light-theme palette  ========== */
+
+/* Transition for smooth theme switching */
+body, .top-bar, .sidebar, .tab-content, .CodeMirror, code {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body.light-theme code {
+    background-color: var(--surface-light);
+    border-color: #f9fafc;
+    color: var(--text-light);
+}
+
+/* ==========  Light mode overrides  ========== */
+body.light-theme {
+    background-color: var(--bg-light);
+    color: var(--text-light);
+}
+
+body.light-theme .top-bar {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    background: var(--surface-light);
+    border-bottom: 1px solid var(--border-light);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+}
+
+body.light-theme .top-bar h1 {
+    margin: 0;
+    margin-left: -34px;
+    justify-self: center;
+}
+
+body.light-theme .top-bar h1 a {
+    /*margin-left: 0 !important;*/
+    color: var(--accent-light);
+    filter: brightness(0.9);
+}
+
+body.light-theme .sidebar {
+    background: var(--surface2-light);
+    border-right: 1px solid var(--border-light);
+}
+
+body.light-theme article,
+body.light-theme .glass-card,
+body.light-theme .result-card,
+body.light-theme .tab-content {
+    background: var(--surface-light);
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+}
+
+body.light-theme a,
+body.light-theme .icon-btn {
+    color: var(--light-button);
+}
+
+body.light-theme a:hover {
+    color: var(--accent-light);
+    filter: brightness(90%);
+}
+
+body.light-theme .icon-btn:hover {
+    color: var(--light-button-accent) !important;
+}
+
+body.light-theme .icon-btn:hover svg {
+    fill: var(--light-button-accent) !important;
+}
+
+body.light-theme .run-btn,
+body.light-theme .run-btn-neuro {
+    background: var(--accent-light);
+    color: #fff;
+}
+
+body.light-theme .run-btn:hover,
+body.light-theme .run-btn-neuro:hover {
+    background: #2457c4;
+}
+
+body.light-theme .gradient-icon,
+body.light-theme .neuro-badge {
+    filter: brightness(0.85);
+}
+
+/* CodeMirror styling */
+body.light-theme .CodeMirror,
+body.light-theme .CodeMirror-gutters,
+body.light-theme .cm-s-eclipse.CodeMirror,
+body.light-theme .cm-s-eclipse .CodeMirror-gutters {
+    background: #fafbfc !important;
+    color: var(--text-light) !important;
+}
+
+/* Make the cursor black */
+body.light-theme .CodeMirror-cursor {
+    border-left: 1px solid #000000 !important;
+}
+
+body.light-theme .CodeMirror {
+    border: 1px solid var(--border-light) !important;
+}
+
+body.light-theme .CodeMirror-gutters {
+    border-right: 0px solid var(--border-light) !important;
+}
+
+body.light-theme .cm-s-eclipse .CodeMirror-linenumber {
+    color: #6b7280;
+}
+
+/* Tab buttons */
+body.light-theme .tab-buttons button {
+    background: var(--surface2-light);
+    border-color: var(--border-light);
+    color: var(--text-light);
+}
+
+body.light-theme .tab-buttons button.active-tab {
+    background: var(--surface-light);
+}
+
+/* Variables table and inputs */
+body.light-theme .variables-table,
+body.light-theme .variables-table th,
+body.light-theme .variables-table td {
+    background: #fff;
+    border-color: var(--border-light);
+}
+
+body.light-theme .variables-table input[type="text"] {
+    background: #fff;
+    color: var(--text-light);
+    border: 1px solid var(--border-light);
+}
+
+body.light-theme .top-bar {
+    border: none;
+}
+
+/* LIGHT SIDEBAR */
+body.light-theme .sidebar {
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.15);
+    border: 0;
+    background-color: var(--surface-light) !important;
+}
+
+body.light-theme .sidebar nav ul {
+    list-style: none;
+    margin-top: 0px;
+    margin: 0px;
+    padding: 0;
+}
+
+body.light-theme .sidebar nav li {
+    margin-bottom: 10px;
+}
+
+body.light-theme .sidebar nav li a {
+    color: #4c535d;
+    text-decoration: none;
+    font-size: 1rem;
+}
+
+body.light-theme .sidebar nav li a:hover {
+    color: #4d9cff;
+}
+
+body.light-theme .sidebar nav li a.active {
+    font-weight: bold;
+    color: #4d9cff;
+}
+
+body.light-theme .sidebar a.neuro-link {
+    display: inline-block;
+    font-weight: bold;
+    background: linear-gradient(90deg, var(--accent1), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 1rem;
+    filter: brightness(0.85);
+}
+
+body.light-theme .sidebar a.neuro-link:hover,
+body.light-theme .sidebar a.neuro-link:focus {
+    filter: brightness(0.95);
+}
+
+body.light-theme .menu-toggle {
+    background: none;
+    border: none;
+    color: var(--light-button);
+    font-size: 24px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+body.light-theme .menu-toggle:hover {
+    color: var(--light-button-accent);
+}
+
 
 /* TOP BAR */
 .top-bar {
@@ -465,6 +499,7 @@ article ol {
     font-size: 1rem;
     line-height: 1.6;
 }
+
 
 /* TABS */
 .tab-buttons {
@@ -1045,9 +1080,9 @@ select#correction-select {
         font-size: 1.25rem;
         text-align: center;
         flex: none; /* перестаёт растягиваться */
-        margin: 0 !important;              /* сбросим старый margin-left */
-        grid-column: 2;                    /* во вторую колонку */
-        justify-self: center !important; 
+        margin: 0 !important; /* сбросим старый margin-left */
+        grid-column: 2; /* во вторую колонку */
+        justify-self: center !important;
         transform: translateX(-32px) !important;
     }
 

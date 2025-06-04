@@ -11,3 +11,4 @@ src/responses.html/
 /backend/model/model_150snippets/
 /backend/app/static/
 /.DS_Store/
+/backend/helpers/replace_log.json/

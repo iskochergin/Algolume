@@ -1,4 +1,21 @@
-/* Toggle the sidebar with ONE button that changes from ☰ to × */
+const CM_LIGHT = 'elegant';
+const CM_DARK = 'dracula';
+
+const applyCMTheme = () => {
+    const light = document.body.classList.contains('light-theme');
+    const theme = light ? CM_LIGHT : CM_DARK;
+
+    ['userCM', 'exampleCM'].forEach(key => {
+        if (window[key]) window[key].setOption('theme', theme);
+    });
+
+    /* keep moon icon visually in-line with sun */
+    const moon = document.querySelector('#themeIcon .moon');
+    if (moon) {
+        moon.setAttribute('vector-effect', 'non-scaling-stroke');
+    }
+};
+
 function toggleSidebar() {
     const sidebar = document.getElementById('sidebar');
     const contentContainer = document.getElementById('content-container');
@@ -73,6 +90,9 @@ document.addEventListener('DOMContentLoaded', () => {
     );
     window.userCM = cm; // чтобы refresher в showTab не упал
 
+    applyCMTheme();
+
+
     // кнопка «Предсказать»
     document.getElementById('predict-btn')
         .addEventListener('click', async (e) => {
@@ -107,9 +127,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 /* ─────────── Theme toggle ─────────── */
-(function() {
+(function () {
     const root = document.body;
-    const btn  = document.getElementById('themeToggle');
+    const btn = document.getElementById('themeToggle');
     const icon = document.getElementById('themeIcon');
 
     if (!btn || !icon) return;                        // fail fast
@@ -135,7 +155,6 @@ document.addEventListener('DOMContentLoaded', () => {
         setIcon();
     });
 })();
-
 
 
 const algoTemplates = {
@@ -405,38 +424,16 @@ function showPrediction(list) {
 
 
 /* ─── CodeMirror skin swap + icon size fix ─── */
-(function(){
-    const CM_LIGHT = 'eclipse';
-    const CM_DARK  = 'dracula';
-
-    const applyCMTheme = () =>{
-        const light = document.body.classList.contains('light-theme');
-        const theme = light ? CM_LIGHT : CM_DARK;
-
-        ['userCM','exampleCM'].forEach(key=>{
-            if(window[key]) window[key].setOption('theme',theme);
-        });
-
-        /* keep moon icon visually in-line with sun */
-        const moon = document.querySelector('#themeIcon .moon');
-        if(moon){ moon.setAttribute('vector-effect','non-scaling-stroke'); }
-    };
-
-    /* run once on load (covers saved preference) */
+(function () {
     applyCMTheme();
 
     /* hook into the existing toggle */
     document.getElementById('themeToggle')
-        .addEventListener('click',applyCMTheme);
+        .addEventListener('click', applyCMTheme);
 })();
-/* ─── replace the drab icons with Heroicons (sun / moon) ─── */
-/* ─── replace the drab icons with Heroicons (sun / moon) ─── */
-/*  ───── perfectly centred, beefier ☀︎ / 🌙  ───── */
-/* ───── perfectly centred, beefier ☀︎ / 🌙  ───── */
-/* ─── centred icons, slight 2px drop — no scaling! ─── */
-/* ─── centred icons; moon slightly bigger & 1px lower ─── */
-(function(){
-  const SUN = `
+
+(function () {
+    const SUN = `
     <g fill="currentColor" transform="translate(0,2)">
       <circle cx="12" cy="12" r="5"/>
       <g>
@@ -451,20 +448,19 @@ function showPrediction(list) {
       </g>
     </g>`;
 
-  const MOON = `
+    const MOON = `
     <g fill="currentColor" transform="translate(0,3) scale(1.1)">
       <path d="M22 12.79A10 10 0 0 1 11.21 2 8 8 0 1 0 22 12.79z"/>
     </g>`;
 
-  const btn = document.getElementById('themeToggle');
-  const ico = document.getElementById('themeIcon');
+    const btn = document.getElementById('themeToggle');
+    const ico = document.getElementById('themeIcon');
 
-  const redraw = () => {
-    ico.setAttribute('viewBox','0 0 24 24');
-    ico.innerHTML = document.body.classList.contains('light-theme') ? MOON : SUN;
-  };
+    const redraw = () => {
+        ico.setAttribute('viewBox', '0 0 24 24');
+        ico.innerHTML = document.body.classList.contains('light-theme') ? MOON : SUN;
+    };
 
-  redraw();
-  btn.addEventListener('click', redraw);
+    redraw();
+    btn.addEventListener('click', redraw);
 })();
-
