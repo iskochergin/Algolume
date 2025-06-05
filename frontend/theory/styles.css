@@ -26,6 +26,39 @@ code {
     /* font-style: italic; */
 }
 
+.top-bar,
+.top-bar h1,
+.top-bar a,
+.sidebar,
+.sidebar nav li a,
+#content-container,
+#main-content,
+footer,
+.icon-btn,
+.icon-btn svg path,
+.run-btn,
+.run-btn-neuro,
+.glass-card,
+.result-card,
+.tab-buttons button,
+.tab-content,
+.variables-table th,
+.variables-table td,
+.variables-table input[type="text"],
+.CodeMirror,
+.CodeMirror-gutters,
+.cm-s-eclipse .CodeMirror-gutters,
+.cm-s-eclipse .CodeMirror {
+    transition: background-color 0.3s ease,
+                color 0.3s ease,
+                border-color 0.1s ease,
+                box-shadow 0.3s ease;
+}
+#correction-select {
+    transition: filter 0.1s ease, border-color 0.1s ease;
+}
+
+
 #content-container {
     display: flex;
     flex-direction: column;
@@ -339,11 +372,14 @@ body.light-theme .menu-toggle:hover {
     cursor: pointer;
     margin-right: 10px;
     z-index: 1;
+    transition: color 0.3s ease, transform 0.4s ease;
 }
 
 .menu-toggle:hover {
     color: #58a6ff;
+    transform: scale(1.2);
 }
+
 
 .top-right-links a {
     color: #c9d1d9;

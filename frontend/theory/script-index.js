@@ -9,7 +9,6 @@ const applyCMTheme = () => {
         if (window[key]) window[key].setOption('theme', theme);
     });
 
-    /* keep moon icon visually in-line with sun */
     const moon = document.querySelector('#themeIcon .moon');
     if (moon) {
         moon.setAttribute('vector-effect', 'non-scaling-stroke');
@@ -60,7 +59,8 @@ document.addEventListener('DOMContentLoaded', () => {
             lineNumbers: true,
             indentUnit: 4,
             tabSize: 4,
-            viewportMargin: Infinity
+            viewportMargin: Infinity,
+            autoCloseBrackets: true,
         }
     );
     window.userCM = cm; // чтобы refresher в showTab не упал
