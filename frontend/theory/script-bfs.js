@@ -1,20 +1,20 @@
+// ───── swapping codemirror themes ─────
 const CM_LIGHT = 'elegant';
-const CM_DARK = 'dracula';
+const CM_DARK  = 'dracula';
 
-const applyCMTheme = () => {
-    const light = document.body.classList.contains('light-theme');
-    const theme = light ? CM_LIGHT : CM_DARK;
+function applyCMTheme() {
+  const light = document.body.classList.contains('light-theme');
+  const theme = light ? CM_LIGHT : CM_DARK;
 
-    ['userCM', 'exampleCM'].forEach(key => {
-        if (window[key]) window[key].setOption('theme', theme);
+  // Перебрать все именованные экземпляры CM
+  ['userCM', 'exampleCM', 'theoryCM1', 'theoryCM2', 'theoryCM3', 'theoryCM4']
+    .forEach(key => {
+      if (window[key]) window[key].setOption('theme', theme);
     });
 
-    /* keep moon icon visually in-line with sun */
-    const moon = document.querySelector('#themeIcon .moon');
-    if (moon) {
-        moon.setAttribute('vector-effect', 'non-scaling-stroke');
-    }
-};
+  const moon = document.querySelector('#themeIcon .moon');
+  if (moon) moon.setAttribute('vector-effect', 'non-scaling-stroke');
+}
 
 (function () {
     const root = document.body;
@@ -42,6 +42,7 @@ const applyCMTheme = () => {
         localStorage.setItem('algolume-theme',
             root.classList.contains('light-theme') ? 'light' : 'dark');
         setIcon();
+        applyCMTheme();
     });
 })();
 
@@ -99,7 +100,7 @@ document.addEventListener("DOMContentLoaded", function () {
         window.exampleCM = CodeMirror.fromTextArea(exampleCodeTextarea, {
             lineNumbers: true,
             mode: "python",
-            theme: "dracula",
+            theme: document.body.classList.contains('light-theme') ? CM_LIGHT : CM_DARK,
             indentUnit: 4,
             autoCloseBrackets: true,
             readOnly: true
@@ -111,7 +112,7 @@ document.addEventListener("DOMContentLoaded", function () {
         window.userCM = CodeMirror.fromTextArea(userCodeTextarea, {
             lineNumbers: true,
             mode: "python",
-            theme: "dracula",
+            theme: document.body.classList.contains('light-theme') ? CM_LIGHT : CM_DARK,
             indentUnit: 4,
             autoCloseBrackets: true
         });
@@ -119,58 +120,54 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const snippet1 = document.getElementById('theory-code-snippet-1');
     if (snippet1) {
-        const theoryCM1 = CodeMirror.fromTextArea(snippet1, {
+        window.theoryCM1 = CodeMirror.fromTextArea(snippet1, {
             lineNumbers: true,
             mode: "python",
-            theme: "dracula",
+            theme: document.body.classList.contains('light-theme') ? CM_LIGHT : CM_DARK,
             indentUnit: 4,
             readOnly: true,
-            viewportMargin: Infinity,
-
+            viewportMargin: Infinity
         });
-        theoryCM1.getWrapperElement().classList.add('theory-cm');
+        window.theoryCM1.getWrapperElement().classList.add('theory-cm');
     }
 
     const snippet2 = document.getElementById('theory-code-snippet-2');
     if (snippet2) {
-        const theoryCM2 = CodeMirror.fromTextArea(snippet2, {
+        window.theoryCM2 = CodeMirror.fromTextArea(snippet2, {
             lineNumbers: true,
             mode: "python",
-            theme: "dracula",
+            theme: document.body.classList.contains('light-theme') ? CM_LIGHT : CM_DARK,
             indentUnit: 4,
             readOnly: true,
-            viewportMargin: Infinity,
-
+            viewportMargin: Infinity
         });
-        theoryCM2.getWrapperElement().classList.add('theory-cm');
+        window.theoryCM2.getWrapperElement().classList.add('theory-cm');
     }
 
     const snippet3 = document.getElementById('theory-code-snippet-3');
     if (snippet3) {
-        const theoryCM3 = CodeMirror.fromTextArea(snippet3, {
+        window.theoryCM3 = CodeMirror.fromTextArea(snippet3, {
             lineNumbers: true,
             mode: "python",
-            theme: "dracula",
+            theme: document.body.classList.contains('light-theme') ? CM_LIGHT : CM_DARK,
             indentUnit: 4,
             readOnly: true,
-            viewportMargin: Infinity,
-
+            viewportMargin: Infinity
         });
-        theoryCM3.getWrapperElement().classList.add('theory-cm');
+        window.theoryCM3.getWrapperElement().classList.add('theory-cm');
     }
 
     const snippet4 = document.getElementById('theory-code-snippet-4');
     if (snippet4) {
-        const theoryCM4 = CodeMirror.fromTextArea(snippet4, {
+        window.theoryCM4 = CodeMirror.fromTextArea(snippet4, {
             lineNumbers: true,
             mode: "python",
-            theme: "dracula",
+            theme: document.body.classList.contains('light-theme') ? CM_LIGHT : CM_DARK,
             indentUnit: 4,
             readOnly: true,
-            viewportMargin: Infinity,
-
+            viewportMargin: Infinity
         });
-        theoryCM4.getWrapperElement().classList.add('theory-cm');
+        window.theoryCM4.getWrapperElement().classList.add('theory-cm');
     }
 
     const modal = document.getElementById("customAlertModal");
@@ -207,8 +204,8 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             try {
-                parentVar = 'parent';
-                graphVar = 'graph';
+                const parentVar = 'parent';
+                const graphVar = 'graph';
 
                 const response = await fetch('http://127.0.0.1:5000/new-debug-page-bfs', {
                     method: 'POST',
@@ -293,7 +290,11 @@ document.addEventListener("DOMContentLoaded", function () {
         contentContainer.addEventListener('transitionend', (e) => {
             if (e.propertyName === 'transform') {
                 if (window.exampleCM) window.exampleCM.refresh();
-                if (window.userCM) window.userCM.refresh();
+                if (window.userCM)    window.userCM.refresh();
+                if (window.theoryCM1)  window.theoryCM1.refresh();
+                if (window.theoryCM2)  window.theoryCM2.refresh();
+                if (window.theoryCM3)  window.theoryCM3.refresh();
+                if (window.theoryCM4)  window.theoryCM4.refresh();
             }
         });
     }

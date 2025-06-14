@@ -1,3 +1,4 @@
+// swapping codemirror themes
 const CM_LIGHT = 'elegant';
 const CM_DARK = 'dracula';
 
