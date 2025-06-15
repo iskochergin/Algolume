@@ -16,6 +16,36 @@ const applyCMTheme = () => {
     }
 };
 
+/* ─────────── Theme toggle ─────────── */
+(function () {
+    const root = document.body;
+    const btn = document.getElementById('themeToggle');
+    const icon = document.getElementById('themeIcon');
+
+    if (!btn || !icon) return;                        // fail fast
+
+    // 1.  Apply saved preference (if any)
+    if (localStorage.getItem('algolume-theme') === 'light') {
+        root.classList.add('light-theme');
+    }
+
+    // 2.  Update icon (sun ↔ moon)
+    const setIcon = () => {
+        icon.innerHTML = root.classList.contains('light-theme')
+            ? '<path d="M21.752 14.002A9 9 0 0 1 9.998 2.248 7 7 0 1 0 21.752 14z"/>'
+            : '<path d="M12 4.5a1 1 0 0 1 1 1V7a1 1 0 0 1-2 0V5.5a1 1 0 0 1 1-1zm0 11a1 1 0 0 1 1 1V19a1 1 0 0 1-2 0v-2.5a1 1 0 0 1 1-1zm7.5-5.5a1 1 0 0 1 1 1h1.5a1 1 0 0 1 0 2H20.5a1 1 0 0 1-1-1 1 1 0 0 1 1-1zm-13 1a1 1 0 0 1 1-1H9a1 1 0 0 1 0 2H7.5a1 1 0 0 1-1-1zM17 7.06l1.06-1.06a1 1 0 0 1 1.41 1.42L18.41 8.48A1 1 0 1 1 17 7.06zM5.53 16.53a1 1 0 0 1 1.41 0l1.06 1.06a1 1 0 1 1-1.41 1.42L5.53 17.95a1 1 0 0 1 0-1.42zM17 16.94a1 1 0 0 1 1.41 1.42l-1.06 1.06a1 1 0 1 1-1.41-1.42l1.06-1.06zM5.53 7.47a1 1 0 0 1 1.41-1.42L8 7.11A1 1 0 1 1 6.59 8.53L5.53 7.47zM12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z"/>';
+    };
+    setIcon();
+
+    // 3.  Toggle on click
+    btn.addEventListener('click', () => {
+        root.classList.toggle('light-theme');
+        localStorage.setItem('algolume-theme',
+            root.classList.contains('light-theme') ? 'light' : 'dark');
+        setIcon();
+    });
+})();
+
 function toggleSidebar() {
     const sidebar = document.getElementById('sidebar');
     const contentContainer = document.getElementById('content-container');
@@ -100,38 +130,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 });
-
-
-/* ─────────── Theme toggle ─────────── */
-(function () {
-    const root = document.body;
-    const btn = document.getElementById('themeToggle');
-    const icon = document.getElementById('themeIcon');
-
-    if (!btn || !icon) return;                        // fail fast
-
-    // 1.  Apply saved preference (if any)
-    if (localStorage.getItem('algolume-theme') === 'light') {
-        root.classList.add('light-theme');
-    }
-
-    // 2.  Update icon (sun ↔ moon)
-    const setIcon = () => {
-        icon.innerHTML = root.classList.contains('light-theme')
-            ? '<path d="M21.752 14.002A9 9 0 0 1 9.998 2.248 7 7 0 1 0 21.752 14z"/>'
-            : '<path d="M12 4.5a1 1 0 0 1 1 1V7a1 1 0 0 1-2 0V5.5a1 1 0 0 1 1-1zm0 11a1 1 0 0 1 1 1V19a1 1 0 0 1-2 0v-2.5a1 1 0 0 1 1-1zm7.5-5.5a1 1 0 0 1 1 1h1.5a1 1 0 0 1 0 2H20.5a1 1 0 0 1-1-1 1 1 0 0 1 1-1zm-13 1a1 1 0 0 1 1-1H9a1 1 0 0 1 0 2H7.5a1 1 0 0 1-1-1zM17 7.06l1.06-1.06a1 1 0 0 1 1.41 1.42L18.41 8.48A1 1 0 1 1 17 7.06zM5.53 16.53a1 1 0 0 1 1.41 0l1.06 1.06a1 1 0 1 1-1.41 1.42L5.53 17.95a1 1 0 0 1 0-1.42zM17 16.94a1 1 0 0 1 1.41 1.42l-1.06 1.06a1 1 0 1 1-1.41-1.42l1.06-1.06zM5.53 7.47a1 1 0 0 1 1.41-1.42L8 7.11A1 1 0 1 1 6.59 8.53L5.53 7.47zM12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z"/>';
-    };
-    setIcon();
-
-    // 3.  Toggle on click
-    btn.addEventListener('click', () => {
-        root.classList.toggle('light-theme');
-        localStorage.setItem('algolume-theme',
-            root.classList.contains('light-theme') ? 'light' : 'dark');
-        setIcon();
-    });
-})();
-
 
 const algoTemplates = {
     Dijkstra: {
