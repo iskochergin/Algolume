@@ -440,6 +440,11 @@ body.light-theme .menu-toggle {
     font-size: 24px;
     cursor: pointer;
     margin-right: 10px;
+
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 body.light-theme .menu-toggle:hover {
@@ -556,6 +561,11 @@ body.light-theme .variables-table input::placeholder {
     margin-right: 10px;
     z-index: 1;
     transition: color 0.3s ease, transform 0.4s ease;
+
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 .menu-toggle:hover {
@@ -1405,23 +1415,27 @@ select#correction-select {
         z-index: 3000; /* выше сайдбара и контента */
         padding: 8px 10px; /* +невидимый край для тапа */
         margin-left: -6px; /* визуально остаётся на месте */
+
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
     }
 
 
     /* ── ОСНОВНОЙ КОНТЕЙНЕР ──────────────── */
     #content-container {
-        display: block !important; /* убираем flex-растяжение */
+        display: block !important;
         min-height: auto !important;
         transform: none !important;
-        margin-top: 56px; /* 40 (бар) + 16 отступ */
+        margin-top: 56px;
     }
 
     #main-content {
-        flex: none !important; /* перестаём занимать всё vh */
+        flex: none !important;
         padding: 12px 0;
     }
 
-    /* ── КАРТОЧКА АЛГОРИТМА ─────────────── */
     .glass-card {
         margin-top: 1rem;
     }
@@ -1430,13 +1444,11 @@ select#correction-select {
         height: 230px;
     }
 
-    /* кнопка «Определить» на всю ширину карточки */
     .run-btn,
     .run-btn-neuro {
         width: 100%;
     }
 
-    /* таблица переменных – компактнее */
     .variables-table th,
     .variables-table td {
         padding: 6px;

@@ -16,7 +16,6 @@ CORS(app)
 CKPT       = Path(PATH_TO_APP) / "model_ckpt"                      # ваша папка
 LABELS_TXT = CKPT / "labels.txt"
 classes    = LABELS_TXT.read_text(encoding="utf-8").splitlines()
-# ожидается: ["DFS", "BFS", "Dijkstra's", "Grasshopper", "Turtle"]
 
 tokenizer = AutoTokenizer.from_pretrained(str(CKPT), use_fast=False)
 ort_sess  = ort.InferenceSession(
