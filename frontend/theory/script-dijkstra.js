@@ -1,3 +1,48 @@
+// ───── swapping codemirror themes ─────
+const CM_LIGHT = 'elegant';
+const CM_DARK  = 'dracula';
+
+function applyCMTheme() {
+    const light = document.body.classList.contains('light-theme');
+    const theme = light ? CM_LIGHT : CM_DARK;
+
+    // Перебрать все именованные экземпляры CM
+    ['userCM', 'exampleCM', 'theoryCM1', 'theoryCM2', 'theoryCM3', 'theoryCM4']
+      .forEach(key => {
+        if (window[key]) window[key].setOption('theme', theme);
+      });
+}
+
+(function () {
+    const root = document.body;
+    const btn = document.getElementById('themeToggle');
+    const icon = document.getElementById('themeIcon');
+
+    if (!btn || !icon) return;  // fail fast
+
+    // 1.  Apply saved preference (if any)
+    if (localStorage.getItem('algolume-theme') === 'light') {
+        root.classList.add('light-theme');
+    }
+
+    // 2.  Update icon (sun ↔ moon)
+    const setIcon = () => {
+        icon.innerHTML = root.classList.contains('light-theme')
+            ? '<path d="M21.752 14.002A9 9 0 0 1 9.998 2.248 7 7 0 1 0 21.752 14z"/>'
+            : '<path d="M12 4.5a1 1 0 0 1 1 1V7a1 1 0 0 1-2 0V5.5a1 1 0 0 1 1-1zm0 11a1 1 0 0 1 1 1V19a1 1 0 0 1-2 0v-2.5a1 1 0 0 1 1-1zm7.5-5.5a1 1 0 0 1 1 1h1.5a1 1 0 0 1 0 2H20.5a1 1 0 0 1-1-1 1 1 0 0 1 1-1zm-13 1a1 1 0 0 1 1-1H9a1 1 0 0 1 0 2H7.5a1 1 0 0 1-1-1zM17 7.06l1.06-1.06a1 1 0 0 1 1.41 1.42L18.41 8.48A1 1 0 1 1 17 7.06zM5.53 16.53a1 1 0 0 1 1.41 0l1.06 1.06a1 1 0 1 1-1.41 1.42L5.53 17.95a1 1 0 0 1 0-1.42zM17 16.94a1 1 0 0 1 1.41 1.42l-1.06 1.06a1 1 0 1 1-1.41-1.42l1.06-1.06zM5.53 7.47a1 1 0 0 1 1.41-1.42L8 7.11A1 1 0 1 1 6.59 8.53L5.53 7.47zM12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z"/>';
+    };
+    setIcon();
+
+    // 3.  Toggle on click
+    btn.addEventListener('click', () => {
+        root.classList.toggle('light-theme');
+        localStorage.setItem('algolume-theme',
+            root.classList.contains('light-theme') ? 'light' : 'dark');
+        setIcon();
+        applyCMTheme();
+    });
+})();
+
 // Ensure the example tab is visible and active on load.
 exampleTab.classList.remove('hidden');
 exampleTabBtn.classList.add('active-tab');
@@ -54,7 +99,7 @@ document.addEventListener("DOMContentLoaded", function () {
         window.exampleCM = CodeMirror.fromTextArea(exampleCodeTextarea, {
             lineNumbers: true,
             mode: "python",
-            theme: "dracula",
+            theme: document.body.classList.contains('light-theme') ? CM_LIGHT : CM_DARK,
             indentUnit: 4,
             autoCloseBrackets: true,
             readOnly: true
@@ -67,7 +112,7 @@ document.addEventListener("DOMContentLoaded", function () {
         window.userCM = CodeMirror.fromTextArea(userCodeTextarea, {
             lineNumbers: true,
             mode: "python",
-            theme: "dracula",
+            theme: document.body.classList.contains('light-theme') ? CM_LIGHT : CM_DARK,
             indentUnit: 4,
             autoCloseBrackets: true
         });
@@ -76,30 +121,28 @@ document.addEventListener("DOMContentLoaded", function () {
     // Initialize CodeMirror for theory code snippets.
     const snippet1 = document.getElementById('theory-code-snippet-1');
     if (snippet1) {
-        const theoryCM1 = CodeMirror.fromTextArea(snippet1, {
+        window.theoryCM1 = CodeMirror.fromTextArea(snippet1, {
             lineNumbers: true,
             mode: "python",
-            theme: "dracula",
+            theme: document.body.classList.contains('light-theme') ? CM_LIGHT : CM_DARK,
             indentUnit: 4,
             readOnly: true,
-            viewportMargin: Infinity,
-
+            viewportMargin: Infinity
         });
-        theoryCM1.getWrapperElement().classList.add('theory-cm');
+        window.theoryCM1.getWrapperElement().classList.add('theory-cm');
     }
 
     const snippet2 = document.getElementById('theory-code-snippet-2');
     if (snippet2) {
-        const theoryCM2 = CodeMirror.fromTextArea(snippet2, {
+        window.theoryCM2 = CodeMirror.fromTextArea(snippet2, {
             lineNumbers: true,
             mode: "python",
-            theme: "dracula",
+            theme: document.body.classList.contains('light-theme') ? CM_LIGHT : CM_DARK,
             indentUnit: 4,
             readOnly: true,
-            viewportMargin: Infinity,
-
+            viewportMargin: Infinity
         });
-        theoryCM2.getWrapperElement().classList.add('theory-cm');
+        window.theoryCM2.getWrapperElement().classList.add('theory-cm');
     }
 
     // (If you have more snippets, repeat similarly for snippet3, snippet4, etc.)
@@ -139,9 +182,9 @@ document.addEventListener("DOMContentLoaded", function () {
             }
             try {
                 // For Dijkstra, we expect variables: parent, graph, dist.
-                parentVar = 'parent';
-                graphVar = 'graph';
-                distVar = 'dist';
+                const parentVar = 'parent';
+                const graphVar = 'graph';
+                const distVar = 'dist';
                 const response = await fetch('http://127.0.0.1:5000/new-debug-page-dijkstra', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
@@ -233,8 +276,50 @@ document.addEventListener("DOMContentLoaded", function () {
         contentContainer.addEventListener('transitionend', (e) => {
             if (e.propertyName === 'transform') {
                 if (window.exampleCM) window.exampleCM.refresh();
-                if (window.userCM) window.userCM.refresh();
+                if (window.userCM)    window.userCM.refresh();
             }
         });
     }
+
+    // Apply the current theme to all CM instances on initial load
+    applyCMTheme();
 });
+
+(function () {
+    applyCMTheme();
+    document.getElementById('themeToggle').addEventListener('click', applyCMTheme);
+})();
+
+(function () {
+    const SUN = `
+<g fill="currentColor">
+  <circle cx="12" cy="12" r="5"/>
+  <g>
+    <rect x="11" y="0" width="2" height="4" rx="1"/>
+    <rect x="11" y="20" width="2" height="4" rx="1"/>
+    <rect x="0" y="11" width="4" height="2" rx="1"/>
+    <rect x="20" y="11" width="4" height="2" rx="1"/>
+    <rect x="3.5" y="3.5" width="2" height="4" rx="1" transform="rotate(-45 4.5 5.5)"/>
+    <rect x="18.5" y="16.5" width="2" height="4" rx="1" transform="rotate(-45 19.5 18.5)"/>
+    <rect x="3.5" y="16.5" width="2" height="4" rx="1" transform="rotate(45 4.5 18.5)"/>
+    <rect x="18.5" y="3.5" width="2" height="4" rx="1" transform="rotate(45 19.5 5.5)"/>
+  </g>
+</g>`;
+
+    const MOON_TRANSLATE_Y = 3;
+    const MOON = `
+<g fill="currentColor" transform="translate(0, ${MOON_TRANSLATE_Y})">
+  <path d="M22 12.79A10 10 0 0 1 11.21 2 8 8 0 1 0 22 12.79z"/>
+</g>`;
+
+    const btn = document.getElementById('themeToggle');
+    const ico = document.getElementById('themeIcon');
+
+    const redraw = () => {
+        ico.setAttribute('viewBox', '0 0 24 24');
+        ico.innerHTML = document.body.classList.contains('light-theme') ? MOON : SUN;
+    };
+
+    redraw();
+    btn.addEventListener('click', redraw);
+})();

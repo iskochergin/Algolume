@@ -359,7 +359,7 @@ body.light-theme .variables-table td.tooltip::before {
     top: 15%;
     left: 50%;
     transform: translate(-50%, 6px);
-    max-width: 220px;
+    max-width: 400px;
     white-space: normal;
     overflow-wrap: break-word;
 
@@ -507,7 +507,7 @@ body.light-theme .variables-table input[type="text"],
 body.light-theme .variables-table input[type="text"]:focus,
 body.light-theme .variables-table input[type="text"]:hover {
     background-color: #f9fafc !important;
-    color: #c9d1d9 !important;
+    color: var(--text-light) !important;
     border: 1px solid var(--border-light) !important;
     border-radius: 4px;
     padding: 4px 8px;

@@ -209,11 +209,11 @@ const algoTemplates = {
         </thead>
         <tbody>
           <tr>
-            <td class="tooltip" data-tooltip="Список смежности графа">graph</td>
+            <td>Список смежности графа</td>
             <td><input type="text" id="var-graph" placeholder="например, graph"></td>
           </tr>
           <tr>
-            <td class="tooltip" data-tooltip="Массив предков для восстановления пути">parent</td>
+            <td>Массив предков</td>
             <td><input type="text" id="var-parent" placeholder="например, parent"></td>
           </tr>
         </tbody>
