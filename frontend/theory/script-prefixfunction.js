@@ -154,6 +154,9 @@ document.addEventListener("DOMContentLoaded", function () {
         exampleRunBtn.addEventListener('click', async e => {
             e.preventDefault();
             const code = window.exampleCM.getValue();
+            const sVar = "s";
+            const pVar = "p";
+
             if (code.split('\n').length > 300) {
                 return CustomAlert('Code is too long! Max 300 lines.');
             }
@@ -161,7 +164,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 const res = await fetch('http://127.0.0.1:5000/new-debug-page-prefixfunction', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({code})
+                    body: JSON.stringify({code, sVar, pVar})
                 });
                 if (!res.ok) throw new Error(`Status ${res.status}`);
                 const result = await res.json();

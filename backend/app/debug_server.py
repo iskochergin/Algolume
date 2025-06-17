@@ -502,6 +502,40 @@ def new_debug_page_dijkstra():
         return jsonify({"error": "An unexpected error occurred."}), 500
 
 
+@app.route('/new-debug-page-prefixfunction', methods=['POST'])
+@limiter.limit("30 per minute; 5 per second")
+def new_debug_page_prefixfunc():
+    try:
+        data = request.get_json()
+        code = data.get('code', '')
+        input_data = data.get('input', '')
+        s = data.get('sVar', '')
+        p = data.get('pVar', '')
+
+        if not s or not p:
+            return jsonify({"error": "One or more required variables are missing (parent, graph, or dist)."}), 400
+
+        debug_id = generate_uuid()
+        debug_log, exec_time, memory = get_debug_log_limited(code, input_data)
+        if type(debug_log) is tuple and debug_log[0] == 'error':
+            return jsonify({"error": debug_log[1]})
+        if type(debug_log) is str and debug_log.startswith('Restricted!'):
+            return jsonify({"error": debug_log})
+
+        file_url = create_new_prefixfunc_session(debug_id, debug_log, code, input_data, s, p)
+
+        return jsonify({
+            "url": file_url,
+            "id": debug_id,
+            "execution_time": exec_time,
+            "memory_used": memory,
+            "error": None
+        }), 200
+
+    except Exception as e:
+        return jsonify({"error": "An unexpected error occurred."}), 500
+
+
 @app.route('/request-debug-log', methods=['POST'])
 @limiter.limit("30 per minute; 5 per second")
 def request_debug_log():
