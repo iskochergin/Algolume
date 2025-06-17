@@ -145,8 +145,6 @@ document.addEventListener("DOMContentLoaded", function () {
         window.theoryCM2.getWrapperElement().classList.add('theory-cm');
     }
 
-    // (If you have more snippets, repeat similarly for snippet3, snippet4, etc.)
-
     // Setup modal for alerts.
     const modal = document.getElementById("customAlertModal");
     const closeBtn = document.getElementsByClassName("close-button")[0];

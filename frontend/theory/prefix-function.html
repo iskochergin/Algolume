@@ -8,19 +8,54 @@
     <link rel="stylesheet" href="styles.css"/>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&display=swap&subset=cyrillic" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&display=swap&subset=cyrillic"
+          rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/dracula.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/elegant.min.css">
 </head>
 <body>
 <header class="top-bar">
     <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
-    <h1><a href="index.html">Algolume</a></h1>
+
+    <h1><a href="index">Algolume</a></h1>
+
     <div class="top-right-links">
-        <a href="https://github.com/iskochergin/Algolume" target="_blank">GitHub</a>
-        <a href="https://forms.yandex.com/u/67bdd0b884227c398a06e849/">Feedback</a>
+        <button id="themeToggle" class="icon-btn" aria-label="Toggle light / dark">
+            <svg id="themeIcon" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 4.5a1 1 0 0 1 1 1V7a1 1 0 0 1-2 0V5.5a1 1 0 0 1 1-1zm0 11a1 1 0 0 1 1 1V19a1 1 0 0 1-2 0v-2.5a1 1 0 0 1 1-1zm7.5-5.5a1 1 0 0 1 1 1h1.5a1 1 0 0 1 0 2H20.5a1 1 0 0 1-1-1 1 1 0 0 1 1-1zm-13 1a1 1 0 0 1 1-1H9a1 1 0 0 1 0 2H7.5a1 1 0 0 1-1-1zM17 7.06l1.06-1.06a1 1 0 0 1 1.41 1.42L18.41 8.48A1 1 0 1 1 17 7.06zM5.53 16.53a1 1 0 0 1 1.41 0l1.06 1.06a1 1 0 1 1-1.41 1.42L5.53 17.95a1 1 0 0 1 0-1.42zM17 16.94a1 1 0 0 1 1.41 1.42l-1.06 1.06a1 1 0 1 1-1.41-1.42l1.06-1.06zM5.53 7.47a1 1 0 0 1 1.41-1.42L8 7.11A1 1 0 1 1 6.59 8.53L5.53 7.47zM12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z"/>
+            </svg>
+        </button><!--
+        --><a href="https://github.com/iskochergin/Algolume"
+              target="_blank"
+              class="icon-btn icon-btn2"
+              aria-label="GitHub">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             viewBox="0 0 16 16"
+             fill="#c9d1d9"
+             width="24"
+             height="24">
+            <path d="M8 0C3.58 0 0 3.58 0 8a8 8 0 0 0 5.47 7.59c.4.07.55-.17.55-.38
+      0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13
+      -.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.22 1.87.87 2.33.66.07
+      -.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08
+      -.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 2-.27c.68 0 1.36.09
+      2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82
+      2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01
+      2.19 0 .21.15.46.55.38A8 8 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+        </svg>
+    </a><!--
+        --><a href="https://forms.yandex.com/u/67bdd0b884227c398a06e849/"
+              target="_blank"
+              class="icon-btn icon-btn2"
+              aria-label="Feedback">
+        <svg viewBox="0 0 16 16" fill="currentColor">
+            <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v.218L8 8 0 4.218V4z"/>
+            <path d="M0 4.697v7.104l5.803-3.55L0 4.697zM6.761 8.83l-6.76 4.138v.335A2 2 0 0 0 2 16h12a2 2 0 0 0 2-2.697v-.335l-6.761-4.138L8 9.583l-1.239-.753zM10.197 8.251 16 11.801V4.697l-5.803 3.554z"/>
+        </svg>
+    </a>
     </div>
 </header>
 
@@ -45,24 +80,28 @@
             <h1>Алгоритм префикс-функции</h1>
             <article>
                 <p><span style="font-weight:bold; font-size:1.2rem;">Условие задачи:</span>
-                   Дана строка <code>s</code> длины <code>n</code>. Требуется вычислить префикс-функцию — массив <code>p</code> длины <code>n</code>, где <code>p[i]</code> равно длине наибольшего собственного префикса подстроки <code>s[0…i]</code>, совпадающего с её суффиксом.</p>
+                    Дана строка <code>s</code> длины <code>n</code>. Требуется вычислить префикс-функцию — массив <code>p</code>
+                    длины <code>n</code>, где <code>p[i]</code> равно длине наибольшего собственного префикса подстроки
+                    <code>s[0…i]</code>, совпадающего с её суффиксом.</p>
 
                 <p><span style="font-weight:bold; font-size:1.2rem;">Формат входных данных:</span><br>
-                   Первая строка — целое число <code>n</code> (<code>1 ≤ n ≤ 1 000 000</code>).<br>
-                   Вторая строка — сама строка <code>s</code> длины <code>n</code> (латиница, без пробелов).</p>
+                    Первая строка — целое число <code>n</code> (<code>1 ≤ n ≤ 1 000 000</code>).<br>
+                    Вторая строка — сама строка <code>s</code> длины <code>n</code> (латиница, без пробелов).</p>
 
                 <p><span style="font-weight:bold; font-size:1.2rem;">Формат выходных данных:</span>
-                   <code>n</code> чисел <code>p[0] … p[n-1]</code>, разделённых пробелом (как правило <code>p[0] = 0</code>).</p>
+                    <code>n</code> чисел <code>p[0] … p[n-1]</code>, разделённых пробелом (как правило <code>p[0] =
+                        0</code>).</p>
 
                 <p><span style="font-weight:bold; font-size:1.2rem;">Решение:</span>
-                   Поддерживаем переменную <code>k</code> — значение <code>p[i-1]</code>.
-                   Для позиции <code>i</code> уменьшением <code>k ← p[k-1]</code> «поднимаемся» по ссылкам, пока символы <code>s[i]</code> и <code>s[k]</code> не совпадут или <code>k = 0</code>.
-                   Если совпали, увеличиваем <code>k++</code> и сохраняем <code>p[i] = k</code>.
-                   Алгоритм обходит строку один раз, сложность <code>O(n)</code>, память <code>O(n)</code>.</p>
+                    Поддерживаем переменную <code>k</code> — значение <code>p[i-1]</code>.
+                    Для позиции <code>i</code> уменьшением <code>k ← p[k-1]</code> «поднимаемся» по ссылкам, пока
+                    символы <code>s[i]</code> и <code>s[k]</code> не совпадут или <code>k = 0</code>.
+                    Если совпали, увеличиваем <code>k++</code> и сохраняем <code>p[i] = k</code>.
+                    Алгоритм обходит строку один раз, сложность <code>O(n)</code>, память <code>O(n)</code>.</p>
 
                 <textarea id="theory-code-snippet-1" style="display:none;">
-n = int(input())
 s = input().strip()
+n = len(s)
 p = [0] * n
 for i in range(1, n):
     k = p[i-1]
@@ -70,19 +109,23 @@ for i in range(1, n):
         k = p[k-1]
     if s[i] == s[k]:
         k += 1
-    p[i] = k
-                </textarea>
+    p[i] = k</textarea>
 
                 <p>После цикла массив <code>p</code> содержит префикс-функцию.</p>
 
                 <p>Например,</p>
                 <textarea id="theory-code-snippet-2" style="display:none;">s = "abacaba"</textarea>
                 <p>даёт</p>
-                <textarea id="theory-code-snippet-3" style="display:none;">p = [0,0,1,0,1,2,3]</textarea>
+                <textarea id="theory-code-snippet-3" style="display:none;">p = [0, 0, 1, 0, 1, 2, 3]</textarea>
 
                 <p><span style="font-weight:bold; font-size:1.2rem;">Доказательство корректности (скетч):</span>
-                   Инвариант: перед обработкой позиции <code>i</code> переменная <code>k</code> равна <code>p[i-1]</code>.
-                   Цикл <code>while</code> гарантирует, что после выхода <code>k</code> — длина наибольшего собствен­ного префикса, совпадающего с суффиксом <code>s[0…i-1]</code>, который ещё может расшириться символом <code>s[i]</code>. Если расширение возможно, прибавляем 1; иначе <code>p[i]=0</code>. Следовательно, каждое <code>p[i]</code> корректно, а работа линейна, так как <code>k</code> только уменьшается внутри цикла.</p>
+                    Инвариант: перед обработкой позиции <code>i</code> переменная <code>k</code> равна
+                    <code>p[i-1]</code>.
+                    Цикл <code>while</code> гарантирует, что после выхода <code>k</code> — длина наибольшего
+                    собствен­ного префикса, совпадающего с суффиксом <code>s[0…i-1]</code>, который ещё может
+                    расшириться символом <code>s[i]</code>. Если расширение возможно, прибавляем 1; иначе
+                    <code>p[i]=0</code>. Следовательно, каждое <code>p[i]</code> корректно, а работа линейна, так как
+                    <code>k</code> только уменьшается внутри цикла.</p>
             </article>
 
             <div class="tab-buttons">
@@ -94,8 +137,8 @@ for i in range(1, n):
                 <p><span style="font-weight:bold; font-size:1.2rem;">Пример реализации (Python 3)</span></p>
                 <p>Ограничения для визуализации: <code>1 ≤ n ≤ 200</code>.</p>
                 <textarea id="example-code">
-n = int(input())
 s = input().strip()
+n = len(s)
 p = [0] * n
 for i in range(1, n):
     k = p[i-1]
@@ -104,17 +147,25 @@ for i in range(1, n):
     if s[i] == s[k]:
         k += 1
     p[i] = k
-
 print(*p)
                 </textarea>
 
                 <table class="variables-table">
                     <thead>
-                    <tr><th>Логическое название</th><th>Название переменной</th></tr>
+                    <tr>
+                        <th>Логическое название</th>
+                        <th>Название переменной</th>
+                    </tr>
                     </thead>
                     <tbody>
-                    <tr><td>входная строка</td><td><input type="text" value="s" disabled/></td></tr>
-                    <tr><td>префикс-функция</td><td><input type="text" value="p" disabled/></td></tr>
+                    <tr>
+                        <td>Входная строка</td>
+                        <td><input type="text" value="s" disabled/></td>
+                    </tr>
+                    <tr>
+                        <td>Массив префикс-функции</td>
+                        <td><input type="text" value="p" disabled/></td>
+                    </tr>
                     </tbody>
                 </table>
 
@@ -130,11 +181,20 @@ print(*p)
 
                 <table class="variables-table" id="user-variables-table">
                     <thead>
-                    <tr><th>Логическое название</th><th>Название переменной (в вашем коде)</th></tr>
+                    <tr>
+                        <th>Логическое название</th>
+                        <th>Название переменной (в вашем коде)</th>
+                    </tr>
                     </thead>
                     <tbody>
-                    <tr><td>входная строка</td><td><input type="text" id="var-s" placeholder="например, s"/></td></tr>
-                    <tr><td>префикс-функция</td><td><input type="text" id="var-p" placeholder="например, p"/></td></tr>
+                    <tr>
+                        <td>Входная строка</td>
+                        <td><input type="text" id="var-s" placeholder="например, s"/></td>
+                    </tr>
+                    <tr>
+                        <td>Массив префикс-функции</td>
+                        <td><input type="text" id="var-p" placeholder="например, p"/></td>
+                    </tr>
                     </tbody>
                 </table>
 
