@@ -2,7 +2,7 @@
 /.vscode/
 /.venv/
 /frontend/python_debug_sessions/
-/ideas/
+/ideas/g
 src/__pycache__/
 src/responses.html/
 /frontend/theory/reviews.html/

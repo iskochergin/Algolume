@@ -271,6 +271,37 @@ def create_new_dijkstra_session(debug_id, debug_log, code, input_data, parent, g
     return file_url
 
 
+def create_new_prefixfunc_session(debug_id, debug_log, code, input_data, s, p):
+    folder_name = debug_id
+    full_path = os.path.join(SESSIONS_BASE, folder_name)
+    os.makedirs(full_path, exist_ok=True)
+
+    template_path = os.path.join(SESSIONS_BASE, "_templates")
+    html_template_path = os.path.join(template_path, "pysession-prefixfunc.html")
+    js_template_path = os.path.join(template_path, "interaction-prefixfunc.js")
+    interaction_js_template_path = os.path.join(template_path, "interaction.js")
+
+    code_lines = code.split('\n')
+
+    with open(html_template_path, 'r', encoding='utf-8') as file:
+        html_content = file.read()
+        html_content = html_content.replace("{code_lines}", json.dumps(code_lines))
+        html_content = html_content.replace("{input_data}", input_data)
+        html_content = html_content.replace("{debug_log}", json.dumps(debug_log))
+        html_content = html_content.replace("{sVar}", s)
+        html_content = html_content.replace("{pVar}", p)
+
+    html_filename = "pysession-prefixfunc.html"
+    with open(os.path.join(full_path, html_filename), 'w', encoding='utf-8') as file:
+        file.write(html_content)
+
+    shutil.copy(js_template_path, os.path.join(full_path, "interaction-prefixfunc.js"))
+    shutil.copy(interaction_js_template_path, os.path.join(full_path, "interaction.js"))
+
+    file_url = f'{BASE_LINK}/python_debug_sessions/{folder_name}/pysession-prefixfunc.html'
+    return file_url
+
+
 @app.route('/')
 @limiter.limit("30 per minute; 5 per second")
 def index():
