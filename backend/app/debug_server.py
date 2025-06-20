@@ -33,7 +33,7 @@ limiter = Limiter(
 def clean_old_debug_sessions():
     """
     Each 1 hour delete everything from SESSION_BASE (except templates),
-    WHICH is created 24 hours ago or later
+    THAT is created 24 hours ago or later
     """
     now = time.time()
     cutoff = 24 * 3600
@@ -302,6 +302,37 @@ def create_new_prefixfunc_session(debug_id, debug_log, code, input_data, s, p):
     return file_url
 
 
+def create_new_zfunc_session(debug_id, debug_log, code, input_data, s, z):
+    folder_name = debug_id
+    full_path = os.path.join(SESSIONS_BASE, folder_name)
+    os.makedirs(full_path, exist_ok=True)
+
+    template_path = os.path.join(SESSIONS_BASE, "_templates")
+    html_template_path = os.path.join(template_path, "pysession-zfunc.html")
+    js_template_path = os.path.join(template_path, "interaction-zfunc.js")
+    interaction_js_template_path = os.path.join(template_path, "interaction.js")
+
+    code_lines = code.split('\n')
+
+    with open(html_template_path, 'r', encoding='utf-8') as file:
+        html_content = file.read()
+        html_content = html_content.replace("{code_lines}", json.dumps(code_lines))
+        html_content = html_content.replace("{input_data}", input_data)
+        html_content = html_content.replace("{debug_log}", json.dumps(debug_log))
+        html_content = html_content.replace("{sVar}", s)
+        html_content = html_content.replace("{zVar}", z)
+
+    html_filename = "pysession-zfunc.html"
+    with open(os.path.join(full_path, html_filename), 'w', encoding='utf-8') as file:
+        file.write(html_content)
+
+    shutil.copy(js_template_path, os.path.join(full_path, "interaction-zfunc.js"))
+    shutil.copy(interaction_js_template_path, os.path.join(full_path, "interaction.js"))
+
+    file_url = f'{BASE_LINK}/python_debug_sessions/{folder_name}/pysession-zfunc.html'
+    return file_url
+
+
 @app.route('/')
 @limiter.limit("30 per minute; 5 per second")
 def index():
@@ -369,7 +400,7 @@ def new_debug_page_turtle():
         parent = data.get('parentVar', '')
 
         if not dp or not parent:
-            return jsonify({"error": "dpVar or parent is missing"})
+            return jsonify({"error": "One or more required variables are missing (dp or parent)"})
 
         debug_id = generate_uuid()
         debug_log, exec_time, memory = get_debug_log_limited(code, input_data)
@@ -404,7 +435,7 @@ def new_debug_page_grasshopper():
         parent = data.get('parentVar', '')
 
         if not dp or not parent:
-            return jsonify({"error": "dpVar or parent is missing"})
+            return jsonify({"error": "One or more required variables are missing (dp or parent)"})
 
         debug_id = generate_uuid()
         debug_log, exec_time, memory = get_debug_log_limited(code, input_data)
@@ -439,7 +470,7 @@ def new_debug_page_dfs():
         graph = data.get('graphVar', '')
 
         if not parent or not graph:
-            return jsonify({"error": "dpVar or graph is missing"})
+            return jsonify({"error": "One or more required variables are missing (dp or graph)"})
 
         debug_id = generate_uuid()
         debug_log, exec_time, memory = get_debug_log_limited(code, input_data)
@@ -474,7 +505,7 @@ def new_debug_page_bfs():
         graph = data.get('graphVar', '')
 
         if not parent or not graph:
-            return jsonify({"error": "dpVar or graph is missing"})
+            return jsonify({"error": "One or more required variables are missing (dp or graph)"})
 
         debug_id = generate_uuid()
         debug_log, exec_time, memory = get_debug_log_limited(code, input_data)
@@ -544,7 +575,7 @@ def new_debug_page_prefixfunc():
         p = data.get('pVar', '')
 
         if not s or not p:
-            return jsonify({"error": "One or more required variables are missing (parent, graph, or dist)."}), 400
+            return jsonify({"error": "One or more required variables are missing (s or p)."}), 400
 
         debug_id = generate_uuid()
         debug_log, exec_time, memory = get_debug_log_limited(code, input_data)
@@ -554,6 +585,40 @@ def new_debug_page_prefixfunc():
             return jsonify({"error": debug_log})
 
         file_url = create_new_prefixfunc_session(debug_id, debug_log, code, input_data, s, p)
+
+        return jsonify({
+            "url": file_url,
+            "id": debug_id,
+            "execution_time": exec_time,
+            "memory_used": memory,
+            "error": None
+        }), 200
+
+    except Exception as e:
+        return jsonify({"error": "An unexpected error occurred."}), 500
+
+
+@app.route('/new-debug-page-zfunction', methods=['POST'])
+@limiter.limit("30 per minute; 5 per second")
+def new_debug_page_zfunc():
+    try:
+        data = request.get_json()
+        code = data.get('code', '')
+        input_data = data.get('input', '')
+        s = data.get('sVar', '')
+        z = data.get('zVar', '')
+
+        if not s or not z:
+            return jsonify({"error": "One or more required variables are missing (s or z)."}), 400
+
+        debug_id = generate_uuid()
+        debug_log, exec_time, memory = get_debug_log_limited(code, input_data)
+        if type(debug_log) is tuple and debug_log[0] == 'error':
+            return jsonify({"error": debug_log[1]})
+        if type(debug_log) is str and debug_log.startswith('Restricted!'):
+            return jsonify({"error": debug_log})
+
+        file_url = create_new_zfunc_session(debug_id, debug_log, code, input_data, s, z)
 
         return jsonify({
             "url": file_url,

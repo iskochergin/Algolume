@@ -81,7 +81,7 @@
             <li><a href="dijkstra">Алгоритм Дейкстры</a></li>
             <li><a href="z-function">Z-функция</a></li>
             <li><a href="prefix-function">Префикс-функция</a></li>
-            <li class="in-development">
+            <li class="in-development active">
                 <a href="soon">
                     В разработке…
                     <span class="in-dev-badge">Soon</span>
@@ -93,78 +93,27 @@
 
 <div id="content-container" class="expanded">
     <main id="main-content">
-        <section class="intro">
-            <section>
-                <h1>Добро пожаловать в Algolume!</h1>
-
-                <p>
-                    <button
-                            onclick="toggleSidebar()"
-                            class="gradient-icon gradient-menu"
-                            aria-label="Открыть меню"
-                            style="font-size:1.5rem;
-                     background-color: transparent;
-                     border: none;
-                     padding: 0;
-                     margin-right: 6px;">
-                        ☰
-                    </button>
-                    Здесь вы найдёте визуализации и краткие теоретические сведения по распространённым алгоритмам
-                </p>
-
-                <p>
-                <span
-                        class="gradient-icon gradient-brain"
-                        aria-hidden="true"
-                        style="font-size:1.2rem; margin-right:6px;">
-      🧠
-                </span>
-                    Вы также можете просто вставить <code>код</code> одного из доступных алгоритмов в поле ниже, а
-                    Algolume Neuro определит алгоритм и
-                    визуализирует его!
-                </p>
-            </section>
+        <section>
+            <h1>В разработке</h1>
+            <article>
+                <ul>
+                    <li>DSU</li>
+                    <li>Prim’s</li>
+                    <li>Quadtree</li>
+                    <li>Segment Tree</li>
+                    <li>Kruskal’s</li>
+                    <li>Fenwick Tree</li>
+                </ul>
+            </article>
+            <p>По вопросам сотрудничества пишите в Telegram: <a href="https://t.me/iskochergin">@iskochergin</a></p>
         </section>
     </main>
-
-    <section id="neuro">
-        <div class="glass-card">
-            <h3 class="neuro-badge">Algolume Neuro (Python3)</h3>
-
-            <textarea id="code-input" name="code"></textarea>
-
-            <div class="run-button-area">
-                <button id="predict-btn" class="run-btn run-btn-neuro">
-                    <span class="btn-label-neuro">Определить</span>
-                    <span class="loader hidden"></span>
-                </button>
-            </div>
-        </div>
-
-
-        <div id="prediction-area" class="hidden result-card">
-            <div class="prediction-row">
-                <select id="correction-select"></select>
-                <span id="prediction-prob"></span>
-            </div>
-
-            <div id="algo-config"></div>
-        </div>
-
-
-    </section>
 
     <footer class="credits">
         <p>© 2025 Algolume. Created by Ivan Kochergin.</p>
     </footer>
 </div>
 
-<div id="customAlertModal" class="modal">
-    <div class="modal-content">
-        <span class="close-button">&times;</span>
-        <p id="alertMessage"></p>
-    </div>
-</div>
 
 <script src="script-index.js"></script>
 </body>

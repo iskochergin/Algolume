@@ -62,14 +62,20 @@
 <div id="sidebar" class="sidebar closed">
     <nav>
         <ul>
-            <li><a href="index.html" class="neuro-link">Algolume Neuro</a></li>
-            <li><a href="dp-turtle.html">DP (Задача с черепашкой)</a></li>
-            <li><a href="dp-grasshopper.html">DP (Задача с кузнечиком)</a></li>
-            <li><a href="dfs.html">DFS (Поиск в глубину)</a></li>
-            <li><a href="bfs.html">BFS (Поиск в ширину)</a></li>
-            <li><a href="dijkstra.html">Алгоритм Дейкстры</a></li>
-            <li><a href="z-function.html" class="active">Z-функция</a></li>
-            <li><a href="prefix-function.html">Префикс-функция</a></li>
+            <li><a href="index" class="neuro-link">Algolume Neuro</a></li>
+            <li><a href="dp-turtle">DP (Задача с черепашкой)</a></li>
+            <li><a href="dp-grasshopper">DP (Задача с кузнечиком)</a></li>
+            <li><a href="dfs">DFS (Поиск в глубину)</a></li>
+            <li><a href="bfs">BFS (Поиск в ширину)</a></li>
+            <li><a href="dijkstra">Алгоритм Дейкстры</a></li>
+            <li><a href="z-function" class="active">Z-функция</a></li>
+            <li><a href="prefix-function">Префикс-функция</a></li>
+            <li class="in-development">
+                <a href="soon">
+                    В разработке…
+                    <span class="in-dev-badge">Soon</span>
+                </a>
+            </li>
         </ul>
     </nav>
 </div>
@@ -132,8 +138,9 @@ for i in range(1, n):
 
             <div id="exampleTab" class="tab-content">
                 <p><span style="font-weight:bold; font-size:1.2rem;">Пример реализации (Python 3)</span></p>
-                <p>Ограничения для визуализации: <code>1 ≤ n ≤ 200</code>.</p>
-                <textarea id="example-code">
+                <p>Для корректной работы визуализации ограничения на входные данные следующие: <code>1 ≤ len(s) ≤
+                    30</code>.
+                    <textarea id="example-code">
 s = input().strip()
 n = len(s)
 z = [0] * n
@@ -174,7 +181,8 @@ print(*z)
 
             <div id="userTab" class="tab-content hidden">
                 <p><span style="font-weight:bold; font-size:1.2rem;">Ваша реализация (Python 3)</span></p>
-                <p>Не забудьте: первая строка — <code>n</code>, вторая — строка <code>s</code>, 0-индексация.</p>
+                <p>Для корректной работы визуализации ограничения на входные данные следующие: <code>1 ≤ len(s) ≤
+                    30</code>.
                 <textarea id="user-code"></textarea>
 
                 <table class="variables-table" id="user-variables-table">

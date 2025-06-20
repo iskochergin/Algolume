@@ -1,5 +1,3 @@
-/*  ░░  Prefix-function visualiser ─ компактная версия (v2) ░░  */
-
 /* ── util ──────────────────────────────────────────────── */
 const okStruct = (s, p) => typeof s === 'string' && Array.isArray(p) && s.length === p.length;
 
@@ -76,7 +74,7 @@ function highlight(idx, s, p, cont) {
     /* arcs */
     wipeArcs();
     drawArc(0, preEnd, 0, 35, 'pf-arc-prefix', cont);          // над префиксом
-    drawArc(sufBeg, idx, 0, 28, 'pf-arc-suffix', cont, '#4ade80'); // над суффиксом
+    drawArc(sufBeg, idx, 0, 35, 'pf-arc-suffix', cont, '#4ade80'); // над суффиксом
 }
 
 /* ── main render ───────────────────────────────────────── */
@@ -92,11 +90,11 @@ function renderPF() {
     const s = searchVariableRecursively(vars, sVar);
     const p = searchVariableRecursively(vars, pVar);
     if (!okStruct(s, p)) {
-        box.innerHTML = 'String/P-array invalid.';
+        box.innerHTML = 'String/P-array invalid or undefined.';
         return;
     }
-    if (s.length > 60) {
-        box.innerHTML = 'Too long to visualise.';
+    if (s.length > 30) {
+        box.innerHTML = 'String is too long to visualise (len=30 is max)';
         return;
     }
 

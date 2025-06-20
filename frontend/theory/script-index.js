@@ -143,15 +143,15 @@ const algoTemplates = {
         </thead>
         <tbody>
           <tr>
-            <td class="tooltip" data-tooltip="Список смежности графа">graph</td>
+            <td>Список смежности графа</td>
             <td><input type="text" id="var-graph" placeholder="например, graph"></td>
           </tr>
           <tr>
-            <td class="tooltip" data-tooltip="Массив предков для восстановления пути">parent</td>
+            <td>Массив предков</td>
             <td><input type="text" id="var-parent" placeholder="например, parent"></td>
           </tr>
           <tr>
-            <td class="tooltip" data-tooltip="Массив кратчайших расстояний от старта">dist</td>
+            <td>Расстояния до достигнутых вершин</td>
             <td><input type="text" id="var-dist" placeholder="например, dist"></td>
           </tr>
         </tbody>
@@ -178,11 +178,11 @@ const algoTemplates = {
         </thead>
         <tbody>
           <tr>
-            <td class="tooltip" data-tooltip="Список смежности графа">graph</td>
+            <td>Список смежности графа</td>
             <td><input type="text" id="var-graph" placeholder="например, graph"></td>
           </tr>
           <tr>
-            <td class="tooltip" data-tooltip="Массив предков для восстановления пути">parent</td>
+            <td>Массив предков</td>
             <td><input type="text" id="var-parent" placeholder="например, parent"></td>
           </tr>
         </tbody>
@@ -240,11 +240,11 @@ const algoTemplates = {
         </thead>
         <tbody>
           <tr>
-            <td class="tooltip" data-tooltip="Таблица динамики (минимальная стоимость)">dp</td>
+            <td>Массив DP</td>
             <td><input type="text" id="var-dp" placeholder="например, dp"></td>
           </tr>
           <tr>
-            <td class="tooltip" data-tooltip="Массив предков для восстановления пути">parent</td>
+            <td>Массив предыдущих шагов</td>
             <td><input type="text" id="var-parent" placeholder="например, parent"></td>
           </tr>
         </tbody>
@@ -271,11 +271,11 @@ const algoTemplates = {
         </thead>
         <tbody>
           <tr>
-            <td class="tooltip" data-tooltip="Таблица динамики (число способов или стоимости)">dp</td>
+            <td>Массив DP</td>
             <td><input type="text" id="var-dp" placeholder="например, dp"></td>
           </tr>
           <tr>
-            <td class="tooltip" data-tooltip="Массив предков для восстановления пути">parent</td>
+            <td>Массив предыдущих шагов</td>
             <td><input type="text" id="var-parent" placeholder="например, parent"></td>
           </tr>
         </tbody>
@@ -289,6 +289,68 @@ const algoTemplates = {
             return checkFilled(d, p) && checkExists(code, d, p) && {dpVar: d, parentVar: p};
         },
         endpoint: '/new-debug-page-grasshopper'
+    },
+
+    ZFunc: {
+        html: `
+      <table class="variables-table">
+        <thead>
+          <tr>
+            <th>Логическое название</th>
+            <th>Название переменной</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Входная строка</td>
+            <td><input type="text" id="var-s" placeholder="например, s"></td>
+          </tr>
+          <tr>
+            <td>Массив Z-функции</td>
+            <td><input type="text" id="var-z" placeholder="например, z"></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="run-button-area">
+        <button id="userRunBtn" class="run-btn">Запустить</button>
+      </div>
+    `,
+        validate: (code) => {
+            const s = val('var-s'), z = val('var-z');
+            return checkFilled(s, z) && checkExists(code, s, z) && {sVar: s, zVar: z};
+        },
+        endpoint: '/new-debug-page-zfunction'
+    },
+
+    PrefixFunc: {
+        html: `
+      <table class="variables-table">
+        <thead>
+          <tr>
+            <th>Логическое название</th>
+            <th>Название переменной</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Входная строка</td>
+            <td><input type="text" id="var-s" placeholder="например, s"></td>
+          </tr>
+          <tr>
+            <td>Массив префикс-функции</td>
+            <td><input type="text" id="var-p" placeholder="например, p"></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="run-button-area">
+        <button id="userRunBtn" class="run-btn">Запустить</button>
+      </div>
+    `,
+        validate: (code) => {
+            const s = val('var-s'), p = val('var-p');
+            return checkFilled(s, p) && checkExists(code, s, p) && {sVar: s, pVar: p};
+        },
+        endpoint: '/new-debug-page-prefixfunction'
     }
 };
 

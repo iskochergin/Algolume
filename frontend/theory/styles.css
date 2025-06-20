@@ -677,6 +677,55 @@ body.light-theme .modal-content {
     filter: brightness(1.1);
 }
 
+.sidebar nav ul li.in-development {
+  margin-top: 1.5rem;
+}
+
+.sidebar nav ul li.in-development a {
+  display: inline-flex;
+  align-items: center;
+  color: rgba(201, 209, 217);
+}
+
+.sidebar nav li.in-development a:hover {
+    color: #58a6ff;
+}
+
+.sidebar nav ul li.in-development a .in-dev-badge {
+  display: inline-block;
+  margin-left: 0.5rem;
+  padding: 2px 6px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  border-radius: 12px;
+  background-color: #58a6ff;
+  color: #fff;
+}
+
+.sidebar nav ul li.in-development a:hover .in-dev-badge {
+  opacity: 1;
+}
+
+.sidebar nav ul li.in-development.active a {
+  color: var(--accent-light);
+  opacity: 1;
+  font-weight: bold;
+}
+
+.sidebar nav ul li.in-development.active a .in-dev-badge {
+  opacity: 1;
+}
+
+body.light-theme .sidebar nav ul li.in-development a {
+  color: rgba(76, 83, 93);
+}
+
+body.light-theme .sidebar nav li.in-development a:hover {
+    color: #58a6ff;
+}
+
+
 /* MAIN CONTENT */
 #main-content {
     box-sizing: border-box;
