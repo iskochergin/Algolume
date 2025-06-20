@@ -1,17 +1,13 @@
-#!/usr/bin/env python3
 import torch
 from transformers import AutoTokenizer, AutoModel
 from pathlib import Path
 
-# 1) Point this at your checkpoint directory
 CKPT_DIR = Path("model_ckpt")
 
-# 2) Load tokenizer & encoder from your folder
 tokenizer = AutoTokenizer.from_pretrained(CKPT_DIR)
 encoder   = AutoModel.from_pretrained(CKPT_DIR)
 encoder.eval()
 
-# 3) Rebuild your head & load its weights
 hidden_sz = encoder.config.hidden_size
 # If you have a labels.txt, read it; otherwise hard-code your classes list
 classes = (CKPT_DIR / "labels.txt").read_text().splitlines()
@@ -24,7 +20,6 @@ mlp = torch.nn.Sequential(
 mlp.load_state_dict(torch.load(CKPT_DIR / "mlp_head.pt", map_location="cpu"))
 mlp.eval()
 
-# 4) Wrap into a single Module for export
 class FullModel(torch.nn.Module):
     def __init__(self, encoder, head):
         super().__init__()
@@ -41,20 +36,17 @@ class FullModel(torch.nn.Module):
 model = FullModel(encoder, mlp)
 model.eval()
 
-# 5) Prepare a dummy batch (we’ll let the ONNX graph be dynamic along sequence dim)
 dummy = tokenizer(
-    ["dummy text"] * 2,             # batch of 2 just to show batch-dynamic
+    ["dummy text"] * 2,
     padding="max_length",
     truncation=True,
-    max_length=256,                 # this value won’t be hard-coded below
+    max_length=256,
     return_tensors="pt"
 )
 
-# 6) Make sure your output directory exists
 out_dir = Path("static")
 out_dir.mkdir(exist_ok=True)
 
-# 7) Export with BOTH axes dynamic (batch and sequence)
 torch.onnx.export(
     model,
     (dummy["input_ids"], dummy["attention_mask"]),
