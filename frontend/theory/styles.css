@@ -567,10 +567,51 @@ body.light-theme .modal-content {
 }
 
 .top-bar a {
-    color: #c9d1d9;
     text-decoration: none;
     color: #58a6ff;
-    margin-left: 113px;
+    /*margin-left: 113px;*/
+}
+
+@media (min-width: 768px) {
+    .top-bar h1 a {
+        margin-left: 113px;
+    }
+}
+
+@media (max-width: 768px) {
+    .top-bar h1 a {
+        margin-left: 90px;
+    }
+
+    .top-right-links {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 0;
+    }
+
+    .top-right-links a,
+    .top-right-links button.icon-btn {
+        margin-left: 0;
+    }
+}
+
+@media (max-width: 390px) {
+    .top-bar h1 a {
+        margin-left: 80px;
+    }
+
+    .top-right-links {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 0;
+    }
+
+    .top-right-links a,
+    .top-right-links button.icon-btn {
+        margin-left: 0;
+    }
 }
 
 .menu-toggle {
@@ -678,13 +719,13 @@ body.light-theme .modal-content {
 }
 
 .sidebar nav ul li.in-development {
-  margin-top: 1.5rem;
+    margin-top: 1.5rem;
 }
 
 .sidebar nav ul li.in-development a {
-  display: inline-flex;
-  align-items: center;
-  color: rgba(201, 209, 217);
+    display: inline-flex;
+    align-items: center;
+    color: rgba(201, 209, 217);
 }
 
 .sidebar nav li.in-development a:hover {
@@ -692,33 +733,33 @@ body.light-theme .modal-content {
 }
 
 .sidebar nav ul li.in-development a .in-dev-badge {
-  display: inline-block;
-  margin-left: 0.5rem;
-  padding: 2px 6px;
-  font-size: 0.65rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  border-radius: 12px;
-  background-color: #58a6ff;
-  color: #fff;
+    display: inline-block;
+    margin-left: 0.5rem;
+    padding: 2px 6px;
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    border-radius: 12px;
+    background-color: #58a6ff;
+    color: #fff;
 }
 
 .sidebar nav ul li.in-development a:hover .in-dev-badge {
-  opacity: 1;
+    opacity: 1;
 }
 
 .sidebar nav ul li.in-development.active a {
-  color: var(--accent-light);
-  opacity: 1;
-  font-weight: bold;
+    color: var(--accent-light);
+    opacity: 1;
+    font-weight: bold;
 }
 
 .sidebar nav ul li.in-development.active a .in-dev-badge {
-  opacity: 1;
+    opacity: 1;
 }
 
 body.light-theme .sidebar nav ul li.in-development a {
-  color: rgba(76, 83, 93);
+    color: rgba(76, 83, 93);
 }
 
 body.light-theme .sidebar nav li.in-development a:hover {
@@ -1003,7 +1044,8 @@ article ol {
 /* FOOTER */
 .credits {
     text-align: center;
-    margin-top: 20px;
+    /*margin-top: 20px;*/
+    margin-top: auto;
     padding: 20px;
     color: #8b949eb2;
     font-size: 0.9rem;
@@ -1495,10 +1537,10 @@ select#correction-select {
 
     /* ── ОСНОВНОЙ КОНТЕЙНЕР ──────────────── */
     #content-container {
-        display: block !important;
-        min-height: auto !important;
         transform: none !important;
         margin-top: 56px;
+        min-height: calc(100vh - 130px);
+        flex: 1 0 auto;
     }
 
     #main-content {
@@ -1524,5 +1566,4 @@ select#correction-select {
         padding: 6px;
         font-size: 0.85rem;
     }
-
 }
