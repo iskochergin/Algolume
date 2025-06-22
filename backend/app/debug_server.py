@@ -2,7 +2,7 @@ import os, sys, re, json, time, uuid, shutil
 from datetime import datetime
 from pathlib import Path
 
-from flask import Flask, redirect, request, jsonify, send_from_directory
+from flask import Flask, redirect, request, jsonify, send_from_directory, g
 from flask_cors import CORS
 from apscheduler.schedulers.background import BackgroundScheduler
 from flask_limiter import Limiter
@@ -12,7 +12,41 @@ from flask_limiter.util import get_remote_address
 from backend.code_exec.debug_limits import get_debug_log_limited, TimeoutException, MemoryLimitException
 from backend.config import *
 
+LOG_FILE = os.path.join(os.path.dirname(__file__), "usage_stats.jsonl")
+seen_ips = set()
+if os.path.exists(LOG_FILE):
+    with open(LOG_FILE) as f:
+        for line in f:
+            try:
+                seen_ips.add(json.loads(line)["ip"])
+            except:
+                pass
+
+def init_usage_stats(app):
+    @app.before_request
+    def start_timer():
+        g._t0 = time.perf_counter()
+
+    @app.after_request
+    def log_user(response):
+        ip = request.remote_addr or ""
+        elapsed = (time.perf_counter() - g._t0) * 1000
+        entry = {
+            "ip": ip,
+            "ts": datetime.utcnow().isoformat(sep=" ", timespec="seconds"),
+            "ms": round(elapsed, 1)
+        }
+        if ip not in seen_ips:
+            seen_ips.add(ip)
+            entry["first_ts"] = entry["ts"]
+        os.makedirs(os.path.dirname(LOG_FILE), exist_ok=True)
+        with open(LOG_FILE, "a") as f:
+            f.write(json.dumps(entry) + "\n")
+        return response
+
+
 app = Flask(__name__)
+init_usage_stats(app)
 CORS(app)
 
 redis_client = Redis(host="localhost", port=6379, db=0, socket_timeout=1, socket_connect_timeout=1)

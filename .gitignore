@@ -12,3 +12,4 @@ src/responses.html/
 /backend/app/static/
 /.DS_Store/
 /backend/helpers/replace_log.json/
+/backend/app/usage_stats.jsonl
