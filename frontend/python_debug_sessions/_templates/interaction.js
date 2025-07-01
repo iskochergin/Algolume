@@ -446,7 +446,7 @@ async function sendInputAndGetNewTrace() {
         // console.log(debugging_result);
 
         waitingServer = false;
-        if (debugging_result.execution_time > 5 || debugging_result.memory_used > 256) {
+        if (debugging_result.execution_time > 5 || debugging_result.memory_used > 2000) {
             document.querySelectorAll("input, button").forEach(elem => elem.disabled = true);
             frozen = true;
             CustomAlert(`Memory/Time limit exceeded. Time: ${debugging_result.execution_time} seconds. Memory: ${debugging_result.memory_used} MB. All actions on the page are frozen, reload it to run the code again!`);
