@@ -1,6 +1,7 @@
 // ───── swapping codemirror themes ─────
 const CM_LIGHT = 'elegant';
 const CM_DARK  = 'dracula';
+const API_BASE = window.location.origin;
 
 function applyCMTheme() {
     const light = document.body.classList.contains('light-theme');
@@ -203,7 +204,7 @@ document.addEventListener("DOMContentLoaded", function () {
             try {
                 const dpVar = 'dp';
                 const parentVar = 'parent';
-                const response = await fetch('http://127.0.0.1:5000/new-debug-page-grasshopper', {
+                const response = await fetch(`${API_BASE}/new-debug-page-grasshopper`, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({code, dpVar, parentVar})
@@ -256,7 +257,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             try {
-                const response = await fetch('http://127.0.0.1:5000/new-debug-page-grasshopper', {
+                const response = await fetch(`${API_BASE}/new-debug-page-grasshopper`, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({code, dpVar: dpVarInput, parentVar: parentVarInput})

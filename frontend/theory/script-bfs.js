@@ -1,6 +1,7 @@
 // ───── swapping codemirror themes ─────
 const CM_LIGHT = 'elegant';
 const CM_DARK  = 'dracula';
+const API_BASE = window.location.origin;
 
 function applyCMTheme() {
   const light = document.body.classList.contains('light-theme');
@@ -207,7 +208,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 const parentVar = 'parent';
                 const graphVar = 'graph';
 
-                const response = await fetch('http://127.0.0.1:5000/new-debug-page-bfs', {
+                const response = await fetch(`${API_BASE}/new-debug-page-bfs`, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({code, parentVar, graphVar})
@@ -261,7 +262,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             try {
-                const response = await fetch('http://127.0.0.1:5000/new-debug-page-bfs', {
+                const response = await fetch(`${API_BASE}/new-debug-page-bfs`, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({code, parentVar, graphVar})
@@ -338,4 +339,3 @@ document.addEventListener("DOMContentLoaded", function () {
     redraw();
     btn.addEventListener('click', redraw);
 })();
-

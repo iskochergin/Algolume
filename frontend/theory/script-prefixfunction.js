@@ -1,6 +1,7 @@
 // ───── swapping CodeMirror themes ─────
 const CM_LIGHT = 'elegant';
 const CM_DARK  = 'dracula';
+const API_BASE = window.location.origin;
 
 function applyCMTheme() {
     const light = document.body.classList.contains('light-theme');
@@ -161,7 +162,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 return CustomAlert('Code is too long! Max 300 lines.');
             }
             try {
-                const res = await fetch('http://127.0.0.1:5000/new-debug-page-prefixfunction', {
+                const res = await fetch(`${API_BASE}/new-debug-page-prefixfunction`, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({code, sVar, pVar})
@@ -203,7 +204,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 return CustomAlert('Code is too long! Max 300 lines.');
             }
             try {
-                const res = await fetch('http://127.0.0.1:5000/new-debug-page-prefixfunction', {
+                const res = await fetch(`${API_BASE}/new-debug-page-prefixfunction`, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({code, sVar, pVar})

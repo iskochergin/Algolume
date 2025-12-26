@@ -1,3 +1,5 @@
+const API_BASE = window.location.origin;
+
 document.addEventListener("DOMContentLoaded", function() {
     var codeTextarea = document.getElementById('code');
     var codeMirrorInstance = CodeMirror.fromTextArea(codeTextarea, {
@@ -38,7 +40,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const input = document.getElementById('input') ? document.getElementById('input').value : '';
         
         try {
-            const response = await fetch('http://127.0.0.1:5000/new-debug-page', {
+            const response = await fetch(`${API_BASE}/new-debug-page`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
