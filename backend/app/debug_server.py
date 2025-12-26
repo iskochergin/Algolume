@@ -10,7 +10,7 @@ from redis import Redis
 from flask_limiter.util import get_remote_address
 
 from backend.code_exec.debug_limits import get_debug_log_limited, TimeoutException, MemoryLimitException
-from backend.config import *
+from backend.config_runtime import *
 
 LOG_FILE = os.path.join(os.path.dirname(__file__), "usage_stats.jsonl")
 seen_ips = set()
@@ -49,12 +49,21 @@ app = Flask(__name__)
 init_usage_stats(app)
 CORS(app)
 
-redis_client = Redis(host="localhost", port=6379, db=0, socket_timeout=1, socket_connect_timeout=1)
+REDIS_HOST = os.getenv("REDIS_HOST", "localhost")
+REDIS_PORT = int(os.getenv("REDIS_PORT", "6379"))
+
+redis_client = Redis(
+    host=REDIS_HOST,
+    port=REDIS_PORT,
+    db=0,
+    socket_timeout=1,
+    socket_connect_timeout=1
+)
 
 limiter = Limiter(
     app=app,
     key_func=get_remote_address,
-    storage_uri="redis://localhost:6379/0",
+    storage_uri=f"redis://{REDIS_HOST}:{REDIS_PORT}/0",
     storage_options={
         "socket_timeout": 1,
         "socket_connect_timeout": 1
@@ -740,10 +749,10 @@ def white_black_list():
 @app.post("/api/predict")
 @limiter.limit("30 per minute; 5 per second")
 def api_predict():
-    from model_server import _predict
+    from backend.app import model_server
     data = request.get_json(force=True)
     code = data.get("code", "")
-    preds = _predict(code)
+    preds = model_server._predict(code)
     return jsonify(predictions=preds), 200
 
 
@@ -751,8 +760,8 @@ def api_predict():
 @limiter.limit("30 per minute; 5 per second")
 def api_log():
     data = request.get_json(force=True)
-    from model_server import _append_log
-    _append_log({
+    from backend.app import model_server
+    model_server._append_log({
         "ts": time.time(),
         "code": data.get("code", ""),
         "predicted": data.get("predicted", ""),

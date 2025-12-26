@@ -1,0 +1,26 @@
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: algolume-redis
+    restart: unless-stopped
+    command: ["redis-server", "--save", "", "--appendonly", "no"]
+
+  app:
+    build: .
+    container_name: algolume-app
+    restart: unless-stopped
+    ports:
+      - "5612:5612"
+    environment:
+      - PYTHONPATH=/app
+      - ALGOLUME_CONFIG=backend.config_docker
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - OMP_NUM_THREADS=1
+      - OPENBLAS_NUM_THREADS=1
+      - MKL_NUM_THREADS=1
+      - NUMEXPR_NUM_THREADS=1
+    depends_on:
+      - redis
+    mem_limit: 512m
+    pids_limit: 200

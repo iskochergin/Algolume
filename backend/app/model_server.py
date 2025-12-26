@@ -6,7 +6,7 @@ from transformers import AutoTokenizer
 from pathlib import Path
 import numpy as np
 import onnxruntime as ort
-from backend.config import *
+from backend.config_runtime import *
 
 app = Flask(__name__)
 CORS(app)
@@ -54,4 +54,3 @@ def _append_log(rec: dict):
     with LOG_PATH.open("a", encoding="utf-8") as f:
         json.dump(rec, f, ensure_ascii=False);
         f.write("\n")
-

@@ -5,7 +5,7 @@ import numpy as np
 import onnxruntime as ort
 from transformers import AutoTokenizer
 
-from backend.config import *
+from backend.config_runtime import *
 
 CKPT = Path(PATH_TO_APP) / "model_ckpt"
 LABELS_TXT = CKPT / "labels.txt"

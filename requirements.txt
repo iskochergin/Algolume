@@ -6,3 +6,5 @@ apscheduler
 transformers
 onnxruntime
 numpy
+gunicorn
+psutil
