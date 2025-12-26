@@ -73,6 +73,23 @@ limiter = Limiter(
 )
 
 
+def get_base_link():
+    """
+    Resolve base link for generated session URLs.
+    Priority: env BASE_LINK -> incoming request host -> config BASE_LINK.
+    """
+    env_link = os.getenv("BASE_LINK")
+    if env_link:
+        return env_link.rstrip('/')
+    try:
+        host_url = request.host_url
+    except Exception:
+        host_url = None
+    if host_url:
+        return host_url.rstrip('/')
+    return BASE_LINK.rstrip('/')
+
+
 def clean_old_debug_sessions():
     """
     Each 1 hour delete everything from SESSION_BASE (except templates),
@@ -150,7 +167,8 @@ def create_new_debugging_session(debug_id, debug_log, code, input_data):
 
     shutil.copy(js_template_path, os.path.join(full_path, "interaction.js"))
 
-    file_url = f'{BASE_LINK}/python_debug_sessions/{folder_name}/py_session.html'
+    base_link = get_base_link()
+    file_url = f'{base_link}/python_debug_sessions/{folder_name}/py_session.html'
     return file_url
 
 
@@ -182,7 +200,8 @@ def create_new_tutle_session(debug_id, debug_log, code, input_data, dp, parent):
     shutil.copy(js_template_path, os.path.join(full_path, "interaction-turtle.js"))
     shutil.copy(interaction_js_template_path, os.path.join(full_path, "interaction.js"))
 
-    file_url = f'{BASE_LINK}/python_debug_sessions/{folder_name}/pysession-turtle.html'
+    base_link = get_base_link()
+    file_url = f'{base_link}/python_debug_sessions/{folder_name}/pysession-turtle.html'
     return file_url
 
 
@@ -214,7 +233,8 @@ def create_new_grasshopper_session(debug_id, debug_log, code, input_data, dp, pa
     shutil.copy(js_template_path, os.path.join(full_path, "interaction-grasshopper.js"))
     shutil.copy(interaction_js_template_path, os.path.join(full_path, "interaction.js"))
 
-    file_url = f'{BASE_LINK}/python_debug_sessions/{folder_name}/pysession-grasshopper.html'
+    base_link = get_base_link()
+    file_url = f'{base_link}/python_debug_sessions/{folder_name}/pysession-grasshopper.html'
     return file_url
 
 
@@ -246,7 +266,8 @@ def create_new_dfs_session(debug_id, debug_log, code, input_data, parent, graph)
     shutil.copy(js_template_path, os.path.join(full_path, "interaction-dfs.js"))
     shutil.copy(interaction_js_template_path, os.path.join(full_path, "interaction.js"))
 
-    file_url = f'{BASE_LINK}/python_debug_sessions/{folder_name}/pysession-dfs.html'
+    base_link = get_base_link()
+    file_url = f'{base_link}/python_debug_sessions/{folder_name}/pysession-dfs.html'
     return file_url
 
 
@@ -278,7 +299,8 @@ def create_new_bfs_session(debug_id, debug_log, code, input_data, parent, graph)
     shutil.copy(js_template_path, os.path.join(full_path, "interaction-dfs.js"))
     shutil.copy(interaction_js_template_path, os.path.join(full_path, "interaction.js"))
 
-    file_url = f'{BASE_LINK}/python_debug_sessions/{folder_name}/pysession-bfs.html'
+    base_link = get_base_link()
+    file_url = f'{base_link}/python_debug_sessions/{folder_name}/pysession-bfs.html'
     return file_url
 
 
@@ -310,7 +332,8 @@ def create_new_dijkstra_session(debug_id, debug_log, code, input_data, parent, g
     shutil.copy(js_template_path, os.path.join(full_path, "interaction-dijkstra.js"))
     shutil.copy(interaction_js_template_path, os.path.join(full_path, "interaction.js"))
 
-    file_url = f'{BASE_LINK}/python_debug_sessions/{folder_name}/pysession-dijkstra.html'
+    base_link = get_base_link()
+    file_url = f'{base_link}/python_debug_sessions/{folder_name}/pysession-dijkstra.html'
     return file_url
 
 
@@ -341,7 +364,8 @@ def create_new_prefixfunc_session(debug_id, debug_log, code, input_data, s, p):
     shutil.copy(js_template_path, os.path.join(full_path, "interaction-prefixfunc.js"))
     shutil.copy(interaction_js_template_path, os.path.join(full_path, "interaction.js"))
 
-    file_url = f'{BASE_LINK}/python_debug_sessions/{folder_name}/pysession-prefixfunc.html'
+    base_link = get_base_link()
+    file_url = f'{base_link}/python_debug_sessions/{folder_name}/pysession-prefixfunc.html'
     return file_url
 
 
@@ -372,7 +396,8 @@ def create_new_zfunc_session(debug_id, debug_log, code, input_data, s, z):
     shutil.copy(js_template_path, os.path.join(full_path, "interaction-zfunc.js"))
     shutil.copy(interaction_js_template_path, os.path.join(full_path, "interaction.js"))
 
-    file_url = f'{BASE_LINK}/python_debug_sessions/{folder_name}/pysession-zfunc.html'
+    base_link = get_base_link()
+    file_url = f'{base_link}/python_debug_sessions/{folder_name}/pysession-zfunc.html'
     return file_url
 
 
@@ -807,5 +832,5 @@ def replace_localhost_links(base_link: str, root_dir: Path):
 
 
 if __name__ == '__main__':
-    replace_localhost_links(BASE_LINK, root_dir=BASE_PATH)
+    replace_localhost_links(get_base_link(), root_dir=BASE_PATH)
     app.run(host='0.0.0.0', port=5000, debug=True)

@@ -14,6 +14,7 @@ services:
     environment:
       - PYTHONPATH=/app
       - ALGOLUME_CONFIG=backend.config_docker
+      - BASE_LINK=${BASE_LINK:-http://localhost:5612}
       - REDIS_HOST=redis
       - REDIS_PORT=6379
       - OMP_NUM_THREADS=1

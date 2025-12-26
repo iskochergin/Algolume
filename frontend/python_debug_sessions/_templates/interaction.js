@@ -429,7 +429,7 @@ async function sendInputAndGetNewTrace() {
         console.log('usedInputLines', usedInputLines);
         const input = userInputs.slice(0, usedInputLines).join('\n') + '\n' + needInput;
 
-        const response = await fetch('http://127.0.0.1:5000/request-debug-log', {
+        const response = await fetch(`${window.location.origin}/request-debug-log`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
